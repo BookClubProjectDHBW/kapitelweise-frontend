@@ -12,5 +12,34 @@
       crossorigin="anonymous"
     />
   </head>
-  <body></body>
+  <body>
+    <main>
+      <h1>Kapitelweise</h1>
+
+      <form id="loginForm">
+        <div class="mb-3">
+          <label for="username" class="form-label">Benutzername:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Passwort:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-info">Anmelden</button>
+      </form>
+    </main>
+  </body>
 </html>
