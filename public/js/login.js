@@ -4,7 +4,6 @@ function showError(message) {
   setTimeout(function () {
     $("#loginError").addClass("d-none").text("");
   }, 4000);
-
 }
 $("#loginForm").on("submit", async function (event) {
   event.preventDefault();
@@ -27,9 +26,15 @@ $("#loginForm").on("submit", async function (event) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+      const token = data.userToken;
+
+      localStorage.setItem("token", token);
+      window.location.href = "homePage.html";
+
+      console.log(token);
     } else if (response.status === 401) {
       showError("Benutzername oder Passwort ist falsch.");
+      $("#password").val("");
     } else {
       showError("Ein Fehler ist aufgetreten.");
     }
