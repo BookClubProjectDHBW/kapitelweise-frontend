@@ -55,7 +55,8 @@
             >Passwort bestätigen:</label
           >
           <input
-      Z      type="password"
+            Z
+            type="password"
             class="form-control"
             id="confirmPassword"
             name="confirmPassword"
@@ -65,6 +66,11 @@
             Die Passwörter stimmen nicht überein.
           </div>
         </div>
+        <div
+          id="registerError"
+          class="alert alert-danger d-none"
+          role="alert"
+        ></div>
         <button class="btn btn-secondary mt-3" type="submit">
           Registrieren
         </button>

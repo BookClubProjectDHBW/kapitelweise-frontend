@@ -15,19 +15,32 @@ $("#registerForm").submit(async function (event) {
     email: $("#email").val(),
     password: password,
   };
+  try {
+    const response = await fetch("/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(registerData),
+    });
 
-  const response = await fetch("/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(registerData),
-  });
+    if (response.ok) {
+      sessionStorage.setItem("registered", "true");
+      window.location.href = "loginPage.html";
+    } else if (response.status === 409) {
+      $("#username").addClass("is-invalid");
+    } else {
+      $("#registerError")
+        .text("Ein Fehler ist aufgetreten. Bitte versuche es erneut.")
+        .removeClass("d-none");
+    }
+    
+  } catch (error) {
+    console.error(error);
 
-  if (response.ok) {
-    window.location.href = "loginPage.html";
-  } else if (response.status === 409) {
-    $("#username").addClass("is-invalid");
+    $("#registerError")
+    .text("Ein Fehler ist aufgetreten. Bitte versuche es erneut.")
+    .removeClass("d-none");
   }
 });
 

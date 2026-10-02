@@ -5,6 +5,11 @@ function showError(message) {
     $("#loginError").addClass("d-none").text("");
   }, 4000);
 }
+if (sessionStorage.getItem("registered") === "true") {
+  $("#registered").removeClass("d-none");
+  sessionStorage.removeItem("registered");
+}
+
 $("#loginForm").on("submit", async function (event) {
   event.preventDefault();
   $("#loginError").addClass("d-none").text("");
@@ -15,14 +20,13 @@ $("#loginForm").on("submit", async function (event) {
   };
 
   try {
-    const response = await fetch("/api/login", {
+    const response = await fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(loginData),
     });
-    console.log(response);
 
     if (response.ok) {
       window.location.href = "homePage.html";
