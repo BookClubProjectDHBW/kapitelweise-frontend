@@ -5,6 +5,11 @@ function showError(message) {
     $("#loginError").addClass("d-none").text("");
   }, 4000);
 }
+if (sessionStorage.getItem("registered") === "true") {
+  $("#registered").removeClass("d-none");
+  sessionStorage.removeItem("registered");
+}
+
 $("#loginForm").on("submit", async function (event) {
   event.preventDefault();
   $("#loginError").addClass("d-none").text("");
@@ -22,16 +27,9 @@ $("#loginForm").on("submit", async function (event) {
       },
       body: JSON.stringify(loginData),
     });
-    console.log(response);
 
     if (response.ok) {
-      const data = await response.json();
-      const token = data.userToken;
-
-      localStorage.setItem("token", token);
       window.location.href = "homePage.html";
-
-      console.log(token);
     } else if (response.status === 401) {
       showError("Benutzername oder Passwort ist falsch.");
       $("#password").val("");
