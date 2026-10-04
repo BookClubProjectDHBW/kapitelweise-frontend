@@ -31,16 +31,6 @@
           </div>
         </div>
         <div class="mb-3">
-          <label for="email" class="form-label">E-Mail:</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            required
-          />
-        </div>
-        <div class="mb-3">
           <label for="password" class="form-label">Passwort:</label>
           <input
             type="password"
@@ -49,23 +39,22 @@
             name="password"
             required
           />
+            <div class = "invalid-feedback">
+            Dein Passwort muss mindestens 10 Zeichen lang sein.
+          </div>
         </div>
         <div class="mb-3">
           <label for="confirmPassword" class="form-label"
             >Passwort bestätigen:</label
           >
           <input
-            Z
             type="password"
             class="form-control"
             id="confirmPassword"
             name="confirmPassword"
             required
           />
-          <div class = "invalid-feedback">
-            Dein Passwort muss mindestens 10 Zeichen lang sein.
-          </div>
-          <div id="confirmPassword" class="invalid-feedback">
+          <div class="invalid-feedback">
             Die Passwörter stimmen nicht überein.
           </div>
         </div>

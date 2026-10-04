@@ -14,7 +14,6 @@ $("#registerForm").submit(async function (event) {
   }
   const registerData = {
     username: $("#username").val(),
-    email: $("#email").val(),
     password: password,
   };
   try {
@@ -32,7 +31,7 @@ $("#registerForm").submit(async function (event) {
     } else if (response.status === 409) {
       $("#username").addClass("is-invalid");
     } else if (response.status === 400) {
-      $("password").addClass("is-invalid");
+      $("#password").addClass("is-invalid");
     } else {
       $("#registerError")
         .text("Ein Fehler ist aufgetreten. Bitte versuche es erneut.")
