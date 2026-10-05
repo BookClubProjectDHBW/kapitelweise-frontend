@@ -17,7 +17,7 @@ $("#registerForm").submit(async function (event) {
     password: password,
   };
   try {
-    const response = await fetch("/register", {
+    const response = await fetch("http://localhost:8181/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

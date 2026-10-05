@@ -25,6 +25,7 @@ $("#loginForm").on("submit", async function (event) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(loginData),
     });
 
