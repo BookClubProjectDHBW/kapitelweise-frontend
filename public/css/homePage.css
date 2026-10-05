@@ -1,8 +1,8 @@
 :root {
   --bookclub-dark: #19324a;
   --bookclub-primary: #376d8f;
-  --bookclub-accent: #d99b4a;
-  --bookclub-light: #f5f7f8;
+  --bookclub-accent: #8a5a12;
+  --bookclub-light: #f5f4f2;
 }
 
 body {
@@ -17,48 +17,56 @@ main {
   flex: 1;
 }
 
-.navbar {
-  background-color: var(--bookclub-dark);
+/* Serifenschrift für Überschriften, angelehnt an das Mockup */
+.serif {
+  font-family: Georgia, "Times New Roman", serif;
 }
 
-.navbar-brand {
-  font-weight: 700;
-  letter-spacing: 0.02em;
+.brand-logo {
+  object-fit: contain;
 }
 
-.welcome-section {
-  background: linear-gradient(
-    135deg,
-    var(--bookclub-dark),
-    var(--bookclub-primary)
-  );
-  color: white;
+/* Tabs "Meine Clubs" / "Meine Einladungen": inaktiver Tab ausgegraut */
+.nav-underline-custom {
+  gap: 2rem;
 }
 
-.welcome-section p {
-  max-width: 760px;
-}
-
-.function-card {
-  height: 100%;
+.nav-underline-custom .nav-link {
+  padding: 0.25rem 0;
+  color: #b8b8b8;
   border: 0;
-  border-top: 4px solid var(--bookclub-accent);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  background: none;
 }
 
-.function-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 0.75rem 1.5rem rgba(25, 50, 74, 0.12) !important;
+.nav-underline-custom .nav-link:hover {
+  color: #6c757d;
 }
 
-.card-number {
+.nav-underline-custom .nav-link.active {
+  color: #212529;
+}
+
+.link-accent {
   color: var(--bookclub-accent);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+}
+
+.link-accent:hover {
+  color: var(--bookclub-dark);
+}
+
+/* Platzhalter für das Buchcover */
+.book-cover {
+  width: 64px;
+  height: 92px;
+  flex-shrink: 0;
+}
+
+.club-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.club-card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(25, 50, 74, 0.1);
 }
 
 .btn-primary {
@@ -66,15 +74,6 @@ main {
   --bs-btn-border-color: var(--bookclub-primary);
   --bs-btn-hover-bg: var(--bookclub-dark);
   --bs-btn-hover-border-color: var(--bookclub-dark);
-}
-
-.btn-outline-light:hover {
-  color: var(--bookclub-dark);
-}
-
-.invite-form .form-control:focus {
-  border-color: var(--bookclub-primary);
-  box-shadow: 0 0 0 0.25rem rgba(55, 109, 143, 0.2);
 }
 
 footer {
@@ -99,13 +98,7 @@ footer a:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .function-card {
+  .club-card {
     transition: none;
   }
-}
-
-.brand-logo {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
 }

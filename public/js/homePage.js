@@ -1,43 +1,20 @@
-// Aktuelles Jahr automatisch einsetzen
-document.getElementById("currentYear").textContent = new Date().getFullYear();
+let logoutButton = document.getElementById("logoutButton");
 
-// Logout-Demonstration
-document.getElementById("logoutButton").addEventListener("click", function () {
-  const shouldLogout = window.confirm("Möchtest du dich wirklich ausloggen?");
+logoutButton.addEventListener("click", async function () {
+  try {
+    const response = await fetch("http://localhost:8000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
 
-  if (shouldLogout) {
-    // In einer echten Anwendung würdest du hier die Logout-Route aufrufen.
-    window.location.href = "login.html";
+    if (!response.ok) {
+      console.error("Logout fehlgeschlagen:", response.status);
+      return;
+    }
+
+    localStorage.removeItem("token");
+    window.location.href = "loginPage.html";
+  } catch (error) {
+    console.error("Logout-Anfrage fehlgeschlagen:", error);
   }
 });
-
-// Formular für den Beitritt über einen Einladungslink
-document
-  .getElementById("joinClubForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const inviteInput = document.getElementById("inviteLink");
-    const joinMessage = document.getElementById("joinMessage");
-    const inviteLink = inviteInput.value.trim();
-
-    joinMessage.classList.remove("d-none", "alert-success", "alert-danger");
-
-    if (!inviteLink) {
-      joinMessage.classList.add("alert-danger");
-      joinMessage.textContent = "Bitte gib einen Einladungslink ein.";
-      inviteInput.focus();
-      return;
-    }
-
-    if (!inviteInput.checkValidity()) {
-      joinMessage.classList.add("alert-danger");
-      joinMessage.textContent = "Bitte gib einen gültigen Einladungslink ein.";
-      inviteInput.focus();
-      return;
-    }
-
-    joinMessage.classList.add("alert-success");
-    joinMessage.textContent =
-      "Der Einladungslink wurde angenommen. In der echten Anwendung wirst du jetzt zum Buchclub weitergeleitet.";
-  });
