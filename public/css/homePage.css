@@ -17,7 +17,6 @@ main {
   flex: 1;
 }
 
-/* Serifenschrift für Überschriften, angelehnt an das Mockup */
 .serif {
   font-family: Georgia, "Times New Roman", serif;
 }
@@ -26,7 +25,7 @@ main {
   object-fit: contain;
 }
 
-/* Tabs "Meine Clubs" / "Meine Einladungen": inaktiver Tab ausgegraut */
+
 .nav-underline-custom {
   gap: 2rem;
 }
@@ -54,7 +53,6 @@ main {
   color: var(--bookclub-dark);
 }
 
-/* Platzhalter für das Buchcover */
 .book-cover {
   width: 64px;
   height: 92px;
@@ -79,17 +77,12 @@ main {
 footer {
   background-color: #102638;
   color: #dbe5eb;
+  text-align: center;
+  padding: 1.5rem;
 }
 
-footer a {
-  color: #dbe5eb;
-  text-decoration: none;
-}
-
-footer a:hover,
-footer a:focus {
-  color: white;
-  text-decoration: underline;
+footer p {
+  margin: 0;
 }
 
 :focus-visible {
