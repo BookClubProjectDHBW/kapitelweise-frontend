@@ -1,4 +1,4 @@
-let logoutButton = document.getElementById("logoutButton");
+const logoutButton = document.getElementById("logoutButton");
 
 logoutButton.addEventListener("click", async function () {
   try {
@@ -12,7 +12,6 @@ logoutButton.addEventListener("click", async function () {
       return;
     }
 
-    localStorage.removeItem("token");
     window.location.href = "loginPage.html";
   } catch (error) {
     console.error("Logout-Anfrage fehlgeschlagen:", error);

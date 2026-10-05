@@ -1,8 +1,8 @@
 :root {
-  --bookclub-dark: #19324a;
-  --bookclub-primary: #376d8f;
-  --bookclub-accent: #8a5a12;
-  --bookclub-light: #f5f4f2;
+  --bookclub-dark: #3f3a34;
+  --bookclub-primary: #7a6248;
+  --bookclub-accent: #a66f3f;
+  --bookclub-light: #f7f3ed;
 }
 
 body {
@@ -10,7 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   background-color: var(--bookclub-light);
-  color: #263238;
+  color: var(--bookclub-dark);
 }
 
 main {
@@ -21,28 +21,23 @@ main {
   font-family: Georgia, "Times New Roman", serif;
 }
 
-.brand-logo {
-  object-fit: contain;
-}
-
-
 .nav-underline-custom {
   gap: 2rem;
 }
 
 .nav-underline-custom .nav-link {
   padding: 0.25rem 0;
-  color: #b8b8b8;
+  color: #999;
   border: 0;
   background: none;
 }
 
 .nav-underline-custom .nav-link:hover {
-  color: #6c757d;
+  color: var(--bookclub-primary);
 }
 
 .nav-underline-custom .nav-link.active {
-  color: #212529;
+  color: var(--bookclub-dark);
 }
 
 .link-accent {
@@ -64,7 +59,7 @@ main {
 }
 
 .club-card:hover {
-  box-shadow: 0 0.5rem 1rem rgba(25, 50, 74, 0.1);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
@@ -75,23 +70,12 @@ main {
 }
 
 footer {
-  background-color: #102638;
-  color: #dbe5eb;
+  background-color: var(--bookclub-dark);
+  color: white;
   text-align: center;
   padding: 1.5rem;
 }
 
 footer p {
   margin: 0;
-}
-
-:focus-visible {
-  outline: 3px solid var(--bookclub-accent);
-  outline-offset: 3px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .club-card {
-    transition: none;
-  }
 }
