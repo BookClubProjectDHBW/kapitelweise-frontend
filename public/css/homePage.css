@@ -1,0 +1,111 @@
+:root {
+  --bookclub-dark: #19324a;
+  --bookclub-primary: #376d8f;
+  --bookclub-accent: #d99b4a;
+  --bookclub-light: #f5f7f8;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bookclub-light);
+  color: #263238;
+}
+
+main {
+  flex: 1;
+}
+
+.navbar {
+  background-color: var(--bookclub-dark);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.welcome-section {
+  background: linear-gradient(
+    135deg,
+    var(--bookclub-dark),
+    var(--bookclub-primary)
+  );
+  color: white;
+}
+
+.welcome-section p {
+  max-width: 760px;
+}
+
+.function-card {
+  height: 100%;
+  border: 0;
+  border-top: 4px solid var(--bookclub-accent);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.function-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(25, 50, 74, 0.12) !important;
+}
+
+.card-number {
+  color: var(--bookclub-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--bookclub-primary);
+  --bs-btn-border-color: var(--bookclub-primary);
+  --bs-btn-hover-bg: var(--bookclub-dark);
+  --bs-btn-hover-border-color: var(--bookclub-dark);
+}
+
+.btn-outline-light:hover {
+  color: var(--bookclub-dark);
+}
+
+.invite-form .form-control:focus {
+  border-color: var(--bookclub-primary);
+  box-shadow: 0 0 0 0.25rem rgba(55, 109, 143, 0.2);
+}
+
+footer {
+  background-color: #102638;
+  color: #dbe5eb;
+}
+
+footer a {
+  color: #dbe5eb;
+  text-decoration: none;
+}
+
+footer a:hover,
+footer a:focus {
+  color: white;
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 3px solid var(--bookclub-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .function-card {
+    transition: none;
+  }
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
