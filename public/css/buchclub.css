@@ -1,0 +1,29 @@
+:root {
+  --bookclub-dark: #3f3a34;
+  --bookclub-primary: #7a6248;
+  --bookclub-accent: #a66f3f;
+  --bookclub-light: #f7f3ed;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bookclub-light);
+  color: var(--bookclub-dark);
+}
+
+main {
+  flex: 1;
+}
+
+footer {
+  background-color: var(--bookclub-dark);
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+footer p {
+  margin: 0;
+}
