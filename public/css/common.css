@@ -1,0 +1,72 @@
+:root {
+  --color-primary: #b77b82;
+  --color-primary-hover: #9f686f;
+  --color-primary-light: #ead4d6;
+
+  --color-secondary: #879b7c;
+  --color-secondary-hover: #718568;
+  --color-secondary-light: #dce4d7;
+
+  --color-background: #f8f5f2;
+  --color-surface: #ffffff;
+
+  --color-text: #3f3a38;
+  --color-text-muted: #77716e;
+  --color-border: #ddd6d2;
+
+  --color-danger: #b85c5c;
+  --color-success: #718568;
+
+  --border-radius: 0.5rem;
+  --shadow-sm: 0 0.125rem 0.5rem rgba(63, 58, 56, 0.08);
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-bg: var(--color-primary-hover);
+  --bs-btn-hover-border-color: var(--color-primary-hover);
+  --bs-btn-active-bg: var(--color-primary-hover);
+  --bs-btn-active-border-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  --bs-btn-bg: var(--color-secondary);
+  --bs-btn-border-color: var(--color-secondary);
+  --bs-btn-hover-bg: var(--color-secondary-hover);
+  --bs-btn-hover-border-color: var(--color-secondary-hover);
+}
+
+.form-control {
+  border-color: var(--color-border);
+  border-radius: var(--border-radius);
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.2rem var(--color-primary-light);
+}
+
+.card {
+  border-color: var(--color-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
