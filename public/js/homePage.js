@@ -1,3 +1,14 @@
+async function loadUser() {
+  const response = await fetch("http://localhost:8181/user", {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  document.getElementById("username").textContent = data.username;
+}
+
 const logoutButton = document.getElementById("logoutButton");
 
 logoutButton.addEventListener("click", async function () {
@@ -17,3 +28,5 @@ logoutButton.addEventListener("click", async function () {
     console.error("Logout-Anfrage fehlgeschlagen:", error);
   }
 });
+
+loadUser();
