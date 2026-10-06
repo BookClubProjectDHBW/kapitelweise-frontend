@@ -19,9 +19,14 @@
   padding: 2rem;
 }
 
+.auth-submit {
+  margin-top: 0.5rem;
+}
+
 .auth-title {
   margin-bottom: 0.5rem;
   text-align: center;
+  font-size: 2.5rem;
 }
 
 .auth-subtitle {
@@ -35,14 +40,28 @@
   font-weight: 500;
 }
 
+.auth-form .form-control {
+  min-height: 3rem;
+}
+
 .auth-form .btn {
   width: 100%;
+  padding: 0.75rem 1rem;
+
 }
 
 .auth-footer {
   margin-top: 1.5rem;
   text-align: center;
   color: var(--color-text-muted);
+}
+
+.auth-footer p {
+  margin-bottom: 0;
+}
+
+.auth-footer a {
+  font-weight: 500;
 }
 
 .auth-link-secondary {
@@ -52,4 +71,18 @@
 
 .auth-link-secondary:hover {
   color: var(--color-secondary-hover);
+}
+
+.auth-footer p {
+  margin-bottom: 0;
+}
+
+.alert-danger {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.alert-success {
+  color: var(--color-success);
+  border-color: var(--color-secondary);
 }
