@@ -30,3 +30,15 @@ logoutButton.addEventListener("click", async function () {
 });
 
 loadUser();
+
+const createClubForm = document.getElementById("createClubForm");
+
+createClubForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const name = document.getElementById("clubNameInput").value.trim();
+  const description = document
+    .getElementById("clubDescriptionInput")
+    .value.trim();
+
+});
