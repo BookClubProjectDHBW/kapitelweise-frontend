@@ -33,7 +33,7 @@ loadUser();
 
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
-const clubNamemodal = document.getElementById("clubNameModal");
+const createClubModal = document.getElementById("createClubModal");
 
 createClubForm.addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -67,7 +67,7 @@ if (response.ok) {
   const createdClub = await response.json();
   console.log("Buchclub erstellt:", createdClub);
 
-  const modal = bootstrap.Modal.getInstance(clubNamemodal);
+  const modal = bootstrap.Modal.getInstance(createClubModal);
   modal.hide();
 }
 
@@ -76,3 +76,7 @@ if (response.ok) {
     console.error("Fehler beim Erstellen des Clubs:", error);
   }
 });
+createClubModal.addEventListener("hidden.bs.modal", function () {
+  createClubForm.reset();
+  clubNameInput.classList.remove("is-invalid");
+});   
