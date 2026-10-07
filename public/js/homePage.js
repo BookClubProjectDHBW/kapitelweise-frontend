@@ -48,4 +48,8 @@ createClubForm.addEventListener("submit", function (event) {
     clubNameInput.classList.add("is-invalid");
     return;
   }
+  const clubData = {
+    name: name,
+    description: description,
+  };
 });
