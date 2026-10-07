@@ -32,13 +32,20 @@ logoutButton.addEventListener("click", async function () {
 loadUser();
 
 const createClubForm = document.getElementById("createClubForm");
+const clubNameInput = document.getElementById("clubNameInput");
 
 createClubForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const name = document.getElementById("clubNameInput").value.trim();
+  const name = clubNameInput.value.trim();
   const description = document
     .getElementById("clubDescriptionInput")
     .value.trim();
 
+    clubNameInput.classList.remove("is-invalid");
+
+  if (name === "") {
+    clubNameInput.classList.add("is-invalid");
+    return;
+  }
 });
