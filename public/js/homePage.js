@@ -34,7 +34,7 @@ loadUser();
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
 
-createClubForm.addEventListener("submit", function (event) {
+createClubForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const name = clubNameInput.value.trim();
@@ -42,7 +42,7 @@ createClubForm.addEventListener("submit", function (event) {
     .getElementById("clubDescriptionInput")
     .value.trim();
 
-    clubNameInput.classList.remove("is-invalid");
+  clubNameInput.classList.remove("is-invalid");
 
   if (name === "") {
     clubNameInput.classList.add("is-invalid");
@@ -52,4 +52,17 @@ createClubForm.addEventListener("submit", function (event) {
     name: name,
     description: description,
   };
+
+  try {
+    const response = await fetch("http://localhost:8181/clubs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(clubData),
+    });
+  } catch (error) {
+    console.error("Fehler beim Erstellen des Clubs:", error);
+  }
 });
