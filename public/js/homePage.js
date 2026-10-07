@@ -34,9 +34,18 @@ loadUser();
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
 const createClubModal = document.getElementById("createClubModal");
+const createClubError = document.getElementById("createClubError");
+
+function showClubError(message) {
+  createClubError.textContent = message;
+  createClubError.classList.remove("d-none");
+}
 
 createClubForm.addEventListener("submit", async function (event) {
   event.preventDefault();
+
+  createClubError.classList.add("d-none");
+  createClubError.textContent = "";
 
   const name = clubNameInput.value.trim();
   const description = document
@@ -63,20 +72,28 @@ createClubForm.addEventListener("submit", async function (event) {
       credentials: "include",
       body: JSON.stringify(clubData),
     });
-if (response.ok) {
-  const createdClub = await response.json();
-  console.log("Buchclub erstellt:", createdClub);
+    if (response.ok) {
+      const createdClub = await response.json();
+      console.log("Buchclub erstellt:", createdClub);
 
-  const modal = bootstrap.Modal.getInstance(createClubModal);
-  modal.hide();
-}
-
-
+      const modal = bootstrap.Modal.getInstance(createClubModal);
+      modal.hide();
+    } else if (response.status === 400) {
+      showClubError("Ungültige Eingaben. Bitte überprüfen Sie ihre Eingaben.");
+    } else if (response.status === 401) {
+      showClubError(
+        "Deine Anmeldung ist abgelaufen. Bitte melde dich erneut an.");
+    } else {
+      showClubError("Der buchclub konnte nicht erstellt werden.");
+    }
   } catch (error) {
     console.error("Fehler beim Erstellen des Clubs:", error);
+    showClubError("Verbindung zum Server fehlgeschlagen.");
   }
 });
 createClubModal.addEventListener("hidden.bs.modal", function () {
   createClubForm.reset();
   clubNameInput.classList.remove("is-invalid");
-});   
+  createClubError.classList.add("d-none");
+  createClubError.textContent = "";
+});
