@@ -101,7 +101,50 @@
       aria-hidden="true"
     >
       <div class="modal-dialog">
-        <div class="modal-content"></div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title fs-5" id="createClubModalLabel">
+              Buchclub gründen
+            </h2>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Schließen"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <form id="createClubForm" class="d-flex flex-column gap-3">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="clubNameInput"
+                  placeholder="Clubname"
+                  maxlength="25"
+                  required
+                />
+                <label for="clubNameInput">Clubname</label>
+              </div>
+
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  id="clubDescriptionInput"
+                  placeholder="Beschreibung"
+                  style="height: 100px"
+                  maxlength="250"
+                ></textarea>
+                <label for="clubDescriptionInput">Beschreibung</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                Erstellen
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
     <footer>
