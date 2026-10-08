@@ -22,7 +22,7 @@
 
           <button
             type="button"
-            class="btn btn-outline-secondary"
+            class="btn btn-outline-secondary serif"
             id="logoutButton"
           >
             Logout
@@ -30,15 +30,26 @@
         </div>
       </nav>
     </header>
-    <main class="container py-5">
-      <section class="mb-4">
-        <h1 class="serif h2 mb-1">
-          Buchclub: <span id="club-name">Name des Buchclubs</span>
-        </h1>
-
-        <p class="text-secondary mb-0">
-          Öffne einen deiner Buchclubs oder nimm eine Einladung an.
-        </p>
+    <main class="container serif py-5">
+      <section class="bookclub-header">
+        <a href="homePage.html" class="back-link"> ← Zurück </a>
+        <div class="bookclub-info">
+          <img id="bookCover" alt="Buchcover" class="book-cover" />
+          <div class="book-details">
+            <p class="club-name">
+              <span id="name">Buchclub</span>·<span id="memberCount"
+                >AnzahlMitglieder</span
+              >
+              Mitglieder
+            </p>
+            <h1 id="title">Buchtitel</h1>
+            <p class="book-data">
+              <span id="edition">Ausgabe</span> · ISBN:
+              <span id="isbn">ISBN</span> · Ziel:
+              <span id="targetDate">Leseziel</span> Seiten
+            </p>
+          </div>
+        </div>
       </section>
     </main>
     <footer>
