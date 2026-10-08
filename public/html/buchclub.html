@@ -12,8 +12,8 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="../css/buchclub.css" />
-    <script src="../js/buchclub.js" defer></script>
     <script src="../js/bookClubMockData.js" defer></script>
+    <script src="../js/buchclub.js" defer></script>
   </head>
   <body>
     <header>
@@ -52,7 +52,11 @@
           </div>
         </div>
       </section>
-      <nav class="bookclub-navigation" aria-label="Buchclub Navigation">
+      <nav
+        id="bookclubNavigation"
+        class="bookclub-navigation"
+        aria-label="Buchclub Navigation"
+      >
         <button class="nav-tab active" type="button">Leseplan</button>
 
         <button class="nav-tab" type="button">Abstimmung</button>
