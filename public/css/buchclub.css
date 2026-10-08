@@ -26,7 +26,7 @@ footer {
 }
 
 .bookclub-header {
-  padding: 2rem 0;
+  padding: 1rem 0;
   border-bottom: 1px solid var(--bookclub-dark);
 }
 
@@ -142,4 +142,97 @@ footer {
   .nav-tab {
     min-width: 110px;
   }
+}
+
+/* Einladungen schicken & User suche */
+
+.tab-content {
+  padding: 2rem 0;
+}
+
+.invitation-panel {
+  max-width: 38rem;
+}
+
+.invitation-panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.invitation-panel > p {
+  margin: 0 0 1.5rem;
+  color: var(--bookclub-primary);
+}
+
+.user-search-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.user-search {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--bookclub-primary);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--bookclub-dark);
+  font: inherit;
+}
+
+.user-search:focus {
+  outline: 3px solid rgb(166 111 63 / 25%);
+  outline-offset: 2px;
+  border-color: var(--bookclub-accent);
+}
+
+.user-results {
+  margin: 0.75rem 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.user-result {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #d8cfc4;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--bookclub-dark);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-result:hover,
+.user-result.selected {
+  border-color: var(--bookclub-accent);
+  background: rgb(166 111 63 / 8%);
+}
+
+.invitation-submit {
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--bookclub-accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.invitation-submit:hover:not(:disabled) {
+  background: var(--bookclub-primary);
+}
+
+.invitation-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.invitation-message {
+  min-height: 1.5rem;
+  margin: 1rem 0 0;
+  font-weight: 600;
 }

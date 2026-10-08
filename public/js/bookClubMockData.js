@@ -42,6 +42,45 @@ const bookClub = {
 
 const currentUserId = "user-1";
 
+const users = [
+  {
+    userId: "user-1",
+    username: "anna.liest",
+  },
+  {
+    userId: "user-2",
+    username: "lea.schmidt",
+  },
+  {
+    userId: "user-3",
+    username: "jonas.klein",
+  },
+  {
+    userId: "user-4",
+    username: "lena.buecher",
+  },
+  {
+    userId: "user-5",
+    username: "tim.liest",
+  },
+  {
+    userId: "user-6",
+    username: "mia.schreibt",
+  },
+  {
+    userId: "user-7",
+    username: "sophie.romane",
+  },
+  {
+    userId: "user-8",
+    username: "max.seitenweise",
+  },
+  {
+    userId: "user-9",
+    username: "noah.buchwurm",
+  },
+];
+
 function renderBookClub(bookClub) {
   const book = bookClub.currentBook;
 
