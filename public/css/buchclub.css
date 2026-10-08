@@ -9,8 +9,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bookclub-light);
+  background: var(--bookclub-light);
   color: var(--bookclub-dark);
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 main {
@@ -18,18 +19,10 @@ main {
 }
 
 footer {
-  background-color: var(--bookclub-dark);
-  color: white;
-  text-align: center;
   padding: 1.5rem;
-}
-
-footer p {
-  margin: 0;
-}
-
-.serif {
-  font-family: Georgia, "Times New Roman", serif;
+  background: var(--bookclub-dark);
+  color: #fff;
+  text-align: center;
 }
 
 .bookclub-header {
@@ -45,8 +38,12 @@ footer p {
   text-decoration: none;
 }
 
-.back-link:hover {
+.back-link:hover,
+.nav-tab:hover {
   color: var(--bookclub-accent);
+}
+
+.back-link:hover {
   text-decoration: underline;
 }
 
@@ -63,16 +60,15 @@ footer p {
   border-radius: 8px;
 }
 
-.book-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.club-name,
+.book-data {
+  margin: 0;
+  color: var(--bookclub-primary);
+  font-size: 0.95rem;
 }
 
 .club-name {
-  margin: 0 0 0.5rem;
-  color: var(--bookclub-primary);
-  font-size: 1rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
@@ -83,13 +79,67 @@ footer p {
 
 .book-details h1 {
   margin: 0 0 1rem;
+  color: var(--bookclub-dark);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 600;
-  color: var(--bookclub-dark);
 }
 
-.book-data {
-  margin: 0;
-  color: var(--bookclub-primary);
-  font-size: 0.95rem;
+.bookclub-navigation {
+  display: flex;
+  border-bottom: 1px solid var(--bookclub-dark);
+}
+
+.nav-tab {
+  position: relative;
+  flex: 1;
+  padding: 1rem 0.4rem;
+  border: 0;
+  background: transparent;
+  color: var(--bookclub-dark);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.nav-tab:hover {
+  background: rgb(166 111 63 / 8%);
+}
+
+.nav-tab.active {
+  color: var(--bookclub-accent);
+  font-weight: 700;
+}
+
+.nav-tab.active::after {
+  content: "";
+  position: absolute;
+  right: 0.4rem;
+  bottom: -1px;
+  left: 0.4rem;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--bookclub-accent);
+}
+
+@media (max-width: 576px) {
+  .bookclub-info {
+    align-items: flex-start;
+  }
+
+  .book-cover {
+    width: 90px;
+    height: 115px;
+  }
+
+  .bookclub-navigation {
+    overflow-x: auto;
+  }
+
+  .nav-tab {
+    min-width: 110px;
+  }
 }

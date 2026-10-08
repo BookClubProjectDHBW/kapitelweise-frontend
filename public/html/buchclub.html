@@ -12,17 +12,18 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="../css/buchclub.css" />
+    <script src="../js/bookClubMockData.js" defer></script>
     <script src="../js/buchclub.js" defer></script>
   </head>
   <body>
     <header>
       <nav class="navbar bg-white border-bottom shadow-sm">
         <div class="container py-2">
-          <a class="navbar-brand serif fs-4" href="homePage.html"> Buchclub </a>
+          <a class="navbar-brand fs-4" href="homePage.html">Buchclub</a>
 
           <button
             type="button"
-            class="btn btn-outline-secondary serif"
+            class="btn btn-outline-secondary"
             id="logoutButton"
           >
             Logout
@@ -30,7 +31,7 @@
         </div>
       </nav>
     </header>
-    <main class="container serif py-5">
+    <main class="container py-5">
       <section class="bookclub-header">
         <a href="homePage.html" class="back-link"> ← Zurück </a>
         <div class="bookclub-info">
@@ -51,6 +52,19 @@
           </div>
         </div>
       </section>
+      <nav
+        id="bookclubNavigation"
+        class="bookclub-navigation"
+        aria-label="Buchclub Navigation"
+      >
+        <button class="nav-tab active" type="button">Leseplan</button>
+
+        <button class="nav-tab" type="button">Abstimmung</button>
+
+        <button class="nav-tab" type="button">Treffen</button>
+
+        <button class="nav-tab" type="button">Mitglieder</button>
+      </nav>
     </main>
     <footer>
       <div class="container">
