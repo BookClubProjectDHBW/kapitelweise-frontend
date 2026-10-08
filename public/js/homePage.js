@@ -1,12 +1,28 @@
 async function loadUser() {
-  const response = await fetch("http://localhost:8181/user", {
-    method: "GET",
-    credentials: "include",
-  });
+  try {
+    const response = await fetch("http://localhost:8181/users/me", {
+      method: "GET",
+      credentials: "include",
+    });
 
-  const data = await response.json();
+    if (response.status === 401) {
+      window.location.href = "loginPage.html";
+      return;
+    }
 
-  document.getElementById("username").textContent = data.username;
+    if (!response.ok) {
+      console.error(
+        "Benutzerdaten konnten nicht geladen werden:",
+        response.status,
+      );
+      return;
+    }
+
+    const data = await response.json();
+    document.getElementById("username").textContent = data.username;
+  } catch (error) {
+    console.error("Fehler beim Laden der Benutzerdaten:", error);
+  }
 }
 
 const logoutButton = document.getElementById("logoutButton");
@@ -35,6 +51,7 @@ const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
 const createClubModal = document.getElementById("createClubModal");
 const createClubError = document.getElementById("createClubError");
+const createClubButton = createClubForm.querySelector('button[type="submit"]');
 
 function showClubError(message) {
   createClubError.textContent = message;
@@ -63,6 +80,8 @@ createClubForm.addEventListener("submit", async function (event) {
     description: description,
   };
 
+  console.log("Daten für das Backend:", clubData);
+  createClubButton.disabled = true;
   try {
     const response = await fetch("http://localhost:8181/clubs", {
       method: "POST",
@@ -79,16 +98,19 @@ createClubForm.addEventListener("submit", async function (event) {
       const modal = bootstrap.Modal.getInstance(createClubModal);
       modal.hide();
     } else if (response.status === 400) {
-      showClubError("Ungültige Eingaben. Bitte überprüfen Sie ihre Eingaben.");
+      showClubError("Ungültige Eingaben. Bitte überprüfe deine Angaben.");
     } else if (response.status === 401) {
       showClubError(
-        "Deine Anmeldung ist abgelaufen. Bitte melde dich erneut an.");
+        "Deine Anmeldung ist abgelaufen. Bitte melde dich erneut an.",
+      );
     } else {
-      showClubError("Der buchclub konnte nicht erstellt werden.");
+      showClubError("Der Buchclub konnte nicht erstellt werden.");
     }
   } catch (error) {
     console.error("Fehler beim Erstellen des Clubs:", error);
     showClubError("Verbindung zum Server fehlgeschlagen.");
+  } finally {
+    createClubButton.disabled = false;
   }
 });
 createClubModal.addEventListener("hidden.bs.modal", function () {
