@@ -93,3 +93,51 @@ footer p {
   color: var(--bookclub-primary);
   font-size: 0.95rem;
 }
+
+.bookclub-navigation {
+  display: flex;
+  width: 100%;
+
+  border-bottom: 1px solid var(--bookclub-dark);
+}
+
+.nav-tab {
+  position: relative;
+  flex: 1;
+
+  padding: 1rem 0.4rem;
+  border: none;
+  background-color: transparent;
+
+  color: var(--bookclub-dark);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-tab.active {
+  color: var(--bookclub-accent);
+  font-weight: 700;
+}
+
+.nav-tab.active::after {
+  content: "";
+
+  position: absolute;
+  right: 0.4rem;
+  left: 0.4rem;
+  bottom: -1px;
+
+  height: 3px;
+  background-color: var(--bookclub-accent);
+  border-radius: 3px 3px 0 0;
+}
+
+.nav-tab:hover {
+  color: var(--bookclub-accent);
+  background-color: rgba(166, 111, 63, 0.08);
+}
