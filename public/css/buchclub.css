@@ -27,3 +27,69 @@ footer {
 footer p {
   margin: 0;
 }
+
+.serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.bookclub-header {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--bookclub-dark);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: var(--bookclub-primary);
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--bookclub-accent);
+  text-decoration: underline;
+}
+
+.bookclub-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.book-cover {
+  width: 125px;
+  height: 145px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.club-name {
+  margin: 0 0 0.5rem;
+  color: var(--bookclub-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.club-name span,
+.book-meta span {
+  margin: 0 0.35rem;
+}
+
+.book-details h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  color: var(--bookclub-dark);
+}
+
+.book-data {
+  margin: 0;
+  color: var(--bookclub-primary);
+  font-size: 0.95rem;
+}
