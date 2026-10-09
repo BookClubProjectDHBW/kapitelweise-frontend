@@ -27,6 +27,72 @@ async function loadUser() {
 
 const logoutButton = document.getElementById("logoutButton");
 
+async function loadClubs() {
+  const clubList = document.getElementById("clubList");
+
+  clubList.replaceChildren();
+  clubList.textContent = "Buchclubs werden geladen...";
+
+  try {
+    const response = await fetch("http://localhost:8181/clubs", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (response.status === 401) {
+      window.location.href = "loginPage.html";
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const clubs = await response.json();
+
+    renderClubs(clubs);
+  } catch (error) {
+    console.error("Fehler beim Laden der Buchclubs:", error);
+    clubList.textContent = "Deine Buchclubs konnten nicht geladen werden.";
+  }
+}
+
+function renderClubs(clubs) {
+  const clubList = document.getElementById("clubList");
+  clubList.replaceChildren();
+
+  if (clubs.length === 0) {
+    clubList.textContent =
+      "Du bist noch in keinem Buchclub. Gründe deinen ersten Club!";
+    return;
+  }
+
+  clubs.forEach(function (club) {
+    const column = document.createElement("div");
+    column.className = "col-12 col-md-6 col-lg-4";
+
+    const card = document.createElement("div");
+    card.className = "card h-100 shadow-sm";
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    const title = document.createElement("h3");
+    title.className = "card-title h5";
+    title.textContent = club.bookClubName;
+
+    const description = document.createElement("p");
+    description.className = "card-text text-secondary";
+    description.textContent =
+      club.description || "Keine Beschreibung vorhanden.";
+
+    cardBody.append(title, description);
+    card.appendChild(cardBody);
+    column.appendChild(card);
+    clubList.appendChild(column);
+  });
+}
+
 logoutButton.addEventListener("click", async function () {
   try {
     const response = await fetch("http://localhost:8181/logout", {
@@ -46,6 +112,7 @@ logoutButton.addEventListener("click", async function () {
 });
 
 loadUser();
+loadClubs();
 
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
@@ -60,6 +127,10 @@ function showClubError(message) {
 
 createClubForm.addEventListener("submit", async function (event) {
   event.preventDefault();
+
+  if (createClubButton.disabled) {
+    return;
+  }
 
   createClubError.classList.add("d-none");
   createClubError.textContent = "";
@@ -97,6 +168,7 @@ createClubForm.addEventListener("submit", async function (event) {
 
       const modal = bootstrap.Modal.getInstance(createClubModal);
       modal.hide();
+      loadClubs();
     } else if (response.status === 400) {
       showClubError("Ungültige Eingaben. Bitte überprüfe deine Angaben.");
     } else if (response.status === 401) {
