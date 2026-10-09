@@ -91,7 +91,7 @@ function renderClubs(clubs) {
     const image = document.createElement("img");
     image.className = "card-img-top club-card-image";
     image.src = clubImages[imageIndex];
-    image.alt = 'Bild für ${club.bookClubName}';
+    image.alt = `Bild für ${club.bookClubName}`;
     card.appendChild(image);
 
     card.dataset.clubId = club.id;
@@ -111,10 +111,10 @@ function renderClubs(clubs) {
 const openButton = document.createElement("a");
     openButton.className = "btn btn-outline-secondary";
     openButton.textContent = "Club öffnen";
-    openButton.href = `clubPage.html?id=${club.id}`;
+    openButton.href = `bookClub.html?id=${club.id}`;
 
     if (club.id == null) {
-      openButtonremoveAttribute("href");
+      openButton.removeAttribute("href");
       openButton.classList.add("disabled");
       openButton.setAttribute("aria-disabled", "true");
     }
