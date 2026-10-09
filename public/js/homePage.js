@@ -56,6 +56,19 @@ async function loadClubs() {
     clubList.textContent = "Deine Buchclubs konnten nicht geladen werden.";
   }
 }
+const clubImages = [
+  "../images/club1.webp",
+  "../images/club2.webp",
+  "../images/club3.webp",
+  "../images/club4.webp",
+  "../images/club5.webp",
+  "../images/club6.webp",
+  "../images/club7.webp",
+  "../images/club8.webp",
+  "../images/club9.webp",
+  "../images/club10.webp",
+];
+
 
 function renderClubs(clubs) {
   const clubList = document.getElementById("clubList");
@@ -73,6 +86,15 @@ function renderClubs(clubs) {
 
     const card = document.createElement("div");
     card.className = "card h-100 shadow-sm";
+
+    const imageIndex = club.id % clubImages.length;
+    const image = document.createElement("img");
+    image.className = "card-img-top club-card-image";
+    image.src = clubImages[imageIndex];
+    image.alt = 'Bild für ${club.bookClubName}';
+    card.appendChild(image);
+
+    card.dataset.clubId = club.id;
 
     const cardBody = document.createElement("div");
     cardBody.className = "card-body";
