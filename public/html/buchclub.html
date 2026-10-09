@@ -15,6 +15,51 @@
     <script src="../js/bookClubMockData.js" defer></script>
     <script src="../js/buchclub.js" defer></script>
   </head>
+  <dialog
+    id="invitationDialog"
+    class="invitation-dialog"
+    aria-labelledby="invitationDialogTitle"
+  >
+    <form id="invitationForm" class="invitation-form" novalidate>
+      <div class="dialog-header">
+        <h2 id="invitationDialogTitle">Mitglied einladen</h2>
+        <button
+          id="closeInvitationDialog"
+          class="dialog-close-button"
+          type="button"
+          aria-label="Einladungsfenster schließen"
+        >
+          ×
+        </button>
+      </div>
+
+      <p>Gib den Benutzernamen der Person ein, die du einladen möchtest.</p>
+
+      <label for="invitedUsername">Benutzername</label>
+      <input
+        id="invitedUsername"
+        name="invitedUsername"
+        type="text"
+        autocomplete="off"
+        required
+      />
+
+      <p id="invitationStatus" class="invitation-status" role="status"></p>
+
+      <div class="dialog-actions">
+        <button
+          id="cancelInvitation"
+          class="dialog-cancel-button"
+          type="button"
+        >
+          Abbrechen
+        </button>
+        <button class="invitation-submit" type="submit">
+          Einladung senden
+        </button>
+      </div>
+    </form>
+  </dialog>
   <body>
     <header>
       <nav class="navbar bg-white border-bottom shadow-sm">
@@ -33,7 +78,13 @@
     </header>
     <main class="container">
       <section class="bookclub-header">
-        <a href="homePage.html" class="back-link"> ← Zurück </a>
+        <div id="adminActions" class="bookclub-header-actions">
+          <a href="homePage.html" class="back-link"> ← Zurück </a>
+
+          <!-- Bleibt zunächst leer und wird nur für Admins befüllt. -->
+          <div></div>
+        </div>
+
         <div class="bookclub-info">
           <img id="bookCover" alt="Buchcover" class="book-cover" />
           <div class="book-details">

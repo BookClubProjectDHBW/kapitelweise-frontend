@@ -144,95 +144,154 @@ footer {
   }
 }
 
-/* Einladungen schicken & User suche */
-
-.tab-content {
-  padding: 2rem 0;
+.bookclub-header-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-.invitation-panel {
-  max-width: 38rem;
+.bookclub-header-actions .back-link {
+  margin-bottom: 1.5rem;
 }
 
-.invitation-panel h2 {
-  margin: 0 0 0.5rem;
-  font-size: clamp(1.5rem, 3vw, 2rem);
+.admin-invitation-button,
+.invitation-submit,
+.dialog-cancel-button {
+  padding: 0.6rem 0.9rem;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.invitation-panel > p {
-  margin: 0 0 1.5rem;
+.admin-invitation-button {
+  border: 1px solid var(--bookclub-primary);
+  background: transparent;
   color: var(--bookclub-primary);
 }
 
-.user-search-label {
+.admin-invitation-button:hover {
+  border-color: var(--bookclub-accent);
+  background: rgb(166 111 63 / 8%);
+  color: var(--bookclub-accent);
+}
+
+.invitation-dialog {
+  width: min(30rem, calc(100% - 2rem));
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  color: var(--bookclub-dark);
+  box-shadow: 0 1rem 3rem rgb(63 58 52 / 30%);
+}
+
+.invitation-dialog::backdrop {
+  background: rgb(63 58 52 / 45%);
+}
+
+.invitation-form {
+  padding: 1.5rem;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.invitation-form > p {
+  margin: 0.75rem 0 1.5rem;
+  color: var(--bookclub-primary);
+}
+
+.invitation-form label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
-.user-search {
+.invitation-form input {
   width: 100%;
-  padding: 0.75rem 0.9rem;
+  padding: 0.7rem 0.8rem;
   border: 1px solid var(--bookclub-primary);
   border-radius: 6px;
-  background: #fff;
   color: var(--bookclub-dark);
   font: inherit;
 }
 
-.user-search:focus {
+.invitation-form input:focus {
   outline: 3px solid rgb(166 111 63 / 25%);
   outline-offset: 2px;
   border-color: var(--bookclub-accent);
 }
 
-.user-results {
-  margin: 0.75rem 0 1.5rem;
+.dialog-close-button {
   padding: 0;
-  list-style: none;
-}
-
-.user-result {
-  width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid #d8cfc4;
-  border-radius: 6px;
-  background: #fff;
+  border: 0;
+  background: transparent;
   color: var(--bookclub-dark);
-  font: inherit;
-  text-align: left;
+  font-size: 1.8rem;
+  line-height: 1;
   cursor: pointer;
 }
 
-.user-result:hover,
-.user-result.selected {
-  border-color: var(--bookclub-accent);
-  background: rgb(166 111 63 / 8%);
+.invitation-status {
+  min-height: 1.5rem;
+  margin: 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.invitation-status.error {
+  color: #9b2c2c;
+}
+
+.invitation-status.success {
+  color: #28633b;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.dialog-cancel-button {
+  border: 1px solid var(--bookclub-primary);
+  background: #fff;
+  color: var(--bookclub-primary);
 }
 
 .invitation-submit {
-  padding: 0.7rem 1rem;
-  border: 0;
-  border-radius: 6px;
+  border: 1px solid var(--bookclub-accent);
   background: var(--bookclub-accent);
   color: #fff;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
 }
 
-.invitation-submit:hover:not(:disabled) {
+.invitation-submit:hover {
   background: var(--bookclub-primary);
+  border-color: var(--bookclub-primary);
 }
 
-.invitation-submit:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
+@media (max-width: 576px) {
+  .bookclub-header-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
 
-.invitation-message {
-  min-height: 1.5rem;
-  margin: 1rem 0 0;
-  font-weight: 600;
+  .bookclub-header-actions .back-link {
+    margin-bottom: 0;
+  }
+
+  .admin-invitation-button {
+    align-self: flex-start;
+    margin-bottom: 1.5rem;
+  }
 }
