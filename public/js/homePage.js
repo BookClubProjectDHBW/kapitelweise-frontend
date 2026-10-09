@@ -108,7 +108,18 @@ function renderClubs(clubs) {
     description.textContent =
       club.description || "Keine Beschreibung vorhanden.";
 
-    cardBody.append(title, description);
+const openButton = document.createElement("a");
+    openButton.className = "btn btn-outline-secondary";
+    openButton.textContent = "Club öffnen";
+    openButton.href = `clubPage.html?id=${club.id}`;
+
+    if (club.id == null) {
+      openButtonremoveAttribute("href");
+      openButton.classList.add("disabled");
+      openButton.setAttribute("aria-disabled", "true");
+    }
+
+    cardBody.append(title, description, openButton);
     card.appendChild(cardBody);
     column.appendChild(card);
     clubList.appendChild(column);
