@@ -126,6 +126,39 @@ const openButton = document.createElement("a");
   });
 }
 
+function renderInvitations(invitations) {
+  const inviteList = document.getElementById("inviteList");
+  inviteList.replaceChildren();
+
+  if (invitations.length === 0) {
+    inviteList.textContent = "Du hast keine Einladungen.";
+    return;
+  }
+
+  invitations.forEach(function (invitation) {
+    const card = document.createElement("div");
+    card.className = "card shadow-sm";
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    card.appendChild(cardBody);
+    inviteList.appendChild(card);
+
+    const title = document.createElement("h3");
+    title.className = "card-title h5";
+    title.textContent = invitation.clubName;
+
+    cardBody.appendChild(title);
+
+    const description = document.createElement("p");
+    description.className = "card-text text-secondary";
+    description.textContent =
+      invitation.description || "Keine Beschreibung vorhanden.";
+
+    cardBody.appendChild(description);
+  })
+}
 logoutButton.addEventListener("click", async function () {
   try {
     const response = await fetch("http://localhost:8181/logout", {
