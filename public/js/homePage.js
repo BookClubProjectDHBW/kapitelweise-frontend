@@ -69,7 +69,6 @@ const clubImages = [
   "../images/club10.webp",
 ];
 
-
 function renderClubs(clubs) {
   const clubList = document.getElementById("clubList");
   clubList.replaceChildren();
@@ -108,7 +107,7 @@ function renderClubs(clubs) {
     description.textContent =
       club.description || "Keine Beschreibung vorhanden.";
 
-const openButton = document.createElement("a");
+    const openButton = document.createElement("a");
     openButton.className = "btn btn-outline-secondary";
     openButton.textContent = "Club öffnen";
     openButton.href = `bookClub.html?id=${club.id}`;
@@ -157,7 +156,25 @@ function renderInvitations(invitations) {
       invitation.description || "Keine Beschreibung vorhanden.";
 
     cardBody.appendChild(description);
-  })
+
+    const acceptButton = document.createElement("button");
+    acceptButton.type = "button";
+    acceptButton.className = "btn btn-success me-2";
+    acceptButton.textContent = "Annehmen";
+
+    const declineButton = document.createElement("button");
+    declineButton.type = "button";
+    declineButton.className = "btn btn-outline-danger";
+    declineButton.textContent = "Ablehnen";
+
+    const buttonGroup = document.createElement("div");
+    buttonGroup.className = "d-flex flex-wrap gap-2";
+
+    buttonGroup.append(acceptButton, declineButton);
+    cardBody.appendChild(buttonGroup);
+
+    card.appendChild(cardBody);
+  });
 }
 logoutButton.addEventListener("click", async function () {
   try {
