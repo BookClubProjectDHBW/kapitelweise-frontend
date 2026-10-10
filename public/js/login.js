@@ -20,7 +20,7 @@ $("#loginForm").on("submit", async function (event) {
   };
 
   try {
-    const response = await fetch("http://localhost:8181/login", {
+    const response = await fetch(`${API_BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

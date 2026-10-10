@@ -1,6 +1,6 @@
 async function loadUser() {
   try {
-    const response = await fetch("http://localhost:8181/users/me", {
+    const response = await fetch(`${API_BASE_URL}/users/me`, {
       method: "GET",
       credentials: "include",
     });
@@ -34,7 +34,7 @@ async function loadClubs() {
   clubList.textContent = "Buchclubs werden geladen...";
 
   try {
-    const response = await fetch("http://localhost:8181/clubs", {
+    const response = await fetch(`${API_BASE_URL}/clubs`, {
       method: "GET",
       credentials: "include",
     });
@@ -128,7 +128,7 @@ const openButton = document.createElement("a");
 
 logoutButton.addEventListener("click", async function () {
   try {
-    const response = await fetch("http://localhost:8181/logout", {
+    const response = await fetch(`${API_BASE_URL}/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -187,7 +187,7 @@ createClubForm.addEventListener("submit", async function (event) {
   console.log("Daten für das Backend:", clubData);
   createClubButton.disabled = true;
   try {
-    const response = await fetch("http://localhost:8181/clubs", {
+    const response = await fetch(`${API_BASE_URL}/clubs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
