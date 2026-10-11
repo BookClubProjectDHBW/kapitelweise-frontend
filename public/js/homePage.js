@@ -125,6 +125,32 @@ function renderClubs(clubs) {
   });
 }
 
+async function respondToInvitation(invitationId, status) {
+  try {
+    const response = await fetch(
+      `http://localhost:8181/clubs/invitations/${invitationId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          invitationStatus: status,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("Einladung beantwortet:", result);
+  } catch (error) {
+    console.error("Fehler beim Antworten auf die Einladung:", error);
+  }
+}
 function renderInvitations(invitations) {
   const inviteList = document.getElementById("inviteList");
   inviteList.replaceChildren();
@@ -169,6 +195,14 @@ function renderInvitations(invitations) {
 
     const buttonGroup = document.createElement("div");
     buttonGroup.className = "d-flex flex-wrap gap-2";
+
+    acceptButton.addEventListener("click", function () {
+      respondToInvitation(invitation.invitationId, "ACCEPTED");
+    });
+
+    declineButton.addEventListener("click", function () {
+      respondToInvitation(invitation.invitationId, "DECLINED");
+    });
 
     buttonGroup.append(acceptButton, declineButton);
     cardBody.appendChild(buttonGroup);
