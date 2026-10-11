@@ -69,7 +69,6 @@ const clubImages = [
   "../images/club10.webp",
 ];
 
-
 function renderClubs(clubs) {
   const clubList = document.getElementById("clubList");
   clubList.replaceChildren();
@@ -108,7 +107,7 @@ function renderClubs(clubs) {
     description.textContent =
       club.description || "Keine Beschreibung vorhanden.";
 
-const openButton = document.createElement("a");
+    const openButton = document.createElement("a");
     openButton.className = "btn btn-outline-secondary";
     openButton.textContent = "Club öffnen";
     openButton.href = `bookClub.html?id=${club.id}`;
@@ -126,6 +125,183 @@ const openButton = document.createElement("a");
   });
 }
 
+async function respondToInvitation(invitationId, status) {
+  try {
+    const response = await fetch(
+      `http://localhost:8181/clubs/invitations/${invitationId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          invitationStatus: status,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const messages = {
+        400: "Ungültige Eingaben.",
+        401: "Deine Anmeldung ist abgelaufen.",
+        403: "Diese Einladung gehört nicht zu deinem Konto.",
+        404: "Die Einladung wurde nicht gefunden.",
+        409: "Diese Einladung wurde bereits beantwortet.",
+      };
+
+      throw new Error(
+        messages[response.status] || "Ein unbekannter Fehler ist aufgetreten.",
+      );
+    }
+
+    const result = await response.json();
+    console.log("Einladung beantwortet:", result);
+
+    return true;
+  } catch (error) {
+    console.error("Fehler beim Antworten auf die Einladung:", error);
+    return error instanceof TypeError
+      ? "Verbindung zum Server fehlgeschlagen."
+      : error.message;
+  }
+}
+
+function removeInvitationCard(card) {
+  card.remove();
+
+  const inviteList = document.getElementById("inviteList");
+
+  if (inviteList.children.length === 0) {
+    inviteList.textContent = "Du hast aktuell keine offenen Einladungen.";
+  }
+}
+
+async function loadInvitations() {
+  const inviteList = document.getElementById("inviteList");
+
+  inviteList.replaceChildren();
+  inviteList.textContent = "Einladungen werden geladen...";
+  try {
+    const response = await fetch("http://localhost:8181/clubs/invitations", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+
+    if (response.status === 401) {
+      sessionStorage.removeItem("token");
+      window.location.href = "loginPage.html";
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const invitations = await response.json();
+    renderInvitations(invitations);
+  } catch (error) {
+    console.error("Fehler beim Laden der Einladungen:", error);
+    inviteList.textContent = "Einladungen konnten nicht geladen werden.";
+  }
+}
+function renderInvitations(invitations) {
+  const inviteList = document.getElementById("inviteList");
+  inviteList.replaceChildren();
+
+  if (invitations.length === 0) {
+    inviteList.textContent = "Du hast keine Einladungen.";
+    return;
+  }
+
+  invitations.forEach(function (invitation) {
+    const card = document.createElement("div");
+    card.className = "card shadow-sm";
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    card.appendChild(cardBody);
+    inviteList.appendChild(card);
+
+    const title = document.createElement("h3");
+    title.className = "card-title h5";
+    title.textContent = invitation.clubName;
+
+    cardBody.appendChild(title);
+
+    const description = document.createElement("p");
+    description.className = "card-text text-secondary";
+    description.textContent =
+      invitation.description || "Keine Beschreibung vorhanden.";
+
+    cardBody.appendChild(description);
+
+    const acceptButton = document.createElement("button");
+    acceptButton.type = "button";
+    acceptButton.className = "btn btn-success";
+    acceptButton.textContent = "Annehmen";
+
+    const declineButton = document.createElement("button");
+    declineButton.type = "button";
+    declineButton.className = "btn btn-outline-danger";
+    declineButton.textContent = "Ablehnen";
+
+    const buttonGroup = document.createElement("div");
+    buttonGroup.className = "d-flex flex-wrap gap-2";
+
+    const errorMessage = document.createElement("div");
+    errorMessage.className = "alert alert-danger d-none mt-3";
+    errorMessage.setAttribute("role", "alert");
+
+    cardBody.appendChild(errorMessage);
+
+    function setButtonsDisabled(disabled) {
+      acceptButton.disabled = disabled;
+      declineButton.disabled = disabled;
+    }
+
+    acceptButton.addEventListener("click", async function () {
+      setButtonsDisabled(true);
+      errorMessage.classList.add("d-none");
+      errorMessage.textContent = "";
+      const success = await respondToInvitation(
+        invitation.invitationId,
+        "ACCEPTED",
+      );
+      if (success === true) {
+        removeInvitationCard(card);
+        loadClubs();
+      } else {
+        errorMessage.textContent = success;
+        errorMessage.classList.remove("d-none");
+        setButtonsDisabled(false);
+      }
+    });
+
+    declineButton.addEventListener("click", async function () {
+      setButtonsDisabled(true);
+      errorMessage.classList.add("d-none");
+      errorMessage.textContent = "";
+      const success = await respondToInvitation(
+        invitation.invitationId,
+        "DECLINED",
+      );
+      if (success === true) {
+        removeInvitationCard(card);
+      } else {
+        errorMessage.textContent = success;
+        errorMessage.classList.remove("d-none");
+        setButtonsDisabled(false);
+      }
+    });
+
+    buttonGroup.append(acceptButton, declineButton);
+    cardBody.appendChild(buttonGroup);
+  });
+}
 logoutButton.addEventListener("click", async function () {
   try {
     const response = await fetch("http://localhost:8181/logout", {
@@ -146,6 +322,7 @@ logoutButton.addEventListener("click", async function () {
 
 loadUser();
 loadClubs();
+loadInvitations();
 
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
