@@ -119,7 +119,6 @@ function renderClubs(clubs) {
     }
 
     cardBody.append(title, description, openButton);
-    card.appendChild(cardBody);
     column.appendChild(card);
     clubList.appendChild(column);
   });
@@ -142,7 +141,17 @@ async function respondToInvitation(invitationId, status) {
     );
 
     if (!response.ok) {
-      throw new Error(`HTTP-Fehler: ${response.status}`);
+      const messages = {
+        400: "Ungültige Eingaben.",
+        401: "Deine Anmeldung ist abgelaufen.",
+        403: "Diese Einladung gehört nicht zu deinem Konto.",
+        404: "Die Einladung wurde nicht gefunden.",
+        409: "Diese Einladung wurde bereits beantwortet.",
+      };
+
+      throw new Error(
+        messages[response.status] || "Ein unbekannter Fehler ist aufgetreten.",
+      );
     }
 
     const result = await response.json();
@@ -151,7 +160,7 @@ async function respondToInvitation(invitationId, status) {
     return true;
   } catch (error) {
     console.error("Fehler beim Antworten auf die Einladung:", error);
-    return false;
+    return error.message;
   }
 }
 
@@ -210,24 +219,50 @@ function renderInvitations(invitations) {
     const buttonGroup = document.createElement("div");
     buttonGroup.className = "d-flex flex-wrap gap-2";
 
+    const errorMessage = document.createElement("div");
+    errorMessage.className = "alert alert-danger d-none mt-3";
+    errorMessage.setAttribute("role", "alert");
+
+    cardBody.appendChild(errorMessage);
+
+    function setButtonsDisabled(disabled) {
+      acceptButton.disabled = disabled;
+      declineButton.disabled = disabled;
+    }
+
     acceptButton.addEventListener("click", async function () {
+      setButtonsDisabled(true);
+      errorMessage.classList.add("d-none");
+      errorMessage.textContent = "";
       const success = await respondToInvitation(
         invitation.invitationId,
         "ACCEPTED",
       );
-      if (success) {
+      if (success === true) {
         removeInvitationCard(card);
         loadClubs();
+      } else {
+        errorMessage.textContent = success;
+        errorMessage.classList.remove("d-none");
+        setButtonsDisabled(false);
       }
     });
 
     declineButton.addEventListener("click", async function () {
+      setButtonsDisabled(true);
+      errorMessage.classList.add("d-none");
+      errorMessage.textContent = "";
       const success = await respondToInvitation(
         invitation.invitationId,
         "DECLINED",
       );
-      if (success) {
+      if (success === true) {
         removeInvitationCard(card);
+      } else {
+        errorMessage.textContent = success;
+        errorMessage.classList.remove("d-none");
+        setButtonsDisabled(false);
+
       }
     });
 
@@ -257,6 +292,7 @@ logoutButton.addEventListener("click", async function () {
 
 loadUser();
 loadClubs();
+renderInvitations([]);
 
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
