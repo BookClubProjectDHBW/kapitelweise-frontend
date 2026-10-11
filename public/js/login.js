@@ -25,11 +25,16 @@ $("#loginForm").on("submit", async function (event) {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
       body: JSON.stringify(loginData),
     });
 
     if (response.ok) {
+      const data = await response.json();
+      if (!data.token) {
+        showError("Die Anmeldung hat kein Token zurückgegeben.");
+        return;
+      }
+      sessionStorage.setItem("token", data.token);
       window.location.href = "homePage.html";
     } else if (response.status === 401) {
       showError("Benutzername oder Passwort ist falsch.");

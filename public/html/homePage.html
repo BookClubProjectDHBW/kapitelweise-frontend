@@ -46,7 +46,7 @@
 
       <div class="card shadow-sm">
         <div
-          class="card-header bg-white d-flex justify-content-between align-items-center"
+          class="card-header bg-white d-flex flex-wrap gap-3 justify-content-between align-items-center"
         >
           <ul class="nav nav-underline-custom serif fs-4">
             <li class="nav-item">
@@ -84,9 +84,8 @@
 
         <div class="card-body p-4 tab-content">
           <section class="tab-pane fade show active" id="clubs-pane">
-            <div id="clubList" class="d-flex flex-column gap-3"></div>
+            <div id="clubList" class="row g-3"></div>
           </section>
-
           <section class="tab-pane fade" id="invites-pane">
             <div id="inviteList" class="d-flex flex-column gap-3"></div>
           </section>
@@ -142,16 +141,13 @@
                 <label for="clubDescriptionInput">Beschreibung</label>
               </div>
 
-<div
-id="createClubError"
-class="alert alert-danger d-none"
-role="alert"
->
-</div>
+              <div
+                id="createClubError"
+                class="alert alert-danger d-none"
+                role="alert"
+              ></div>
 
-              <button type="submit" class="btn btn-primary">
-                Erstellen
-              </button>
+              <button type="submit" class="btn btn-primary">Erstellen</button>
             </form>
           </div>
         </div>
