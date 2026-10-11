@@ -119,6 +119,7 @@ function renderClubs(clubs) {
     }
 
     cardBody.append(title, description, openButton);
+    card.appendChild(cardBody);
     column.appendChild(card);
     clubList.appendChild(column);
   });
@@ -160,7 +161,9 @@ async function respondToInvitation(invitationId, status) {
     return true;
   } catch (error) {
     console.error("Fehler beim Antworten auf die Einladung:", error);
-    return error.message;
+    return error instanceof TypeError
+      ? "Verbindung zum Server fehlgeschlagen."
+      : error.message;
   }
 }
 
@@ -174,6 +177,36 @@ function removeInvitationCard(card) {
   }
 }
 
+async function loadInvitations() {
+  const inviteList = document.getElementById("inviteList");
+
+  inviteList.replaceChildren();
+  inviteList.textContent = "Einladungen werden geladen...";
+  try {
+    const response = await fetch("http://localhost:8181/clubs/invitations", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+
+    if (response.status === 401) {
+      sessionStorage.removeItem("token");
+      window.location.href = "loginPage.html";
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const invitations = await response.json();
+    renderInvitations(invitations);
+  } catch (error) {
+    console.error("Fehler beim Laden der Einladungen:", error);
+    inviteList.textContent = "Einladungen konnten nicht geladen werden.";
+  }
+}
 function renderInvitations(invitations) {
   const inviteList = document.getElementById("inviteList");
   inviteList.replaceChildren();
@@ -208,7 +241,7 @@ function renderInvitations(invitations) {
 
     const acceptButton = document.createElement("button");
     acceptButton.type = "button";
-    acceptButton.className = "btn btn-success me-2";
+    acceptButton.className = "btn btn-success";
     acceptButton.textContent = "Annehmen";
 
     const declineButton = document.createElement("button");
@@ -262,14 +295,11 @@ function renderInvitations(invitations) {
         errorMessage.textContent = success;
         errorMessage.classList.remove("d-none");
         setButtonsDisabled(false);
-
       }
     });
 
     buttonGroup.append(acceptButton, declineButton);
     cardBody.appendChild(buttonGroup);
-
-    card.appendChild(cardBody);
   });
 }
 logoutButton.addEventListener("click", async function () {
@@ -292,7 +322,7 @@ logoutButton.addEventListener("click", async function () {
 
 loadUser();
 loadClubs();
-renderInvitations([]);
+loadInvitations();
 
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
