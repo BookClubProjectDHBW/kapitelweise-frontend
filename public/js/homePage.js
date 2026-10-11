@@ -147,10 +147,24 @@ async function respondToInvitation(invitationId, status) {
 
     const result = await response.json();
     console.log("Einladung beantwortet:", result);
+
+    return true;
   } catch (error) {
     console.error("Fehler beim Antworten auf die Einladung:", error);
+    return false;
   }
 }
+
+function removeInvitationCard(card) {
+  card.remove();
+
+  const inviteList = document.getElementById("inviteList");
+
+  if (inviteList.children.length === 0) {
+    inviteList.textContent = "Du hast aktuell keine offenen Einladungen.";
+  }
+}
+
 function renderInvitations(invitations) {
   const inviteList = document.getElementById("inviteList");
   inviteList.replaceChildren();
@@ -196,12 +210,25 @@ function renderInvitations(invitations) {
     const buttonGroup = document.createElement("div");
     buttonGroup.className = "d-flex flex-wrap gap-2";
 
-    acceptButton.addEventListener("click", function () {
-      respondToInvitation(invitation.invitationId, "ACCEPTED");
+    acceptButton.addEventListener("click", async function () {
+      const success = await respondToInvitation(
+        invitation.invitationId,
+        "ACCEPTED",
+      );
+      if (success) {
+        removeInvitationCard(card);
+        loadClubs();
+      }
     });
 
-    declineButton.addEventListener("click", function () {
-      respondToInvitation(invitation.invitationId, "DECLINED");
+    declineButton.addEventListener("click", async function () {
+      const success = await respondToInvitation(
+        invitation.invitationId,
+        "DECLINED",
+      );
+      if (success) {
+        removeInvitationCard(card);
+      }
     });
 
     buttonGroup.append(acceptButton, declineButton);
