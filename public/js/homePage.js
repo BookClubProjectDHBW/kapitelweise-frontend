@@ -2,14 +2,15 @@ async function loadUser() {
   try {
     const response = await fetch("http://localhost:8181/users/me", {
       method: "GET",
-      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
     });
-
     if (response.status === 401) {
+      sessionStorage.removeItem("token");
       window.location.href = "loginPage.html";
       return;
     }
-
     if (!response.ok) {
       console.error(
         "Benutzerdaten konnten nicht geladen werden:",
@@ -17,39 +18,33 @@ async function loadUser() {
       );
       return;
     }
-
     const data = await response.json();
     document.getElementById("username").textContent = data.username;
   } catch (error) {
     console.error("Fehler beim Laden der Benutzerdaten:", error);
   }
 }
-
 const logoutButton = document.getElementById("logoutButton");
-
 async function loadClubs() {
   const clubList = document.getElementById("clubList");
-
   clubList.replaceChildren();
   clubList.textContent = "Buchclubs werden geladen...";
-
   try {
     const response = await fetch("http://localhost:8181/clubs", {
       method: "GET",
-      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
     });
-
     if (response.status === 401) {
+      sessionStorage.removeItem("token");
       window.location.href = "loginPage.html";
       return;
     }
-
     if (!response.ok) {
       throw new Error(`HTTP-Fehler: ${response.status}`);
     }
-
     const clubs = await response.json();
-
     renderClubs(clubs);
   } catch (error) {
     console.error("Fehler beim Laden der Buchclubs:", error);
@@ -68,63 +63,50 @@ const clubImages = [
   "../images/club9.webp",
   "../images/club10.webp",
 ];
-
 function renderClubs(clubs) {
   const clubList = document.getElementById("clubList");
   clubList.replaceChildren();
-
   if (clubs.length === 0) {
     clubList.textContent =
       "Du bist noch in keinem Buchclub. Gründe deinen ersten Club!";
     return;
   }
-
   clubs.forEach(function (club) {
     const column = document.createElement("div");
     column.className = "col-12 col-md-6 col-lg-4";
-
     const card = document.createElement("div");
     card.className = "card h-100 shadow-sm";
-
     const imageIndex = club.id % clubImages.length;
     const image = document.createElement("img");
     image.className = "card-img-top club-card-image";
     image.src = clubImages[imageIndex];
     image.alt = `Bild für ${club.bookClubName}`;
     card.appendChild(image);
-
     card.dataset.clubId = club.id;
-
     const cardBody = document.createElement("div");
     cardBody.className = "card-body";
-
     const title = document.createElement("h3");
     title.className = "card-title h5";
     title.textContent = club.bookClubName;
-
     const description = document.createElement("p");
     description.className = "card-text text-secondary";
     description.textContent =
       club.description || "Keine Beschreibung vorhanden.";
-
     const openButton = document.createElement("a");
     openButton.className = "btn btn-outline-secondary";
     openButton.textContent = "Club öffnen";
     openButton.href = `bookClub.html?id=${club.id}`;
-
     if (club.id == null) {
       openButton.removeAttribute("href");
       openButton.classList.add("disabled");
       openButton.setAttribute("aria-disabled", "true");
     }
-
     cardBody.append(title, description, openButton);
     card.appendChild(cardBody);
     column.appendChild(card);
     clubList.appendChild(column);
   });
 }
-
 async function respondToInvitation(invitationId, status) {
   try {
     const response = await fetch(
@@ -140,7 +122,6 @@ async function respondToInvitation(invitationId, status) {
         }),
       },
     );
-
     if (!response.ok) {
       const messages = {
         400: "Ungültige Eingaben.",
@@ -149,15 +130,12 @@ async function respondToInvitation(invitationId, status) {
         404: "Die Einladung wurde nicht gefunden.",
         409: "Diese Einladung wurde bereits beantwortet.",
       };
-
       throw new Error(
         messages[response.status] || "Ein unbekannter Fehler ist aufgetreten.",
       );
     }
-
     const result = await response.json();
     console.log("Einladung beantwortet:", result);
-
     return true;
   } catch (error) {
     console.error("Fehler beim Antworten auf die Einladung:", error);
@@ -166,20 +144,15 @@ async function respondToInvitation(invitationId, status) {
       : error.message;
   }
 }
-
 function removeInvitationCard(card) {
   card.remove();
-
   const inviteList = document.getElementById("inviteList");
-
   if (inviteList.children.length === 0) {
     inviteList.textContent = "Du hast aktuell keine offenen Einladungen.";
   }
 }
-
 async function loadInvitations() {
   const inviteList = document.getElementById("inviteList");
-
   inviteList.replaceChildren();
   inviteList.textContent = "Einladungen werden geladen...";
   try {
@@ -189,17 +162,14 @@ async function loadInvitations() {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });
-
     if (response.status === 401) {
       sessionStorage.removeItem("token");
       window.location.href = "loginPage.html";
       return;
     }
-
     if (!response.ok) {
       throw new Error(`HTTP-Fehler: ${response.status}`);
     }
-
     const invitations = await response.json();
     renderInvitations(invitations);
   } catch (error) {
@@ -210,59 +180,44 @@ async function loadInvitations() {
 function renderInvitations(invitations) {
   const inviteList = document.getElementById("inviteList");
   inviteList.replaceChildren();
-
   if (invitations.length === 0) {
     inviteList.textContent = "Du hast keine Einladungen.";
     return;
   }
-
   invitations.forEach(function (invitation) {
     const card = document.createElement("div");
     card.className = "card shadow-sm";
-
     const cardBody = document.createElement("div");
     cardBody.className = "card-body";
-
     card.appendChild(cardBody);
     inviteList.appendChild(card);
-
     const title = document.createElement("h3");
     title.className = "card-title h5";
     title.textContent = invitation.clubName;
-
     cardBody.appendChild(title);
-
     const description = document.createElement("p");
     description.className = "card-text text-secondary";
     description.textContent =
       invitation.description || "Keine Beschreibung vorhanden.";
-
     cardBody.appendChild(description);
-
     const acceptButton = document.createElement("button");
     acceptButton.type = "button";
     acceptButton.className = "btn btn-success";
     acceptButton.textContent = "Annehmen";
-
     const declineButton = document.createElement("button");
     declineButton.type = "button";
     declineButton.className = "btn btn-outline-danger";
     declineButton.textContent = "Ablehnen";
-
     const buttonGroup = document.createElement("div");
     buttonGroup.className = "d-flex flex-wrap gap-2";
-
     const errorMessage = document.createElement("div");
     errorMessage.className = "alert alert-danger d-none mt-3";
     errorMessage.setAttribute("role", "alert");
-
     cardBody.appendChild(errorMessage);
-
     function setButtonsDisabled(disabled) {
       acceptButton.disabled = disabled;
       declineButton.disabled = disabled;
     }
-
     acceptButton.addEventListener("click", async function () {
       setButtonsDisabled(true);
       errorMessage.classList.add("d-none");
@@ -280,7 +235,6 @@ function renderInvitations(invitations) {
         setButtonsDisabled(false);
       }
     });
-
     declineButton.addEventListener("click", async function () {
       setButtonsDisabled(true);
       errorMessage.classList.add("d-none");
@@ -297,61 +251,42 @@ function renderInvitations(invitations) {
         setButtonsDisabled(false);
       }
     });
-
     buttonGroup.append(acceptButton, declineButton);
     cardBody.appendChild(buttonGroup);
   });
 }
-logoutButton.addEventListener("click", async function () {
-  try {
-    const response = await fetch("http://localhost:8181/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      console.error("Logout fehlgeschlagen:", response.status);
-      return;
-    }
-
-    window.location.href = "loginPage.html";
-  } catch (error) {
-    console.error("Logout-Anfrage fehlgeschlagen:", error);
-  }
+logoutButton.addEventListener("click", function () {
+  sessionStorage.removeItem("token");
+  window.location.href = "loginPage.html";
 });
-
-loadUser();
-loadClubs();
-loadInvitations();
-
+if (!sessionStorage.getItem("token")) {
+  window.location.href = "loginPage.html";
+} else {
+  loadUser();
+  loadClubs();
+  loadInvitations();
+}
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
 const createClubModal = document.getElementById("createClubModal");
 const createClubError = document.getElementById("createClubError");
 const createClubButton = createClubForm.querySelector('button[type="submit"]');
-
 function showClubError(message) {
   createClubError.textContent = message;
   createClubError.classList.remove("d-none");
 }
-
 createClubForm.addEventListener("submit", async function (event) {
   event.preventDefault();
-
   if (createClubButton.disabled) {
     return;
   }
-
   createClubError.classList.add("d-none");
   createClubError.textContent = "";
-
   const name = clubNameInput.value.trim();
   const description = document
     .getElementById("clubDescriptionInput")
     .value.trim();
-
   clubNameInput.classList.remove("is-invalid");
-
   if (name === "") {
     clubNameInput.classList.add("is-invalid");
     return;
@@ -360,7 +295,6 @@ createClubForm.addEventListener("submit", async function (event) {
     name: name,
     description: description,
   };
-
   console.log("Daten für das Backend:", clubData);
   createClubButton.disabled = true;
   try {
@@ -368,14 +302,13 @@ createClubForm.addEventListener("submit", async function (event) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
-      credentials: "include",
       body: JSON.stringify(clubData),
     });
     if (response.ok) {
       const createdClub = await response.json();
       console.log("Buchclub erstellt:", createdClub);
-
       const modal = bootstrap.Modal.getInstance(createClubModal);
       modal.hide();
       loadClubs();
