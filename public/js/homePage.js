@@ -1,3 +1,5 @@
+const DEV_MODE = true;
+
 async function loadUser() {
   try {
     const response = await fetch("http://localhost:8181/users/me", {
@@ -259,7 +261,31 @@ logoutButton.addEventListener("click", function () {
   sessionStorage.removeItem("token");
   window.location.href = "loginPage.html";
 });
-if (!sessionStorage.getItem("token")) {
+if (DEV_MODE) {
+  document.getElementById("username").textContent = "Testnutzer";
+
+  renderClubs([
+    {
+      id: 1,
+      bookClubName: "Fantasyfreunde",
+      description: "Gemeinsam Fantasybücher entdecken.",
+    },
+    {
+      id: 2,
+      bookClubName: "Krimirunde",
+      description: "Jeden Monat ein spannender Krimi.",
+    },
+  ]);
+
+  renderInvitations([
+    {
+      invitationId: 1,
+      clubId: 3,
+      clubName: "Die Leseratten",
+      description: "Unser gemütlicher Leseclub.",
+    },
+  ]);
+} else if (!sessionStorage.getItem("token")) {
   window.location.href = "loginPage.html";
 } else {
   loadUser();
