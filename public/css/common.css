@@ -2,21 +2,17 @@
   --color-primary: #b77b82;
   --color-primary-hover: #9f686f;
   --color-primary-light: #ead4d6;
-
   --color-secondary: #879b7c;
   --color-secondary-hover: #718568;
   --color-secondary-light: #dce4d7;
-
   --color-background: #f8f5f2;
   --color-surface: #ffffff;
-
   --color-text: #3f3a38;
   --color-text-muted: #77716e;
   --color-border: #ddd6d2;
-
   --color-danger: #b85c5c;
   --color-success: #718568;
-
+  --color-focus: rgba(135, 155, 124, 0.25);
   --border-radius: 0.5rem;
   --shadow-sm: 0 0.125rem 0.5rem rgba(63, 58, 56, 0.08);
 }
@@ -69,4 +65,52 @@ a:hover {
   border-color: var(--color-border);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
+}
+
+.btn-confirm {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--color-secondary);
+  --bs-btn-border-color: var(--color-secondary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-secondary-hover);
+  --bs-btn-hover-border-color: var(--color-secondary-hover);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-secondary-hover);
+  --bs-btn-active-border-color: var(--color-secondary-hover);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--color-secondary);
+  --bs-btn-disabled-border-color: var(--color-secondary);
+}
+
+.btn-reject {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-primary-hover);
+  --bs-btn-hover-border-color: var(--color-primary-hover);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-primary-hover);
+  --bs-btn-active-border-color: var(--color-primary-hover);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--color-primary);
+  --bs-btn-disabled-border-color: var(--color-primary);
+}
+
+.btn-outline-botanical {
+  --bs-btn-color: #52694a;
+  --bs-btn-border-color: var(--color-secondary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--color-secondary);
+  --bs-btn-hover-border-color: var(--color-secondary);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--color-secondary-hover);
+  --bs-btn-active-border-color: var(--color-secondary-hover);
+}
+
+.btn:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-secondary-hover);
+  outline-offset: 2px;
 }

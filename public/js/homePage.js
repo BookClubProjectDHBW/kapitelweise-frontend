@@ -85,19 +85,24 @@ function renderClubs(clubs) {
     image.alt = `Bild für ${club.bookClubName}`;
     card.appendChild(image);
     card.dataset.clubId = club.id;
+
     const cardBody = document.createElement("div");
     cardBody.className = "card-body";
+
     const title = document.createElement("h3");
     title.className = "card-title h5";
     title.textContent = club.bookClubName;
+
     const description = document.createElement("p");
     description.className = "card-text text-secondary";
     description.textContent =
       club.description || "Keine Beschreibung vorhanden.";
+
     const openButton = document.createElement("a");
-    openButton.className = "btn btn-outline-secondary";
+    openButton.className = "btn btn-outline-botanical";
     openButton.textContent = "Club öffnen";
     openButton.href = `bookClub.html?id=${club.id}`;
+
     if (club.id == null) {
       openButton.removeAttribute("href");
       openButton.classList.add("disabled");
@@ -187,35 +192,44 @@ function renderInvitations(invitations) {
     return;
   }
   invitations.forEach(function (invitation) {
+
     const card = document.createElement("div");
     card.className = "card shadow-sm";
+
     const cardBody = document.createElement("div");
     cardBody.className = "card-body";
     card.appendChild(cardBody);
     inviteList.appendChild(card);
+
     const title = document.createElement("h3");
     title.className = "card-title h5";
     title.textContent = invitation.clubName;
     cardBody.appendChild(title);
+
     const description = document.createElement("p");
     description.className = "card-text text-secondary";
     description.textContent =
       invitation.description || "Keine Beschreibung vorhanden.";
     cardBody.appendChild(description);
+
     const acceptButton = document.createElement("button");
     acceptButton.type = "button";
-    acceptButton.className = "btn btn-success";
+    acceptButton.className = "btn btn-confirm";
     acceptButton.textContent = "Annehmen";
+
     const declineButton = document.createElement("button");
     declineButton.type = "button";
-    declineButton.className = "btn btn-outline-danger";
+    declineButton.className = "btn btn-reject";
     declineButton.textContent = "Ablehnen";
+
     const buttonGroup = document.createElement("div");
     buttonGroup.className = "d-flex flex-wrap gap-2";
+
     const errorMessage = document.createElement("div");
     errorMessage.className = "alert alert-danger d-none mt-3";
     errorMessage.setAttribute("role", "alert");
     cardBody.appendChild(errorMessage);
+
     function setButtonsDisabled(disabled) {
       acceptButton.disabled = disabled;
       declineButton.disabled = disabled;
@@ -297,6 +311,7 @@ const clubNameInput = document.getElementById("clubNameInput");
 const createClubModal = document.getElementById("createClubModal");
 const createClubError = document.getElementById("createClubError");
 const createClubButton = createClubForm.querySelector('button[type="submit"]');
+
 function showClubError(message) {
   createClubError.textContent = message;
   createClubError.classList.remove("d-none");
