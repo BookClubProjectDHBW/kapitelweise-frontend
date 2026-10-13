@@ -1,17 +1,10 @@
-:root {
-  --bookclub-dark: #3f3a34;
-  --bookclub-primary: #7a6248;
-  --bookclub-accent: #a66f3f;
-  --bookclub-light: #f7f3ed;
-}
-
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--bookclub-light);
-  color: var(--bookclub-dark);
-  font-family: Georgia, "Times New Roman", serif;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 main {
@@ -20,27 +13,28 @@ main {
 
 footer {
   padding: 1.5rem;
-  background: var(--bookclub-dark);
-  color: #fff;
+  background: var(--color-secondary-light);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
   text-align: center;
 }
 
 .bookclub-header {
   padding: 1rem 0;
-  border-bottom: 1px solid var(--bookclub-dark);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .back-link {
   display: inline-block;
   margin-bottom: 1.5rem;
-  color: var(--bookclub-primary);
+  color: var(--color-secondary-hover);
   font-size: 0.95rem;
   text-decoration: none;
 }
 
 .back-link:hover,
 .nav-tab:hover {
-  color: var(--bookclub-accent);
+  color: var(--color-primary);
 }
 
 .back-link:hover {
@@ -63,7 +57,7 @@ footer {
 .club-name,
 .book-data {
   margin: 0;
-  color: var(--bookclub-primary);
+  color: var(--color-secondary-hover);
   font-size: 0.95rem;
 }
 
@@ -79,14 +73,14 @@ footer {
 
 .book-details h1 {
   margin: 0 0 1rem;
-  color: var(--bookclub-dark);
+  color: var(--color-text);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 600;
 }
 
 .bookclub-navigation {
   display: flex;
-  border-bottom: 1px solid var(--bookclub-dark);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .nav-tab {
@@ -95,7 +89,7 @@ footer {
   padding: 1rem 0.4rem;
   border: 0;
   background: transparent;
-  color: var(--bookclub-dark);
+  color: var(--color-text);
   font: inherit;
   font-weight: 600;
   text-align: left;
@@ -106,11 +100,11 @@ footer {
 }
 
 .nav-tab:hover {
-  background: rgb(166 111 63 / 8%);
+  background: rgba(183, 123, 130, 0.10);
 }
 
 .nav-tab.active {
-  color: var(--bookclub-accent);
+  color: var(--color-primary);
   font-weight: 700;
 }
 
@@ -122,7 +116,7 @@ footer {
   left: 0.4rem;
   height: 3px;
   border-radius: 3px 3px 0 0;
-  background: var(--bookclub-accent);
+  background: var(--color-primary);
 }
 
 @media (max-width: 576px) {
@@ -166,15 +160,15 @@ footer {
 }
 
 .admin-invitation-button {
-  border: 1px solid var(--bookclub-primary);
+  border: 1px solid var(--color-secondary-hover);
   background: transparent;
-  color: var(--bookclub-primary);
+  color: var(--color-secondary-hover);
 }
 
 .admin-invitation-button:hover {
-  border-color: var(--bookclub-accent);
-  background: rgb(166 111 63 / 8%);
-  color: var(--bookclub-accent);
+  border-color: var(--color-primary);
+  background: rgba(183, 123, 130, 0.10);
+  color: var(--color-primary);
 }
 
 .invitation-dialog {
@@ -182,12 +176,12 @@ footer {
   padding: 0;
   border: 0;
   border-radius: 10px;
-  color: var(--bookclub-dark);
-  box-shadow: 0 1rem 3rem rgb(63 58 52 / 30%);
+  color: var(--color-text);
+  box-shadow: 0 1rem 3rem rgba(63, 58, 56, 0.22);
 }
 
 .invitation-dialog::backdrop {
-  background: rgb(63 58 52 / 45%);
+  background: rgba(63, 58, 56, 0.45);
 }
 
 .invitation-form {
@@ -208,7 +202,7 @@ footer {
 
 .invitation-form > p {
   margin: 0.75rem 0 1.5rem;
-  color: var(--bookclub-primary);
+  color: var(--color-secondary-hover);
 }
 
 .invitation-form label {
@@ -220,23 +214,23 @@ footer {
 .invitation-form input {
   width: 100%;
   padding: 0.7rem 0.8rem;
-  border: 1px solid var(--bookclub-primary);
+  border: 1px solid var(--color-secondary-hover);
   border-radius: 6px;
-  color: var(--bookclub-dark);
+  color: var(--color-text);
   font: inherit;
 }
 
 .invitation-form input:focus {
-  outline: 3px solid rgb(166 111 63 / 25%);
+  outline: 3px solid rgba(135, 155, 124, 0.25);
   outline-offset: 2px;
-  border-color: var(--bookclub-accent);
+  border-color: var(--color-primary);
 }
 
 .dialog-close-button {
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--bookclub-dark);
+  color: var(--color-text);
   font-size: 1.8rem;
   line-height: 1;
   cursor: pointer;
@@ -264,20 +258,20 @@ footer {
 }
 
 .dialog-cancel-button {
-  border: 1px solid var(--bookclub-primary);
+  border: 1px solid var(--color-secondary-hover);
   background: #fff;
-  color: var(--bookclub-primary);
+  color: var(--color-secondary-hover);
 }
 
 .invitation-submit {
-  border: 1px solid var(--bookclub-accent);
-  background: var(--bookclub-accent);
+  border: 1px solid var(--color-secondary);
+  background: var(--color-secondary);
   color: #fff;
 }
 
 .invitation-submit:hover {
-  background: var(--bookclub-primary);
-  border-color: var(--bookclub-primary);
+  background: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
 }
 
 @media (max-width: 576px) {
@@ -294,4 +288,100 @@ footer {
     align-self: flex-start;
     margin-bottom: 1.5rem;
   }
+}
+
+
+.navbar {
+  border-color: var(--color-border) !important;
+}
+
+.navbar-brand {
+  color: var(--color-text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 600;
+}
+
+.navbar-brand:hover {
+  color: var(--color-primary);
+}
+
+#logoutButton {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+#logoutButton:hover {
+  color: var(--color-text);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+.bookclub-header {
+  border-bottom-color: var(--color-border);
+}
+
+.book-details h1,
+.dialog-header h2 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.bookclub-navigation {
+  border-bottom-color: var(--color-border);
+}
+
+.nav-tab.active {
+  color: var(--color-secondary-hover);
+}
+
+.nav-tab.active::after {
+  background: var(--color-secondary);
+}
+
+.admin-invitation-button {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary-hover);
+}
+
+.admin-invitation-button:hover {
+  border-color: var(--color-secondary-hover);
+  background: var(--color-secondary-light);
+  color: var(--color-secondary-hover);
+}
+
+.invitation-dialog {
+  border: 1px solid var(--color-border);
+}
+
+.invitation-form input {
+  border-color: var(--color-border);
+}
+
+.invitation-form input:focus {
+  border-color: var(--color-secondary);
+}
+
+.invitation-form > p {
+  color: var(--color-text-muted);
+}
+
+.dialog-cancel-button {
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.dialog-cancel-button:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary-hover);
+}
+
+.invitation-submit {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.invitation-submit:hover {
+  border-color: var(--color-secondary-hover);
+  background: var(--color-secondary-hover);
 }
