@@ -1,5 +1,99 @@
 const DEV_MODE = false;
 
+const HOMEPAGE_QUERY = `
+  query {
+    member {
+      id
+      name
+      membership {
+        id
+        name
+        description
+      }
+      invitationPending {
+        id
+        createdAt
+        bookclub {
+          id
+          name
+          description
+        }
+        invitedBy {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+async function graphqlRequest(query, variables = {}) {
+  const response = await fetch("http://localhost:8383/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+
+  if (response.status === 401) {
+    sessionStorage.removeItem("token");
+    window.location.href = "loginPage.html";
+    throw new Error("Deine Anmeldung ist abgelaufen.");
+  }
+
+  if (!response.ok) {
+    throw new Error(`HTTP-Fehler: ${response.status}`);
+  }
+
+  const result = await response.json();
+
+  if (result.errors?.length) {
+    throw new Error(result.errors[0].message);
+  }
+
+  return result.data;
+}
+
+async function loadHomepage() {
+  try {
+    const data = await graphqlRequest(HOMEPAGE_QUERY);
+    const member = data.member;
+
+    document.getElementById("username").textContent = member.name;
+
+    const clubs = member.membership.map(function (club) {
+      return {
+        id: club.id,
+        bookClubName: club.name,
+        description: club.description,
+      };
+    });
+
+    renderClubs(clubs);
+
+    const invitations = member.invitationPending.map(function (invitation) {
+      return {
+        invitationId: invitation.id,
+        clubId: invitation.bookclub.id,
+        clubName: invitation.bookclub.name,
+        description: invitation.bookclub.description,
+      };
+    });
+
+    renderInvitations(invitations);
+  } catch (error) {
+    console.error("Fehler beim Laden der Homepage:", error);
+
+    document.getElementById("clubList").textContent =
+      "Deine Buchclubs konnten nicht geladen werden.";
+
+    document.getElementById("inviteList").textContent =
+      "Deine Einladungen konnten nicht geladen werden.";
+  }
+}
+
 async function loadUser() {
   try {
     const response = await fetch("http://localhost:8181/users/me", {
@@ -192,7 +286,6 @@ function renderInvitations(invitations) {
     return;
   }
   invitations.forEach(function (invitation) {
-
     const card = document.createElement("div");
     card.className = "card shadow-sm";
 
@@ -302,9 +395,7 @@ if (DEV_MODE) {
 } else if (!sessionStorage.getItem("token")) {
   window.location.href = "loginPage.html";
 } else {
-  loadUser();
-  loadClubs();
-  loadInvitations();
+  loadHomepage();
 }
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
