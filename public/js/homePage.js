@@ -37,6 +37,16 @@ const CREATE_CLUB_MUTATION = `
   }
 `;
 
+const RESPOND_INVITATION_MUTATION = `
+  mutation Respond($input: InvitationInput!) {
+    responseInvitation(invitationInput: $input) {
+      id
+      name
+      description
+    }
+  }
+`;
+
 async function graphqlRequest(query, variables = {}) {
   const response = await fetch("http://localhost:8383/graphql", {
     method: "POST",
@@ -220,36 +230,18 @@ function renderClubs(clubs) {
 }
 async function respondToInvitation(invitationId, status) {
   try {
-    const response = await fetch(
-      `http://localhost:8181/clubs/invitations/${invitationId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          invitationStatus: status,
-        }),
+    const data = await graphqlRequest(RESPOND_INVITATION_MUTATION, {
+      input: {
+        invitationId: String(invitationId),
+        status: status,
       },
-    );
-    if (!response.ok) {
-      const messages = {
-        400: "Ungültige Eingaben.",
-        401: "Deine Anmeldung ist abgelaufen.",
-        403: "Diese Einladung gehört nicht zu deinem Konto.",
-        404: "Die Einladung wurde nicht gefunden.",
-        409: "Diese Einladung wurde bereits beantwortet.",
-      };
-      throw new Error(
-        messages[response.status] || "Ein unbekannter Fehler ist aufgetreten.",
-      );
-    }
-    const result = await response.json();
-    console.log("Einladung beantwortet:", result);
+    });
+
+    console.log("Einladung beantwortet:", data.responseInvitation);
     return true;
   } catch (error) {
     console.error("Fehler beim Antworten auf die Einladung:", error);
+
     return error instanceof TypeError
       ? "Verbindung zum Server fehlgeschlagen."
       : error.message;
