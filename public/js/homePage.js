@@ -76,6 +76,8 @@ async function graphqlRequest(query, variables = {}) {
   return result.data;
 }
 
+let currentClubs = [];
+
 async function loadHomepage() {
   try {
     const data = await graphqlRequest(HOMEPAGE_QUERY);
@@ -91,7 +93,8 @@ async function loadHomepage() {
       };
     });
 
-    renderClubs(clubs);
+    currentClubs = clubs;
+    renderClubs(currentClubs);
 
     const invitations = member.invitationPending.map(function (invitation) {
       return {
@@ -238,6 +241,17 @@ async function respondToInvitation(invitationId, status) {
     });
 
     console.log("Einladung beantwortet:", data.responseInvitation);
+    if (status === "ACCEPTED" && data.responseInvitation) {
+      const club = data.responseInvitation;
+
+      currentClubs.push({
+        id: club.id,
+        bookClubName: club.name,
+        description: club.description,
+      });
+
+      renderClubs(currentClubs);
+    }
     return true;
   } catch (error) {
     console.error("Fehler beim Antworten auf die Einladung:", error);
@@ -339,7 +353,6 @@ function renderInvitations(invitations) {
       );
       if (success === true) {
         removeInvitationCard(card);
-        loadClubs();
       } else {
         errorMessage.textContent = success;
         errorMessage.classList.remove("d-none");
