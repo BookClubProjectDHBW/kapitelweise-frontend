@@ -118,32 +118,7 @@ async function loadHomepage() {
 }
 
 const logoutButton = document.getElementById("logoutButton");
-async function loadClubs() {
-  const clubList = document.getElementById("clubList");
-  clubList.replaceChildren();
-  clubList.textContent = "Buchclubs werden geladen...";
-  try {
-    const response = await fetch("http://localhost:8181/clubs", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-    });
-    if (response.status === 401) {
-      sessionStorage.removeItem("token");
-      window.location.href = "loginPage.html";
-      return;
-    }
-    if (!response.ok) {
-      throw new Error(`HTTP-Fehler: ${response.status}`);
-    }
-    const clubs = await response.json();
-    renderClubs(clubs);
-  } catch (error) {
-    console.error("Fehler beim Laden der Buchclubs:", error);
-    clubList.textContent = "Deine Buchclubs konnten nicht geladen werden.";
-  }
-}
+
 const clubImages = [
   "../images/club1.webp",
   "../images/club2.webp",
