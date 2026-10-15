@@ -217,32 +217,7 @@ function removeInvitationCard(card) {
     inviteList.textContent = "Du hast aktuell keine offenen Einladungen.";
   }
 }
-async function loadInvitations() {
-  const inviteList = document.getElementById("inviteList");
-  inviteList.replaceChildren();
-  inviteList.textContent = "Einladungen werden geladen...";
-  try {
-    const response = await fetch("http://localhost:8181/clubs/invitations", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-    });
-    if (response.status === 401) {
-      sessionStorage.removeItem("token");
-      window.location.href = "loginPage.html";
-      return;
-    }
-    if (!response.ok) {
-      throw new Error(`HTTP-Fehler: ${response.status}`);
-    }
-    const invitations = await response.json();
-    renderInvitations(invitations);
-  } catch (error) {
-    console.error("Fehler beim Laden der Einladungen:", error);
-    inviteList.textContent = "Einladungen konnten nicht geladen werden.";
-  }
-}
+
 function renderInvitations(invitations) {
   const inviteList = document.getElementById("inviteList");
   inviteList.replaceChildren();
