@@ -117,32 +117,6 @@ async function loadHomepage() {
   }
 }
 
-async function loadUser() {
-  try {
-    const response = await fetch("http://localhost:8181/users/me", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-    });
-    if (response.status === 401) {
-      sessionStorage.removeItem("token");
-      window.location.href = "loginPage.html";
-      return;
-    }
-    if (!response.ok) {
-      console.error(
-        "Benutzerdaten konnten nicht geladen werden:",
-        response.status,
-      );
-      return;
-    }
-    const data = await response.json();
-    document.getElementById("username").textContent = data.username;
-  } catch (error) {
-    console.error("Fehler beim Laden der Benutzerdaten:", error);
-  }
-}
 const logoutButton = document.getElementById("logoutButton");
 async function loadClubs() {
   const clubList = document.getElementById("clubList");
