@@ -440,32 +440,25 @@ createClubForm.addEventListener("submit", async function (event) {
   console.log("Daten für das Backend:", clubData);
   createClubButton.disabled = true;
   try {
-    const response = await fetch("http://localhost:8181/clubs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(clubData),
+    const data = await graphqlRequest(CREATE_CLUB_MUTATION, {
+      input: clubData,
     });
-    if (response.ok) {
-      const createdClub = await response.json();
-      console.log("Buchclub erstellt:", createdClub);
-      const modal = bootstrap.Modal.getInstance(createClubModal);
-      modal.hide();
-      loadClubs();
-    } else if (response.status === 400) {
-      showClubError("Ungültige Eingaben. Bitte überprüfe deine Angaben.");
-    } else if (response.status === 401) {
-      showClubError(
-        "Deine Anmeldung ist abgelaufen. Bitte melde dich erneut an.",
-      );
-    } else {
-      showClubError("Der Buchclub konnte nicht erstellt werden.");
-    }
+
+    const createdClub = data.createNewBookClub;
+
+    console.log("Buchclub erstellt:", createdClub);
+
+    const modal = bootstrap.Modal.getInstance(createClubModal);
+    modal.hide();
+
+    loadHomepage();
   } catch (error) {
     console.error("Fehler beim Erstellen des Clubs:", error);
-    showClubError("Verbindung zum Server fehlgeschlagen.");
+    showClubError(
+      error instanceof TypeError
+        ? "Verbindung zum Server fehlgeschlagen."
+        : error.message,
+    );
   } finally {
     createClubButton.disabled = false;
   }
