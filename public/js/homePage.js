@@ -27,6 +27,16 @@ const HOMEPAGE_QUERY = `
   }
 `;
 
+const CREATE_CLUB_MUTATION = `
+  mutation CreateClub($input: BookClubInput!) {
+    createNewBookClub(bookClubInput: $input) {
+      id
+      name
+      description
+    }
+  }
+`;
+
 async function graphqlRequest(query, variables = {}) {
   const response = await fetch("http://localhost:8383/graphql", {
     method: "POST",
