@@ -456,7 +456,13 @@ createClubForm.addEventListener("submit", async function (event) {
     const modal = bootstrap.Modal.getInstance(createClubModal);
     modal.hide();
 
-    loadHomepage();
+    currentClubs.push({
+      id: createdClub.id,
+      bookClubName: createdClub.name,
+      description: createdClub.description,
+    });
+
+    renderClubs(currentClubs);
   } catch (error) {
     console.error("Fehler beim Erstellen des Clubs:", error);
     showClubError(
