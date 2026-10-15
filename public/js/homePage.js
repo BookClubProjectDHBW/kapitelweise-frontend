@@ -1,4 +1,4 @@
-const DEV_MODE = false;
+const DEV_MODE = true;
 
 const HOMEPAGE_QUERY = `
   query {
@@ -310,7 +310,7 @@ logoutButton.addEventListener("click", function () {
 if (DEV_MODE) {
   document.getElementById("username").textContent = "Testnutzer";
 
-  renderClubs([
+  currentClubs = [
     {
       id: 1,
       bookClubName: "Fantasyfreunde",
@@ -321,7 +321,9 @@ if (DEV_MODE) {
       bookClubName: "Krimirunde",
       description: "Jeden Monat ein spannender Krimi.",
     },
-  ]);
+  ];
+
+  renderClubs(currentClubs);
 
   renderInvitations([
     {
