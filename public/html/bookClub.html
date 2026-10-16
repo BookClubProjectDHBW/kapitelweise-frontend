@@ -111,13 +111,53 @@
       >
         <button class="nav-tab active" type="button">Leseplan</button>
 
-        <button class="nav-tab" type="button">Abstimmung</button>
+        <button id="votingTab" class="nav-tab" type="button">Abstimmung</button>
 
         <button class="nav-tab" type="button">Treffen</button>
 
         <button class="nav-tab" type="button">Mitglieder</button>
       </nav>
-      <section id="tabContent" class="tab-content" aria-live="polite"></section>
+      <section id="tabContent" class="tab-content" aria-live="polite">
+        <div id="bookSearchPanel" class="d-none">
+          <h2 class="h4 mb-3">Buch suchen</h2>
+          <p class="text-secondary">
+            Suche ein Buch, das du für die nächste Abstimmung vorschlagen
+            möchtest.
+          </p>
+
+          <form id="bookSearchForm" class="row g-3 align-items-end">
+            <div class="col-12 col-md-3">
+              <label for="bookSearchType" class="form-label">Suche nach</label>
+              <select id="bookSearchType" class="form-select">
+                <option value="title">Titel</option>
+                <option value="author">Autor</option>
+                <option value="isbn">ISBN</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-7">
+              <label for="bookSearchInput" class="form-label"
+                >Suchbegriff</label
+              >
+              <input
+                id="bookSearchInput"
+                type="search"
+                class="form-control"
+                placeholder="Buchtitel eingeben..."
+                required
+              />
+            </div>
+
+            <div class="col-12 col-md-2">
+              <button type="submit" class="btn btn-confirm w-100">
+                Suchen
+              </button>
+            </div>
+          </form>
+
+          <div id="bookSearchResults" class="mt-4"></div>
+        </div>
+      </section>
     </main>
     <footer>
       <div class="container">

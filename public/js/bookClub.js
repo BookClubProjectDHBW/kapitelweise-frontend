@@ -12,6 +12,10 @@ navigation.addEventListener("click", (event) => {
   });
 
   clickedTab.classList.add("active");
+
+  document
+    .getElementById("bookSearchPanel")
+    .classList.toggle("d-none", clickedTab.id !== "votingTab");
 });
 
 //Adminrolle prüfen
