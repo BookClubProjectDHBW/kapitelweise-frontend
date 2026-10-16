@@ -128,16 +128,40 @@ const bookSearchForm = document.getElementById("bookSearchForm");
 const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 
-bookSearchForm.addEventListener("submit", function (event) {
+bookSearchForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const searchType = bookSearchType.value;
   const searchTerm = bookSearchInput.value.trim();
+  const resultsContainer = document.getElementById("bookSearchResults");
 
   if (searchTerm === "") {
     return;
   }
 
-  console.log("Suchkategorie:", searchType);
-  console.log("Suchbegriff:", searchTerm);
+  const searchParams = new URLSearchParams({
+    [searchType]: searchTerm,
+  });
+
+  resultsContainer.textContent = "Bücher werden gesucht...";
+
+  try {
+    const response = await fetch(
+      `http://localhost:8383/bookSearch?${searchParams}`,
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    console.log("Gefundene Bücher:", data.docs);
+
+    resultsContainer.textContent = `${data.docs.length} Bücher gefunden.`;
+  } catch (error) {
+    console.error("Fehler bei der Büchersuche:", error);
+    resultsContainer.textContent =
+      "Die Büchersuche ist momentan nicht verfügbar.";
+  }
 });
