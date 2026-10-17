@@ -47,7 +47,6 @@
 .auth-form .btn {
   width: 100%;
   padding: 0.75rem 1rem;
-
 }
 
 .auth-footer {
@@ -71,10 +70,6 @@
 
 .auth-link-secondary:hover {
   color: var(--color-secondary-hover);
-}
-
-.auth-footer p {
-  margin-bottom: 0;
 }
 
 .alert-danger {
