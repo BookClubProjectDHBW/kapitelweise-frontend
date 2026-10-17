@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Name des Buchclubs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/buchclub.css" />
+    <script src="../js/bookClubMockData.js" defer></script>
+    <script src="../js/buchclub.js" defer></script>
+  </head>
+  <dialog
+    id="invitationDialog"
+    class="invitation-dialog"
+    aria-labelledby="invitationDialogTitle"
+  >
+    <form id="invitationForm" class="invitation-form" novalidate>
+      <div class="dialog-header">
+        <h2 id="invitationDialogTitle">Mitglied einladen</h2>
+        <button
+          id="closeInvitationDialog"
+          class="dialog-close-button"
+          type="button"
+          aria-label="Einladungsfenster schließen"
+        >
+          ×
+        </button>
+      </div>
+
+      <p>Gib den Benutzernamen der Person ein, die du einladen möchtest.</p>
+
+      <label for="invitedUsername">Benutzername</label>
+      <input
+        id="invitedUsername"
+        name="invitedUsername"
+        type="text"
+        autocomplete="off"
+        required
+      />
+
+      <p id="invitationStatus" class="invitation-status" role="status"></p>
+
+      <div class="dialog-actions">
+        <button
+          id="cancelInvitation"
+          class="dialog-cancel-button"
+          type="button"
+        >
+          Abbrechen
+        </button>
+        <button class="invitation-submit" type="submit">
+          Einladung senden
+        </button>
+      </div>
+    </form>
+  </dialog>
+  <body>
+    <header>
+      <nav class="navbar bg-white border-bottom shadow-sm">
+        <div class="container py-2">
+          <a class="navbar-brand fs-4" href="homePage.html">Buchclub</a>
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            id="logoutButton"
+          >
+            Logout
+          </button>
+        </div>
+      </nav>
+    </header>
+    <main class="container">
+      <section class="bookclub-header">
+        <div id="adminActions" class="bookclub-header-actions">
+          <a href="homePage.html" class="back-link"> ← Zurück </a>
+
+          <!-- Bleibt zunächst leer und wird nur für Admins befüllt. -->
+          <div></div>
+        </div>
+
+        <div class="bookclub-info">
+          <img id="bookCover" alt="Buchcover" class="book-cover" />
+          <div class="book-details">
+            <p class="club-name">
+              <span id="name">Buchclub</span>·<span id="memberCount"
+                >AnzahlMitglieder</span
+              >
+              Mitglieder
+            </p>
+            <h1 id="title">Buchtitel</h1>
+            <p class="book-data">
+              <span id="edition">Ausgabe</span> · ISBN:
+              <span id="isbn">ISBN</span> · Ziel:
+              <span id="targetDate">Leseziel</span> Seiten
+            </p>
+          </div>
+        </div>
+      </section>
+      <nav
+        id="bookclubNavigation"
+        class="bookclub-navigation"
+        aria-label="Buchclub Navigation"
+      >
+        <button class="nav-tab active" type="button">Leseplan</button>
+
+        <button class="nav-tab" type="button">Abstimmung</button>
+
+        <button class="nav-tab" type="button">Treffen</button>
+
+        <button class="nav-tab" type="button">Mitglieder</button>
+      </nav>
+      <section id="tabContent" class="tab-content" aria-live="polite"></section>
+    </main>
+    <footer>
+      <div class="container">
+        <p class="mb-0">© 2026 Kapitelweise</p>
+      </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
