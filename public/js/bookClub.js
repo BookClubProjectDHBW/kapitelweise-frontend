@@ -141,9 +141,13 @@ bookSearchForm.addEventListener("submit", async function (event) {
     return;
   }
 
+  selectedBook = null;
+
   const searchParams = new URLSearchParams({
     [searchType]: searchTerm,
   });
+
+
 
   resultsContainer.textContent = "Bücher werden gesucht...";
 
