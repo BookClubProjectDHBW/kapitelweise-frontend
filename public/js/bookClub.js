@@ -1,3 +1,87 @@
+const clubId = new URLSearchParams(window.location.search).get("id");
+
+async function fetchClubSuggestions() {
+  const status = document.getElementById("clubSuggestionsStatus");
+
+  if (!clubId) {
+    status.textContent = "Keine Buchclub-ID vorhanden.";
+    status.className = "text-danger";
+    throw new Error("Keine Buchclub-ID vorhanden.");
+  }
+
+  status.textContent = "Buchvorschläge werden geladen...";
+  status.className = "text-secondary";
+
+  try {
+    const response = await fetch(
+      `http://localhost:8181/clubs/${encodeURIComponent(clubId)}/suggestions`,
+      {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      },
+    );
+
+    if (response.status === 401) {
+      sessionStorage.removeItem("token");
+      window.location.href = "loginPage.html";
+      throw new Error("Deine Anmeldung ist abgelaufen.");
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    status.textContent = "";
+
+    return data;
+  } catch (error) {
+    if (error.message !== "Deine Anmeldung ist abgelaufen.") {
+      status.textContent = "Buchvorschläge konnten nicht geladen werden.";
+      status.className = "text-danger";
+    }
+
+    throw error;
+  }
+}
+
+function renderClubSuggestions(suggestions) {
+  const suggestionsList = document.getElementById("clubSuggestionsList");
+  const status = document.getElementById("clubSuggestionsStatus");
+
+  suggestionsList.replaceChildren();
+
+  if (suggestions.length === 0) {
+    status.textContent = "Es wurden noch keine Bücher vorgeschlagen.";
+    status.className = "text-secondary";
+    return;
+  }
+
+  status.textContent = "";
+
+  suggestions.forEach(function (book) {
+    const card = document.createElement("div");
+    card.className = "card mb-3";
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    const title = document.createElement("h3");
+    title.className = "h5";
+    title.textContent = book.title;
+
+    const author = document.createElement("p");
+    author.className = "text-secondary mb-0";
+    author.textContent = `Autor: ${book.author || "Unbekannt"}`;
+
+    cardBody.append(title, author);
+    card.appendChild(cardBody);
+    suggestionsList.appendChild(card);
+  });
+}
+
 const navigation = document.getElementById("bookclubNavigation");
 
 navigation.addEventListener("click", (event) => {
