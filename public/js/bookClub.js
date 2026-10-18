@@ -170,13 +170,13 @@ bookSearchForm.addEventListener("submit", async function (event) {
       card.className = "card mb-3";
 
       const cardBody = document.createElement("div");
-      cardBody.className = "card-body";
+      cardBody.className = "card-body d-flex align-items-start gap-3";
 
       if (book.cover_i) {
         const cover = document.createElement("img");
         cover.src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
         cover.alt = `Cover von ${book.title}`;
-        cover.className = "rounded mb-3";
+        cover.className = "rounded flex-shrink-0";
         cover.style.width = "100px";
         cover.style.height = "150px";
         cover.style.objectFit = "cover";
@@ -196,7 +196,11 @@ bookSearchForm.addEventListener("submit", async function (event) {
       year.className = "text-secondary mb-0";
       year.textContent = `Erstveröffentlichung: ${book.first_publish_year || "Unbekannt"}`;
 
-      cardBody.append(title, author, year);
+      const bookInfo = document.createElement("div");
+
+      bookInfo.append(title, author, year);
+      cardBody.appendChild(bookInfo);
+
       card.appendChild(cardBody);
       resultsContainer.appendChild(card);
     });
