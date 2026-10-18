@@ -128,6 +128,19 @@ const bookSearchForm = document.getElementById("bookSearchForm");
 const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 
+bookSearchType.addEventListener("change", function () {
+  const placeholders = {
+    title: "Buchtitel eingeben...",
+    author: "Autor eingeben...",
+    isbn: "ISBN eingeben...",
+  };
+
+  bookSearchInput.placeholder = placeholders[bookSearchType.value];
+});
+
+let selectedBook = null;
+let activeBookSearchController = null;
+
 bookSearchForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
@@ -139,6 +152,14 @@ bookSearchForm.addEventListener("submit", async function (event) {
     return;
   }
 
+  selectedBook = null;
+
+  if (activeBookSearchController) {
+    activeBookSearchController.abort();
+  }
+
+  activeBookSearchController = new AbortController();
+
   const searchParams = new URLSearchParams({
     [searchType]: searchTerm,
   });
@@ -148,6 +169,9 @@ bookSearchForm.addEventListener("submit", async function (event) {
   try {
     const response = await fetch(
       `http://localhost:8383/bookSearch?${searchParams}`,
+      {
+        signal: activeBookSearchController.signal,
+      },
     );
 
     if (!response.ok) {
@@ -158,8 +182,93 @@ bookSearchForm.addEventListener("submit", async function (event) {
 
     console.log("Gefundene Bücher:", data.docs);
 
-    resultsContainer.textContent = `${data.docs.length} Bücher gefunden.`;
+    resultsContainer.replaceChildren();
+
+    if (data.docs.length === 0) {
+      resultsContainer.textContent = "Keine Bücher gefunden.";
+      return;
+    }
+
+    data.docs.slice(0, 10).forEach(function (book) {
+      const card = document.createElement("div");
+      card.className = "card mb-3";
+
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body d-flex align-items-start gap-3";
+
+      const placeholder = document.createElement("div");
+      placeholder.className =
+        "rounded flex-shrink-0 bg-body-secondary d-flex align-items-center justify-content-center text-secondary text-center";
+      placeholder.style.width = "100px";
+      placeholder.style.height = "150px";
+      placeholder.textContent = "Kein Cover";
+
+      if (book.cover_i) {
+        const cover = document.createElement("img");
+        cover.src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+        cover.alt = `Cover von ${book.title}`;
+        cover.className = "rounded flex-shrink-0";
+        cover.style.width = "100px";
+        cover.style.height = "150px";
+        cover.style.objectFit = "cover";
+
+        cover.addEventListener("error", function () {
+          cover.replaceWith(placeholder);
+        });
+
+        cardBody.appendChild(cover);
+      } else {
+        cardBody.appendChild(placeholder);
+      }
+
+      const title = document.createElement("h3");
+      title.className = "h5";
+      title.textContent = book.title || "Unbekannter Titel";
+
+      const author = document.createElement("p");
+      author.className = "mb-1";
+      author.textContent = `Autor: ${book.author_name?.join(", ") || "Unbekannt"}`;
+
+      const year = document.createElement("p");
+      year.className = "text-secondary mb-0";
+      year.textContent = `Erstveröffentlichung: ${book.first_publish_year || "Unbekannt"}`;
+
+      const bookInfo = document.createElement("div");
+
+      const suggestButton = document.createElement("button");
+      suggestButton.type = "button";
+      suggestButton.className = "btn btn-confirm mt-2";
+      suggestButton.textContent = "Buch vorschlagen";
+
+      const selectionMessage = document.createElement("p");
+      selectionMessage.className =
+        "book-selection-message text-secondary mt-2 mb-0";
+
+      suggestButton.addEventListener("click", function () {
+        selectedBook = book;
+
+        document
+          .querySelectorAll(".book-selection-message")
+          .forEach(function (message) {
+            message.textContent = "";
+          });
+
+        selectionMessage.textContent = `"${book.title}" ausgewählt. Der Vorschlag wurde noch nicht eingereicht.`;
+
+        console.log("Ausgewähltes Buch:", selectedBook);
+      });
+
+      bookInfo.append(title, author, year, suggestButton, selectionMessage);
+      cardBody.appendChild(bookInfo);
+
+      card.appendChild(cardBody);
+      resultsContainer.appendChild(card);
+    });
   } catch (error) {
+    if (error.name === "AbortError") {
+      return;
+    }
+
     console.error("Fehler bei der Büchersuche:", error);
     resultsContainer.textContent =
       "Die Büchersuche ist momentan nicht verfügbar.";
