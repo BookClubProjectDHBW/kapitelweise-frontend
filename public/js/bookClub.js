@@ -172,6 +172,18 @@ bookSearchForm.addEventListener("submit", async function (event) {
       const cardBody = document.createElement("div");
       cardBody.className = "card-body";
 
+      if (book.cover_i) {
+        const cover = document.createElement("img");
+        cover.src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+        cover.alt = `Cover von ${book.title}`;
+        cover.className = "rounded mb-3";
+        cover.style.width = "100px";
+        cover.style.height = "150px";
+        cover.style.objectFit = "cover";
+
+        cardBody.appendChild(cover);
+      }
+
       const title = document.createElement("h3");
       title.className = "h5";
       title.textContent = book.title || "Unbekannter Titel";
