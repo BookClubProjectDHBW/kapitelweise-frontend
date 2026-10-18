@@ -128,6 +128,16 @@ const bookSearchForm = document.getElementById("bookSearchForm");
 const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 
+bookSearchType.addEventListener("change", function () {
+  const placeholders = {
+    title: "Buchtitel eingeben...",
+    author: "Autor eingeben...",
+    isbn: "ISBN eingeben...",
+  };
+
+  bookSearchInput.placeholder = placeholders[bookSearchType.value];
+});
+
 let selectedBook = null;
 let activeBookSearchController = null;
 
@@ -186,6 +196,13 @@ bookSearchForm.addEventListener("submit", async function (event) {
       const cardBody = document.createElement("div");
       cardBody.className = "card-body d-flex align-items-start gap-3";
 
+      const placeholder = document.createElement("div");
+      placeholder.className =
+        "rounded flex-shrink-0 bg-body-secondary d-flex align-items-center justify-content-center text-secondary text-center";
+      placeholder.style.width = "100px";
+      placeholder.style.height = "150px";
+      placeholder.textContent = "Kein Cover";
+
       if (book.cover_i) {
         const cover = document.createElement("img");
         cover.src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
@@ -195,15 +212,12 @@ bookSearchForm.addEventListener("submit", async function (event) {
         cover.style.height = "150px";
         cover.style.objectFit = "cover";
 
+        cover.addEventListener("error", function () {
+          cover.replaceWith(placeholder);
+        });
+
         cardBody.appendChild(cover);
       } else {
-        const placeholder = document.createElement("div");
-        placeholder.className =
-          "rounded flex-shrink-0 bg-body-secondary d-flex align-items-center justify-content-center text-secondary text-center";
-        placeholder.style.width = "100px";
-        placeholder.style.height = "150px";
-        placeholder.textContent = "Kein Cover";
-
         cardBody.appendChild(placeholder);
       }
 
