@@ -47,6 +47,41 @@ async function fetchClubSuggestions() {
   }
 }
 
+function renderClubSuggestions(suggestions) {
+  const suggestionsList = document.getElementById("clubSuggestionsList");
+  const status = document.getElementById("clubSuggestionsStatus");
+
+  suggestionsList.replaceChildren();
+
+  if (suggestions.length === 0) {
+    status.textContent = "Es wurden noch keine Bücher vorgeschlagen.";
+    status.className = "text-secondary";
+    return;
+  }
+
+  status.textContent = "";
+
+  suggestions.forEach(function (book) {
+    const card = document.createElement("div");
+    card.className = "card mb-3";
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    const title = document.createElement("h3");
+    title.className = "h5";
+    title.textContent = book.title;
+
+    const author = document.createElement("p");
+    author.className = "text-secondary mb-0";
+    author.textContent = `Autor: ${book.author || "Unbekannt"}`;
+
+    cardBody.append(title, author);
+    card.appendChild(cardBody);
+    suggestionsList.appendChild(card);
+  });
+}
+
 const navigation = document.getElementById("bookclubNavigation");
 
 navigation.addEventListener("click", (event) => {
