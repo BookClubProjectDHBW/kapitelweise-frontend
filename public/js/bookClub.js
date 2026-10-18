@@ -158,7 +158,36 @@ bookSearchForm.addEventListener("submit", async function (event) {
 
     console.log("Gefundene Bücher:", data.docs);
 
-    resultsContainer.textContent = `${data.docs.length} Bücher gefunden.`;
+    resultsContainer.replaceChildren();
+
+    if (data.docs.length === 0) {
+      resultsContainer.textContent = "Keine Bücher gefunden.";
+      return;
+    }
+
+    data.docs.slice(0, 10).forEach(function (book) {
+      const card = document.createElement("div");
+      card.className = "card mb-3";
+
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body";
+
+      const title = document.createElement("h3");
+      title.className = "h5";
+      title.textContent = book.title || "Unbekannter Titel";
+
+      const author = document.createElement("p");
+      author.className = "mb-1";
+      author.textContent = `Autor: ${book.author_name?.join(", ") || "Unbekannt"}`;
+
+      const year = document.createElement("p");
+      year.className = "text-secondary mb-0";
+      year.textContent = `Erstveröffentlichung: ${book.first_publish_year || "Unbekannt"}`;
+
+      cardBody.append(title, author, year);
+      card.appendChild(cardBody);
+      resultsContainer.appendChild(card);
+    });
   } catch (error) {
     console.error("Fehler bei der Büchersuche:", error);
     resultsContainer.textContent =
