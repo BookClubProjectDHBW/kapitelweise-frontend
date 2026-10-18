@@ -1,32 +1,50 @@
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 async function fetchClubSuggestions() {
+  const status = document.getElementById("clubSuggestionsStatus");
+
   if (!clubId) {
+    status.textContent = "Keine Buchclub-ID vorhanden.";
+    status.className = "text-danger";
     throw new Error("Keine Buchclub-ID vorhanden.");
   }
 
-  const response = await fetch(
-    `http://localhost:8181/clubs/${encodeURIComponent(clubId)}/suggestions`,
-    {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+  status.textContent = "Buchvorschläge werden geladen...";
+  status.className = "text-secondary";
+
+  try {
+    const response = await fetch(
+      `http://localhost:8181/clubs/${encodeURIComponent(clubId)}/suggestions`,
+      {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
       },
-    },
-  );
-
-  if (response.status === 401) {
-    sessionStorage.removeItem("token");
-    window.location.href = "loginPage.html";
-    throw new Error("Deine Anmeldung ist abgelaufen.");
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      `Buchvorschläge konnten nicht geladen werden: ${response.status}`,
     );
-  }
 
-  return await response.json();
+    if (response.status === 401) {
+      sessionStorage.removeItem("token");
+      window.location.href = "loginPage.html";
+      throw new Error("Deine Anmeldung ist abgelaufen.");
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    status.textContent = "";
+
+    return data;
+  } catch (error) {
+    if (error.message !== "Deine Anmeldung ist abgelaufen.") {
+      status.textContent = "Buchvorschläge konnten nicht geladen werden.";
+      status.className = "text-danger";
+    }
+
+    throw error;
+  }
 }
 
 const navigation = document.getElementById("bookclubNavigation");
