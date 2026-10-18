@@ -198,7 +198,19 @@ bookSearchForm.addEventListener("submit", async function (event) {
 
       const bookInfo = document.createElement("div");
 
-      bookInfo.append(title, author, year);
+      const suggestButton = document.createElement("button");
+      suggestButton.type = "button";
+      suggestButton.className = "btn btn-confirm mt-2";
+      suggestButton.textContent = "Buch vorschlagen";
+
+      const selectionMessage = document.createElement("p");
+      selectionMessage.className = "text-secondary mt-2 mb-0";
+
+      suggestButton.addEventListener("click", function () {
+        selectionMessage.textContent = `"${book.title}" ausgewählt. Der Vorschlag wurde noch nicht eingereicht.`;
+      });
+
+      bookInfo.append(title, author, year, suggestButton, selectionMessage);
       cardBody.appendChild(bookInfo);
 
       card.appendChild(cardBody);
