@@ -12,9 +12,11 @@ navigation.addEventListener("click", (event) => {
   });
 
   clickedTab.classList.add("active");
-});
 
-//Adminrolle prüfen
+  document
+    .getElementById("bookSearchPanel")
+    .classList.toggle("d-none", clickedTab.id !== "votingTab");
+});
 function isCurrentUserAdmin(bookClub, currentUserId) {
   const currentMember = bookClub.members.find(
     (member) => member.userId === currentUserId,
@@ -22,7 +24,6 @@ function isCurrentUserAdmin(bookClub, currentUserId) {
 
   return currentMember?.role === "admin";
 }
-//Dialog-Elemente, Öffnen und Schließen
 const invitationDialog = document.getElementById("invitationDialog");
 const invitationForm = document.getElementById("invitationForm");
 const invitedUsernameInput = document.getElementById("invitedUsername");
@@ -53,7 +54,6 @@ cancelInvitationButton.addEventListener("click", closeInvitationDialog);
 
 invitationDialog.addEventListener("close", resetInvitationDialog);
 
-//Mock-Prüfung der Einladung
 function sendInvitationMock(bookClub, username) {
   const normalizedUsername = username.trim().toLowerCase();
   const invitedUser = users.find(
@@ -83,7 +83,6 @@ function sendInvitationMock(bookClub, username) {
     message: "Die Einladung wurde erfolgreich verschickt.",
   };
 }
-//Formular absenden, Status anzeigen
 invitationForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -107,7 +106,6 @@ invitationForm.addEventListener("submit", (event) => {
   }
 });
 
-//Adminbutton erstellen
 function addInvitationButtonIfAdmin(bookClub, currentUserId) {
   if (!isCurrentUserAdmin(bookClub, currentUserId)) {
     return;
@@ -125,5 +123,45 @@ function addInvitationButtonIfAdmin(bookClub, currentUserId) {
   adminActions.append(invitationButton);
 }
 
-//Button für Admins hinzufügen
 addInvitationButtonIfAdmin(bookClub, currentUserId);
+const bookSearchForm = document.getElementById("bookSearchForm");
+const bookSearchType = document.getElementById("bookSearchType");
+const bookSearchInput = document.getElementById("bookSearchInput");
+
+bookSearchForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const searchType = bookSearchType.value;
+  const searchTerm = bookSearchInput.value.trim();
+  const resultsContainer = document.getElementById("bookSearchResults");
+
+  if (searchTerm === "") {
+    return;
+  }
+
+  const searchParams = new URLSearchParams({
+    [searchType]: searchTerm,
+  });
+
+  resultsContainer.textContent = "Bücher werden gesucht...";
+
+  try {
+    const response = await fetch(
+      `http://localhost:8383/bookSearch?${searchParams}`,
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    console.log("Gefundene Bücher:", data.docs);
+
+    resultsContainer.textContent = `${data.docs.length} Bücher gefunden.`;
+  } catch (error) {
+    console.error("Fehler bei der Büchersuche:", error);
+    resultsContainer.textContent =
+      "Die Büchersuche ist momentan nicht verfügbar.";
+  }
+});
