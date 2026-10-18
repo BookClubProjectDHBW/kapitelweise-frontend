@@ -129,6 +129,7 @@ const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 
 let selectedBook = null;
+let activeBookSearchController = null;
 
 bookSearchForm.addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -143,17 +144,24 @@ bookSearchForm.addEventListener("submit", async function (event) {
 
   selectedBook = null;
 
+  if (activeBookSearchController) {
+    activeBookSearchController.abort();
+  }
+
+  activeBookSearchController = new AbortController();
+
   const searchParams = new URLSearchParams({
     [searchType]: searchTerm,
   });
-
-
 
   resultsContainer.textContent = "Bücher werden gesucht...";
 
   try {
     const response = await fetch(
       `http://localhost:8383/bookSearch?${searchParams}`,
+      {
+        signal: activeBookSearchController.signal,
+      },
     );
 
     if (!response.ok) {
@@ -234,6 +242,10 @@ bookSearchForm.addEventListener("submit", async function (event) {
       resultsContainer.appendChild(card);
     });
   } catch (error) {
+    if (error.name === "AbortError") {
+      return;
+    }
+
     console.error("Fehler bei der Büchersuche:", error);
     resultsContainer.textContent =
       "Die Büchersuche ist momentan nicht verfügbar.";
