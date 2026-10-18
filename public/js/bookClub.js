@@ -128,6 +128,8 @@ const bookSearchForm = document.getElementById("bookSearchForm");
 const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 
+let selectedBook = null;
+
 bookSearchForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
@@ -204,10 +206,21 @@ bookSearchForm.addEventListener("submit", async function (event) {
       suggestButton.textContent = "Buch vorschlagen";
 
       const selectionMessage = document.createElement("p");
-      selectionMessage.className = "text-secondary mt-2 mb-0";
+      selectionMessage.className =
+        "book-selection-message text-secondary mt-2 mb-0";
 
       suggestButton.addEventListener("click", function () {
+        selectedBook = book;
+
+        document
+          .querySelectorAll(".book-selection-message")
+          .forEach(function (message) {
+            message.textContent = "";
+          });
+
         selectionMessage.textContent = `"${book.title}" ausgewählt. Der Vorschlag wurde noch nicht eingereicht.`;
+
+        console.log("Ausgewähltes Buch:", selectedBook);
       });
 
       bookInfo.append(title, author, year, suggestButton, selectionMessage);
