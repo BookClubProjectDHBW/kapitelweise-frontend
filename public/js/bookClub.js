@@ -196,6 +196,15 @@ bookSearchForm.addEventListener("submit", async function (event) {
         cover.style.objectFit = "cover";
 
         cardBody.appendChild(cover);
+      } else {
+        const placeholder = document.createElement("div");
+        placeholder.className =
+          "rounded flex-shrink-0 bg-body-secondary d-flex align-items-center justify-content-center text-secondary text-center";
+        placeholder.style.width = "100px";
+        placeholder.style.height = "150px";
+        placeholder.textContent = "Kein Cover";
+
+        cardBody.appendChild(placeholder);
       }
 
       const title = document.createElement("h3");
