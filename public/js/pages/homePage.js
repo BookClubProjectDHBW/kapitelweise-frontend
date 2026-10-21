@@ -1,86 +1,15 @@
+import {
+  getHomepageData,
+  createClub,
+  answerInvitation,
+} from "../api/clubApi.js";
+
 const DEV_MODE = true;
-
-const HOMEPAGE_QUERY = `
-  query {
-    member {
-      id
-      name
-      membership {
-        id
-        name
-        description
-      }
-      invitationPending {
-        id
-        createdAt
-        bookclub {
-          id
-          name
-          description
-        }
-        invitedBy {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-
-const CREATE_CLUB_MUTATION = `
-  mutation CreateClub($input: BookClubInput!) {
-    createNewBookClub(bookClubInput: $input) {
-      id
-      name
-      description
-    }
-  }
-`;
-
-const RESPOND_INVITATION_MUTATION = `
-  mutation Respond($input: InvitationInput!) {
-    responseInvitation(invitationInput: $input) {
-      id
-      name
-      description
-    }
-  }
-`;
-
-async function graphqlRequest(query, variables = {}) {
-  const response = await fetch("http://localhost:8383/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-    },
-    body: JSON.stringify({ query, variables }),
-  });
-
-  if (response.status === 401) {
-    sessionStorage.removeItem("token");
-    window.location.href = "loginPage.html";
-    throw new Error("Deine Anmeldung ist abgelaufen.");
-  }
-
-  if (!response.ok) {
-    throw new Error(`HTTP-Fehler: ${response.status}`);
-  }
-
-  const result = await response.json();
-
-  if (result.errors?.length) {
-    throw new Error(result.errors[0].message);
-  }
-
-  return result.data;
-}
-
 let currentClubs = [];
 
 async function loadHomepage() {
   try {
-    const data = await graphqlRequest(HOMEPAGE_QUERY);
+    const data = await getHomepageData();
     const member = data.member;
 
     document.getElementById("username").textContent = member.name;
@@ -182,12 +111,7 @@ function renderClubs(clubs) {
 }
 async function respondToInvitation(invitationId, status) {
   try {
-    const data = await graphqlRequest(RESPOND_INVITATION_MUTATION, {
-      input: {
-        invitationId: String(invitationId),
-        status: status,
-      },
-    });
+    const data = await answerInvitation(invitationId, status);
 
     console.log("Einladung beantwortet:", data.responseInvitation);
     if (status === "ACCEPTED" && data.responseInvitation) {
@@ -371,9 +295,7 @@ createClubForm.addEventListener("submit", async function (event) {
   console.log("Daten für das Backend:", clubData);
   createClubButton.disabled = true;
   try {
-    const data = await graphqlRequest(CREATE_CLUB_MUTATION, {
-      input: clubData,
-    });
+    const data = await createClub(clubData);
 
     const createdClub = data.createNewBookClub;
 
