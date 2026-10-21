@@ -1,3 +1,4 @@
+
 import {
   getHomepageData,
   createClub,
@@ -5,6 +6,7 @@ import {
 } from "../api/clubApi.js";
 
 const DEV_MODE = true;
+
 let currentClubs = [];
 
 async function loadHomepage() {
@@ -60,24 +62,30 @@ const clubImages = [
   "../images/club9.webp",
   "../images/club10.webp",
 ];
+
 function renderClubs(clubs) {
   const clubList = document.getElementById("clubList");
   clubList.replaceChildren();
+
   if (clubs.length === 0) {
     clubList.textContent =
       "Du bist noch in keinem Buchclub. Gründe deinen ersten Club!";
     return;
   }
+
   clubs.forEach(function (club) {
     const column = document.createElement("div");
     column.className = "col-12 col-md-6 col-lg-4";
+
     const card = document.createElement("div");
     card.className = "card h-100 shadow-sm";
+
     const imageIndex = club.id % clubImages.length;
     const image = document.createElement("img");
     image.className = "card-img-top club-card-image";
     image.src = clubImages[imageIndex];
     image.alt = `Bild für ${club.bookClubName}`;
+
     card.appendChild(image);
     card.dataset.clubId = club.id;
 
@@ -103,17 +111,20 @@ function renderClubs(clubs) {
       openButton.classList.add("disabled");
       openButton.setAttribute("aria-disabled", "true");
     }
+
     cardBody.append(title, description, openButton);
     card.appendChild(cardBody);
     column.appendChild(card);
     clubList.appendChild(column);
   });
 }
+
 async function respondToInvitation(invitationId, status) {
   try {
     const data = await answerInvitation(invitationId, status);
 
     console.log("Einladung beantwortet:", data.responseInvitation);
+
     if (status === "ACCEPTED" && data.responseInvitation) {
       const club = data.responseInvitation;
 
@@ -125,6 +136,7 @@ async function respondToInvitation(invitationId, status) {
 
       renderClubs(currentClubs);
     }
+
     return true;
   } catch (error) {
     console.error("Fehler beim Antworten auf die Einladung:", error);
@@ -134,9 +146,12 @@ async function respondToInvitation(invitationId, status) {
       : error.message;
   }
 }
+
 function removeInvitationCard(card) {
   card.remove();
+
   const inviteList = document.getElementById("inviteList");
+
   if (inviteList.children.length === 0) {
     inviteList.textContent = "Du hast aktuell keine offenen Einladungen.";
   }
@@ -145,16 +160,19 @@ function removeInvitationCard(card) {
 function renderInvitations(invitations) {
   const inviteList = document.getElementById("inviteList");
   inviteList.replaceChildren();
+
   if (invitations.length === 0) {
     inviteList.textContent = "Du hast keine Einladungen.";
     return;
   }
+
   invitations.forEach(function (invitation) {
     const card = document.createElement("div");
     card.className = "card shadow-sm";
 
     const cardBody = document.createElement("div");
     cardBody.className = "card-body";
+
     card.appendChild(cardBody);
     inviteList.appendChild(card);
 
@@ -191,14 +209,17 @@ function renderInvitations(invitations) {
       acceptButton.disabled = disabled;
       declineButton.disabled = disabled;
     }
+
     acceptButton.addEventListener("click", async function () {
       setButtonsDisabled(true);
       errorMessage.classList.add("d-none");
       errorMessage.textContent = "";
+
       const success = await respondToInvitation(
         invitation.invitationId,
         "ACCEPTED",
       );
+
       if (success === true) {
         removeInvitationCard(card);
       } else {
@@ -207,14 +228,17 @@ function renderInvitations(invitations) {
         setButtonsDisabled(false);
       }
     });
+
     declineButton.addEventListener("click", async function () {
       setButtonsDisabled(true);
       errorMessage.classList.add("d-none");
       errorMessage.textContent = "";
+
       const success = await respondToInvitation(
         invitation.invitationId,
         "DECLINED",
       );
+
       if (success === true) {
         removeInvitationCard(card);
       } else {
@@ -223,14 +247,17 @@ function renderInvitations(invitations) {
         setButtonsDisabled(false);
       }
     });
+
     buttonGroup.append(acceptButton, declineButton);
     cardBody.appendChild(buttonGroup);
   });
 }
+
 logoutButton.addEventListener("click", function () {
   sessionStorage.removeItem("token");
   window.location.href = "loginPage.html";
 });
+
 if (DEV_MODE) {
   document.getElementById("username").textContent = "Testnutzer";
 
@@ -262,6 +289,7 @@ if (DEV_MODE) {
 } else {
   loadHomepage();
 }
+
 const createClubForm = document.getElementById("createClubForm");
 const clubNameInput = document.getElementById("clubNameInput");
 const createClubModal = document.getElementById("createClubModal");
@@ -272,31 +300,40 @@ function showClubError(message) {
   createClubError.textContent = message;
   createClubError.classList.remove("d-none");
 }
+
 createClubForm.addEventListener("submit", async function (event) {
   event.preventDefault();
+
   if (createClubButton.disabled) {
     return;
   }
+
   createClubError.classList.add("d-none");
   createClubError.textContent = "";
+
   const name = clubNameInput.value.trim();
   const description = document
     .getElementById("clubDescriptionInput")
     .value.trim();
+
   clubNameInput.classList.remove("is-invalid");
+
   if (name === "") {
     clubNameInput.classList.add("is-invalid");
     return;
   }
+
   const clubData = {
     name: name,
     description: description,
   };
+
   console.log("Daten für das Backend:", clubData);
+
   createClubButton.disabled = true;
+
   try {
     const data = await createClub(clubData);
-
     const createdClub = data.createNewBookClub;
 
     console.log("Buchclub erstellt:", createdClub);
@@ -313,6 +350,7 @@ createClubForm.addEventListener("submit", async function (event) {
     renderClubs(currentClubs);
   } catch (error) {
     console.error("Fehler beim Erstellen des Clubs:", error);
+
     showClubError(
       error instanceof TypeError
         ? "Verbindung zum Server fehlgeschlagen."
@@ -322,6 +360,7 @@ createClubForm.addEventListener("submit", async function (event) {
     createClubButton.disabled = false;
   }
 });
+
 createClubModal.addEventListener("hidden.bs.modal", function () {
   createClubForm.reset();
   clubNameInput.classList.remove("is-invalid");
