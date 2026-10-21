@@ -1,3 +1,6 @@
+
+import { registerUser } from "../api/authApi.js";
+
 $("#registerForm").submit(async function (event) {
   event.preventDefault();
 
@@ -12,18 +15,14 @@ $("#registerForm").submit(async function (event) {
   } else {
     $("#confirmPassword").removeClass("is-invalid");
   }
+
   const registerData = {
     username: $("#username").val(),
     password: password,
   };
+
   try {
-    const response = await fetch("http://localhost:8181/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(registerData),
-    });
+    const response = await registerUser(registerData);
 
     if (response.ok) {
       sessionStorage.setItem("registered", "true");
