@@ -1,3 +1,6 @@
+
+import { loginUser } from "../api/authApi.js";
+
 function showError(message) {
   $("#loginError").removeClass("d-none").text(message);
 
@@ -5,6 +8,7 @@ function showError(message) {
     $("#loginError").addClass("d-none").text("");
   }, 4000);
 }
+
 if (sessionStorage.getItem("registered") === "true") {
   $("#registered").removeClass("d-none");
   sessionStorage.removeItem("registered");
@@ -20,20 +24,16 @@ $("#loginForm").on("submit", async function (event) {
   };
 
   try {
-    const response = await fetch("http://localhost:8181/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    });
+    const response = await loginUser(loginData);
 
     if (response.ok) {
       const data = await response.json();
+
       if (!data.token) {
         showError("Die Anmeldung hat kein Token zurückgegeben.");
         return;
       }
+
       sessionStorage.setItem("token", data.token);
       window.location.href = "homePage.html";
     } else if (response.status === 401) {
