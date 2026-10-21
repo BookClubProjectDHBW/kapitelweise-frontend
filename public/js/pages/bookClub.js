@@ -1,3 +1,6 @@
+
+import { searchBooks } from "../api/bookApi.js";
+
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 async function fetchClubSuggestions() {
@@ -101,6 +104,7 @@ navigation.addEventListener("click", (event) => {
     .getElementById("bookSearchPanel")
     .classList.toggle("d-none", clickedTab.id !== "votingTab");
 });
+
 function isCurrentUserAdmin(bookClub, currentUserId) {
   const currentMember = bookClub.members.find(
     (member) => member.userId === currentUserId,
@@ -108,6 +112,7 @@ function isCurrentUserAdmin(bookClub, currentUserId) {
 
   return currentMember?.role === "admin";
 }
+
 const invitationDialog = document.getElementById("invitationDialog");
 const invitationForm = document.getElementById("invitationForm");
 const invitedUsernameInput = document.getElementById("invitedUsername");
@@ -167,6 +172,7 @@ function sendInvitationMock(bookClub, username) {
     message: "Die Einladung wurde erfolgreich verschickt.",
   };
 }
+
 invitationForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -208,6 +214,7 @@ function addInvitationButtonIfAdmin(bookClub, currentUserId) {
 }
 
 addInvitationButtonIfAdmin(bookClub, currentUserId);
+
 const bookSearchForm = document.getElementById("bookSearchForm");
 const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
@@ -244,25 +251,14 @@ bookSearchForm.addEventListener("submit", async function (event) {
 
   activeBookSearchController = new AbortController();
 
-  const searchParams = new URLSearchParams({
-    [searchType]: searchTerm,
-  });
-
   resultsContainer.textContent = "Bücher werden gesucht...";
 
   try {
-    const response = await fetch(
-      `http://localhost:8383/bookSearch?${searchParams}`,
-      {
-        signal: activeBookSearchController.signal,
-      },
+    const data = await searchBooks(
+      searchType,
+      searchTerm,
+      activeBookSearchController.signal,
     );
-
-    if (!response.ok) {
-      throw new Error(`HTTP-Fehler: ${response.status}`);
-    }
-
-    const data = await response.json();
 
     console.log("Gefundene Bücher:", data.docs);
 
