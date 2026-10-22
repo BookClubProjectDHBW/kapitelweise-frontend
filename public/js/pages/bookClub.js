@@ -11,6 +11,7 @@ import {
   renderBookClub,
   renderBookSearchResults,
   renderClubSuggestions,
+  renderCurrentBook,
 } from "./bookClubView.js";
 const clubId = new URLSearchParams(window.location.search).get("id");
 
@@ -49,6 +50,8 @@ async function chooseCurrentBook(book, button) {
 
     hasSelectedCurrentBook = true;
 
+    renderCurrentBook(currentBook);
+
     document
       .querySelectorAll("#clubSuggestionsList button")
       .forEach(function (selectButton) {
@@ -86,6 +89,10 @@ async function loadClubSuggestions() {
   try {
     const currentBook = await getCurrentBook(clubId);
     hasSelectedCurrentBook = currentBook !== null;
+
+    if (currentBook) {
+      renderCurrentBook(currentBook);
+    }
 
     const suggestions = await getClubSuggestions(clubId);
 

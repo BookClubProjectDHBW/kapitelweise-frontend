@@ -184,3 +184,17 @@ export function renderClubSuggestions(suggestions, isAdmin, onChooseBook) {
     list.appendChild(card);
   });
 }
+export function renderCurrentBook(book) {
+  document.getElementById("title").textContent = book.title;
+
+  const bookData = document.getElementById("currentBookData");
+
+  bookData.textContent =
+    `Autor: ${book.author || "Unbekannt"} · ` +
+    `ISBN: ${book.isbn || "Unbekannt"} · ` +
+    `Seiten: ${book.pages ?? "Unbekannt"}`;
+
+  document.querySelector(".club-name").classList.remove("d-none");
+  document.getElementById("clubDescription").classList.add("d-none");
+  bookData.classList.remove("d-none");
+}
