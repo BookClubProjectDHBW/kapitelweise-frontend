@@ -1,8 +1,15 @@
 import { config } from "../config.js";
 import { getBookClub, inviteUserToClub } from "../api/clubApi.js";
-import { searchBooks, submitBookProposal } from "../api/bookApi.js";
-import { renderBookClub, renderBookSearchResults } from "./bookClubView.js";
-
+import {
+  searchBooks,
+  submitBookProposal,
+  getClubSuggestions,
+} from "../api/bookApi.js";
+import {
+  renderBookClub,
+  renderBookSearchResults,
+  renderClubSuggestions,
+} from "./bookClubView.js";
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 let currentBookClub = null;
@@ -27,6 +34,41 @@ const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 const resultsContainer = document.getElementById("bookSearchResults");
 
+async function loadClubSuggestions() {
+  const status = document.getElementById("clubSuggestionsStatus");
+  const list = document.getElementById("clubSuggestionsList");
+
+  if (config.useMockData) {
+    status.textContent =
+      "Gespeicherte Buchvorschläge werden im DEV-Modus nicht geladen.";
+    return;
+  }
+
+  if (!clubId) {
+    status.textContent = "Keine Buchclub-ID vorhanden.";
+    return;
+  }
+
+  list.replaceChildren();
+  status.textContent = "Buchvorschläge werden geladen...";
+  status.className = "text-secondary";
+
+  try {
+    const suggestions = await getClubSuggestions(clubId);
+
+    if (!Array.isArray(suggestions)) {
+      throw new Error("Ungültiges Antwortformat der Vorschlags-API.");
+    }
+
+    renderClubSuggestions(suggestions);
+  } catch (error) {
+    console.error("Fehler beim Laden der Buchvorschläge:", error);
+
+    status.textContent = "Buchvorschläge konnten nicht geladen werden.";
+    status.className = "text-danger";
+  }
+}
+
 navigation.addEventListener("click", function (event) {
   const clickedTab = event.target.closest(".nav-tab");
 
@@ -43,6 +85,10 @@ navigation.addEventListener("click", function (event) {
   document
     .getElementById("bookSearchPanel")
     .classList.toggle("d-none", clickedTab.id !== "votingTab");
+
+  if (clickedTab.id === "votingTab") {
+    loadClubSuggestions();
+  }
 });
 
 function resetInvitationDialog() {
@@ -219,6 +265,7 @@ async function selectBook(book, selectionMessage, suggestButton) {
 
   try {
     await submitBookProposal(clubId, selectedBook);
+    loadClubSuggestions();
 
     selectionMessage.textContent = "Buch erfolgreich vorgeschlagen!";
     selectionMessage.className =

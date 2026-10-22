@@ -115,3 +115,60 @@ export function renderBookSearchResults(books, onSelectBook) {
     resultsContainer.appendChild(card);
   });
 }
+
+export function renderClubSuggestions(suggestions) {
+  const list = document.getElementById("clubSuggestionsList");
+  const status = document.getElementById("clubSuggestionsStatus");
+
+  list.replaceChildren();
+
+  if (suggestions.length === 0) {
+    status.textContent = "Es wurden noch keine Bücher vorgeschlagen.";
+    return;
+  }
+
+  status.textContent = "";
+
+  suggestions.forEach(function (book) {
+    const card = document.createElement("div");
+    card.className = "card mb-3";
+
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    const title = document.createElement("h3");
+    title.className = "h5";
+    title.textContent = book.title || "Unbekannter Titel";
+
+    const author = document.createElement("p");
+    author.className = "mb-1";
+    author.textContent = `Autor: ${book.author || "Unbekannt"}`;
+
+    const isbn = document.createElement("p");
+    isbn.className = "mb-1";
+    isbn.textContent = `ISBN: ${book.isbn || "Unbekannt"}`;
+
+    const details = document.createElement("p");
+    details.className = "text-secondary mb-1";
+    details.textContent = `Seiten: ${book.pages ?? "Unbekannt"} · Erstveröffentlichung: ${book.first_publish_year ?? "Unbekannt"}`;
+
+    const suggestedBy = document.createElement("p");
+    suggestedBy.className = "mb-1";
+    suggestedBy.textContent = `Vorgeschlagen von: ${book.suggested_by || "Unbekannt"}`;
+
+    const proposalStatus = document.createElement("p");
+    proposalStatus.className = "text-secondary mb-0";
+
+    const statusLabels = {
+      PENDING: "Wird geprüft",
+      READY: "Bereit",
+      REJECTED: "Abgelehnt",
+    };
+
+    proposalStatus.textContent = `Status: ${statusLabels[book.suggestion_status] || book.suggestion_status || "Unbekannt"}`;
+
+    cardBody.append(title, author, isbn, details, suggestedBy, proposalStatus);
+    card.appendChild(cardBody);
+    list.appendChild(card);
+  });
+}
