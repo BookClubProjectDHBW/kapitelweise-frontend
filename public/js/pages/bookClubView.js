@@ -116,7 +116,7 @@ export function renderBookSearchResults(books, onSelectBook) {
   });
 }
 
-export function renderClubSuggestions(suggestions) {
+export function renderClubSuggestions(suggestions, isAdmin, onChooseBook) {
   const list = document.getElementById("clubSuggestionsList");
   const status = document.getElementById("clubSuggestionsStatus");
 
@@ -168,6 +168,18 @@ export function renderClubSuggestions(suggestions) {
     proposalStatus.textContent = `Status: ${statusLabels[book.suggestion_status] || book.suggestion_status || "Unbekannt"}`;
 
     cardBody.append(title, author, isbn, details, suggestedBy, proposalStatus);
+    if (isAdmin && book.suggestion_status === "READY") {
+      const selectButton = document.createElement("button");
+      selectButton.type = "button";
+      selectButton.className = "btn btn-confirm mt-3";
+      selectButton.textContent = "Als nächstes Buch auswählen";
+
+      selectButton.addEventListener("click", function () {
+        onChooseBook(book, selectButton);
+      });
+
+      cardBody.appendChild(selectButton);
+    }
     card.appendChild(cardBody);
     list.appendChild(card);
   });
