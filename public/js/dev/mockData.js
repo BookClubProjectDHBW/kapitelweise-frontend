@@ -1,3 +1,4 @@
+
 export const bookClubs = [
   {
     bookClubId: "bookclub-1",
@@ -44,6 +45,7 @@ export const bookClubs = [
 ];
 
 export const currentUserId = "user-1";
+
 export const bookClub = bookClubs[0];
 
 export const users = [
@@ -85,24 +87,40 @@ export const users = [
   },
 ];
 
-
 export const homepageClubs = [
-  { id: 1, bookClubName: "Fantasyfreunde", description: "Gemeinsam Fantasybücher entdecken." },
-  { id: 2, bookClubName: "Krimirunde", description: "Jeden Monat ein spannender Krimi." },
+  {
+    id: 1,
+    bookClubName: "Fantasyfreunde",
+    description: "Gemeinsam Fantasybücher entdecken.",
+  },
+  {
+    id: 2,
+    bookClubName: "Krimirunde",
+    description: "Jeden Monat ein spannender Krimi.",
+  },
 ];
 
 export const homepageInvitations = [
-  { invitationId: 1, clubId: 3, clubName: "Die Leseratten", description: "Unser gemütlicher Leseclub." },
+  {
+    invitationId: 1,
+    clubId: 3,
+    clubName: "Die Leseratten",
+    description: "Unser gemütlicher Leseclub.",
+  },
 ];
 
 export function sendInvitationMock(club, username) {
   const normalizedUsername = username.trim().toLowerCase();
+
   const invitedUser = users.find(
     (user) => user.username.toLowerCase() === normalizedUsername,
   );
 
   if (!invitedUser) {
-    return { success: false, message: "Der Benutzername existiert nicht." };
+    return {
+      success: false,
+      message: "Der Benutzername existiert nicht.",
+    };
   }
 
   const isAlreadyMember = club.members.some(
@@ -110,8 +128,14 @@ export function sendInvitationMock(club, username) {
   );
 
   if (isAlreadyMember) {
-    return { success: false, message: "Diese Person ist bereits Mitglied des Buchclubs." };
+    return {
+      success: false,
+      message: "Diese Person ist bereits Mitglied des Buchclubs.",
+    };
   }
 
-  return { success: true, message: "Die Einladung wurde erfolgreich verschickt." };
+  return {
+    success: true,
+    message: "Die Einladung wurde erfolgreich verschickt.",
+  };
 }
