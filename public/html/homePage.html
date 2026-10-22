@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="de">
   <head>
@@ -13,7 +14,7 @@
     />
     <link rel="stylesheet" href="../css/common.css" />
     <link rel="stylesheet" href="../css/homePage.css" />
-    <script src="../js/homePage.js" defer></script>
+    <script type="module" src="../js/pages/homePage.js"></script>
   </head>
   <body>
     <header>
@@ -87,12 +88,14 @@
           <section class="tab-pane fade show active" id="clubs-pane">
             <div id="clubList" class="row g-3"></div>
           </section>
+
           <section class="tab-pane fade" id="invites-pane">
             <div id="inviteList" class="d-flex flex-column gap-3"></div>
           </section>
         </div>
       </div>
     </main>
+
     <div
       class="modal fade"
       id="createClubModal"
@@ -148,12 +151,15 @@
                 role="alert"
               ></div>
 
-              <button type="submit" class="btn btn-confirm">Erstellen</button>
+              <button type="submit" class="btn btn-confirm">
+                Erstellen
+              </button>
             </form>
           </div>
         </div>
       </div>
     </div>
+
     <footer>
       <div class="container">
         <p class="mb-0">© 2026 Kapitelweise</p>

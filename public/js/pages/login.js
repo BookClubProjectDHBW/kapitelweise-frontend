@@ -1,3 +1,5 @@
+import { loginUser } from "../api/authApi.js";
+
 function showError(message) {
   $("#loginError").removeClass("d-none").text(message);
 
@@ -20,13 +22,7 @@ $("#loginForm").on("submit", async function (event) {
   };
 
   try {
-    const response = await fetch("http://localhost:8181/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    });
+    const response = await loginUser(loginData);
 
     if (response.ok) {
       const data = await response.json();

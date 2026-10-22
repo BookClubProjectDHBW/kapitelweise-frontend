@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="de">
   <head>
@@ -20,7 +21,9 @@
         <div class="auth-card">
           <h1 class="auth-title serif">Kapitelweise</h1>
 
-          <p class="auth-subtitle">Gemeinsam wählen, lesen und diskutieren.</p>
+          <p class="auth-subtitle">
+            Gemeinsam wählen, lesen und diskutieren.
+          </p>
 
           <form id="registerForm" class="auth-form">
             <div class="mb-3">
@@ -36,6 +39,7 @@
                 Der Benutzername ist bereits vergeben.
               </div>
             </div>
+
             <div class="mb-3">
               <label for="password" class="form-label">Passwort:</label>
               <input
@@ -49,10 +53,11 @@
                 Dein Passwort muss mindestens 10 Zeichen lang sein.
               </div>
             </div>
+
             <div class="mb-3">
-              <label for="confirmPassword" class="form-label"
-                >Passwort bestätigen:</label
-              >
+              <label for="confirmPassword" class="form-label">
+                Passwort bestätigen:
+              </label>
               <input
                 type="password"
                 class="form-control"
@@ -64,14 +69,17 @@
                 Die Passwörter stimmen nicht überein.
               </div>
             </div>
+
             <div
               id="registerError"
               class="alert alert-danger d-none"
               role="alert"
             ></div>
+
             <button class="btn btn-confirm mt-3" type="submit">
               Registrieren
             </button>
+
             <p class="mt-3">
               Du hast bereits ein Konto?
               <a href="loginPage.html">Hier einloggen</a>
@@ -80,7 +88,8 @@
         </div>
       </div>
     </main>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="../js/register.js"></script>
+    <script type="module" src="../js/pages/register.js"></script>
   </body>
 </html>
