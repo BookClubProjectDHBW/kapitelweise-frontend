@@ -1,11 +1,11 @@
 const environment = "development";
-const enableMockData = true;
+const enableMockData = false;
 
 const apiUrls = {
   development: {
     auth: "http://localhost:8282",
     graphql: "http://localhost:8383/graphql",
-    bookSearch: "http://localhost:8383",
+    bookSearch: "http://localhost:8484",
     backend: "http://localhost:8181",
   },
   production: {

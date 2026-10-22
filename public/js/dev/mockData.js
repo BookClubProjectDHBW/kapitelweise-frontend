@@ -1,4 +1,3 @@
-
 export const bookClubs = [
   {
     bookClubId: "bookclub-1",
@@ -143,15 +142,15 @@ export function sendInvitationMock(club, username) {
 export const searchResults = [
   {
     title: "Harry Potter und der Stein der Weisen",
-    author_name: ["J. K. Rowling"],
-    first_publish_year: 1997,
-    cover_i: 10521270,
-    isbn: ["9783551551672"],
+    author: "J. K. Rowling",
+    firstPublishYear: 1997,
+    coverId: 10521270,
+    isbn: "9783551551672",
   },
   {
     title: "Der Hobbit",
-    author_name: ["J. R. R. Tolkien"],
-    first_publish_year: 1937,
-    isbn: ["9780261103344"],
+    author: "J. R. R. Tolkien",
+    firstPublishYear: 1937,
+    isbn: "9780261103344",
   },
 ];

@@ -1,8 +1,15 @@
 import { config } from "../config.js";
 import { getBookClub, inviteUserToClub } from "../api/clubApi.js";
-import { searchBooks } from "../api/bookApi.js";
-import { renderBookClub, renderBookSearchResults } from "./bookClubView.js";
-
+import {
+  searchBooks,
+  submitBookProposal,
+  getClubSuggestions,
+} from "../api/bookApi.js";
+import {
+  renderBookClub,
+  renderBookSearchResults,
+  renderClubSuggestions,
+} from "./bookClubView.js";
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 let currentBookClub = null;
@@ -27,6 +34,41 @@ const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 const resultsContainer = document.getElementById("bookSearchResults");
 
+async function loadClubSuggestions() {
+  const status = document.getElementById("clubSuggestionsStatus");
+  const list = document.getElementById("clubSuggestionsList");
+
+  if (config.useMockData) {
+    status.textContent =
+      "Gespeicherte Buchvorschläge werden im DEV-Modus nicht geladen.";
+    return;
+  }
+
+  if (!clubId) {
+    status.textContent = "Keine Buchclub-ID vorhanden.";
+    return;
+  }
+
+  list.replaceChildren();
+  status.textContent = "Buchvorschläge werden geladen...";
+  status.className = "text-secondary";
+
+  try {
+    const suggestions = await getClubSuggestions(clubId);
+
+    if (!Array.isArray(suggestions)) {
+      throw new Error("Ungültiges Antwortformat der Vorschlags-API.");
+    }
+
+    renderClubSuggestions(suggestions);
+  } catch (error) {
+    console.error("Fehler beim Laden der Buchvorschläge:", error);
+
+    status.textContent = "Buchvorschläge konnten nicht geladen werden.";
+    status.className = "text-danger";
+  }
+}
+
 navigation.addEventListener("click", function (event) {
   const clickedTab = event.target.closest(".nav-tab");
 
@@ -43,6 +85,10 @@ navigation.addEventListener("click", function (event) {
   document
     .getElementById("bookSearchPanel")
     .classList.toggle("d-none", clickedTab.id !== "votingTab");
+
+  if (clickedTab.id === "votingTab") {
+    loadClubSuggestions();
+  }
 });
 
 function resetInvitationDialog() {
@@ -192,7 +238,7 @@ bookSearchType.addEventListener("change", function () {
   bookSearchInput.placeholder = placeholders[bookSearchType.value];
 });
 
-function selectBook(book, selectionMessage) {
+async function selectBook(book, selectionMessage, suggestButton) {
   selectedBook = book;
 
   document
@@ -201,9 +247,37 @@ function selectBook(book, selectionMessage) {
       message.textContent = "";
     });
 
-  selectionMessage.textContent = `"${book.title}" ausgewählt. Der Vorschlag wurde noch nicht eingereicht.`;
+  if (config.useMockData) {
+    selectionMessage.textContent = `"${book.title}" ausgewählt. Im DEV-Modus wird nichts eingereicht.`;
+    return;
+  }
 
-  console.log("Ausgewähltes Buch:", selectedBook);
+  if (!clubId) {
+    selectionMessage.textContent = "Keine Buchclub-ID vorhanden.";
+    selectionMessage.className = "book-selection-message text-danger mt-2 mb-0";
+    return;
+  }
+
+  suggestButton.disabled = true;
+  selectionMessage.textContent = "Buchvorschlag wird eingereicht...";
+  selectionMessage.className =
+    "book-selection-message text-secondary mt-2 mb-0";
+
+  try {
+    await submitBookProposal(clubId, selectedBook);
+    loadClubSuggestions();
+
+    selectionMessage.textContent = "Buch erfolgreich vorgeschlagen!";
+    selectionMessage.className =
+      "book-selection-message text-success mt-2 mb-0";
+  } catch (error) {
+    console.error("Fehler beim Einreichen:", error);
+
+    selectionMessage.textContent = error.message;
+    selectionMessage.className = "book-selection-message text-danger mt-2 mb-0";
+  } finally {
+    suggestButton.disabled = false;
+  }
 }
 
 bookSearchForm.addEventListener("submit", async function (event) {
@@ -239,9 +313,9 @@ bookSearchForm.addEventListener("submit", async function (event) {
         if (searchType === "title") {
           value = book.title;
         } else if (searchType === "author") {
-          value = book.author_name.join(" ");
+          value = book.author;
         } else {
-          value = book.isbn.join(" ");
+          value = book.isbn;
         }
 
         return value.toLowerCase().includes(searchTerm.toLowerCase());
