@@ -246,8 +246,6 @@ async function loadBookClub() {
 
       showInvitationButton(currentMember?.role === "admin");
       return;
-
-      
     }
 
     if (!sessionStorage.getItem("token")) {
@@ -270,7 +268,7 @@ async function loadBookClub() {
     showInvitationButton(currentBookClub.role === "ADMIN");
 
         try {
-      const currentBook = await getCurrentBook(clubId);
+          const currentBook = await getCurrentBook(clubId);
 
       hasSelectedCurrentBook = currentBook !== null;
 
