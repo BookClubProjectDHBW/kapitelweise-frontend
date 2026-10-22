@@ -1,11 +1,7 @@
-
 import { config } from "../config.js";
 import { getBookClub, inviteUserToClub } from "../api/clubApi.js";
 import { searchBooks } from "../api/bookApi.js";
-import {
-  renderBookClub,
-  renderBookSearchResults,
-} from "./bookClubView.js";
+import { renderBookClub, renderBookSearchResults } from "./bookClubView.js";
 
 const clubId = new URLSearchParams(window.location.search).get("id");
 
@@ -44,10 +40,9 @@ navigation.addEventListener("click", function (event) {
 
   clickedTab.classList.add("active");
 
-  document.getElementById("bookSearchPanel").classList.toggle(
-    "d-none",
-    clickedTab.id !== "votingTab",
-  );
+  document
+    .getElementById("bookSearchPanel")
+    .classList.toggle("d-none", clickedTab.id !== "votingTab");
 });
 
 function resetInvitationDialog() {
@@ -66,15 +61,9 @@ function closeInvitationDialog() {
   invitationDialog.close();
 }
 
-closeInvitationDialogButton.addEventListener(
-  "click",
-  closeInvitationDialog,
-);
+closeInvitationDialogButton.addEventListener("click", closeInvitationDialog);
 
-cancelInvitationButton.addEventListener(
-  "click",
-  closeInvitationDialog,
-);
+cancelInvitationButton.addEventListener("click", closeInvitationDialog);
 
 invitationDialog.addEventListener("close", resetInvitationDialog);
 
@@ -89,18 +78,13 @@ invitationForm.addEventListener("submit", async function (event) {
     return;
   }
 
-  const submitButton = invitationForm.querySelector(
-    'button[type="submit"]',
-  );
+  const submitButton = invitationForm.querySelector('button[type="submit"]');
 
   submitButton.disabled = true;
 
   try {
     if (config.useMockData) {
-      const result = devData.sendInvitationMock(
-        currentBookClub,
-        username,
-      );
+      const result = devData.sendInvitationMock(currentBookClub, username);
 
       invitationStatus.textContent = result.message;
       invitationStatus.className = result.success
@@ -146,10 +130,7 @@ function showInvitationButton(isAdmin) {
   invitationButton.className = "admin-invitation-button";
   invitationButton.textContent = "Mitglied einladen";
 
-  invitationButton.addEventListener(
-    "click",
-    openInvitationDialog,
-  );
+  invitationButton.addEventListener("click", openInvitationDialog);
 
   adminActions.append(invitationButton);
 }
@@ -220,8 +201,7 @@ function selectBook(book, selectionMessage) {
       message.textContent = "";
     });
 
-  selectionMessage.textContent =
-    `"${book.title}" ausgewählt. Der Vorschlag wurde noch nicht eingereicht.`;
+  selectionMessage.textContent = `"${book.title}" ausgewählt. Der Vorschlag wurde noch nicht eingereicht.`;
 
   console.log("Ausgewähltes Buch:", selectedBook);
 }
@@ -248,11 +228,29 @@ bookSearchForm.addEventListener("submit", async function (event) {
   resultsContainer.textContent = "Bücher werden gesucht...";
 
   try {
-    const data = await searchBooks(
-      searchType,
-      searchTerm,
-      controller.signal,
-    );
+    let data;
+
+    if (config.useMockData) {
+      const { searchResults } = await import("../dev/mockData.js");
+
+      const books = searchResults.filter(function (book) {
+        let value;
+
+        if (searchType === "title") {
+          value = book.title;
+        } else if (searchType === "author") {
+          value = book.author_name.join(" ");
+        } else {
+          value = book.isbn.join(" ");
+        }
+
+        return value.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+
+      data = { docs: books };
+    } else {
+      data = await searchBooks(searchType, searchTerm, controller.signal);
+    }
 
     if (activeBookSearchController !== controller) {
       return;
@@ -278,11 +276,9 @@ bookSearchForm.addEventListener("submit", async function (event) {
   }
 });
 
-document
-  .getElementById("logoutButton")
-  .addEventListener("click", function () {
-    sessionStorage.removeItem("token");
-    window.location.href = "loginPage.html";
-  });
+document.getElementById("logoutButton").addEventListener("click", function () {
+  sessionStorage.removeItem("token");
+  window.location.href = "loginPage.html";
+});
 
 loadBookClub();
