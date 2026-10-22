@@ -1,6 +1,6 @@
 import { config } from "../config.js";
 import { getBookClub, inviteUserToClub } from "../api/clubApi.js";
-import { searchBooks } from "../api/bookApi.js";
+import { searchBooks, submitBookProposal } from "../api/bookApi.js";
 import { renderBookClub, renderBookSearchResults } from "./bookClubView.js";
 
 const clubId = new URLSearchParams(window.location.search).get("id");
@@ -192,7 +192,7 @@ bookSearchType.addEventListener("change", function () {
   bookSearchInput.placeholder = placeholders[bookSearchType.value];
 });
 
-function selectBook(book, selectionMessage) {
+async function selectBook(book, selectionMessage, suggestButton) {
   selectedBook = book;
 
   document
@@ -201,9 +201,36 @@ function selectBook(book, selectionMessage) {
       message.textContent = "";
     });
 
-  selectionMessage.textContent = `"${book.title}" ausgewählt. Der Vorschlag wurde noch nicht eingereicht.`;
+  if (config.useMockData) {
+    selectionMessage.textContent = `"${book.title}" ausgewählt. Im DEV-Modus wird nichts eingereicht.`;
+    return;
+  }
 
-  console.log("Ausgewähltes Buch:", selectedBook);
+  if (!clubId) {
+    selectionMessage.textContent = "Keine Buchclub-ID vorhanden.";
+    selectionMessage.className = "book-selection-message text-danger mt-2 mb-0";
+    return;
+  }
+
+  suggestButton.disabled = true;
+  selectionMessage.textContent = "Buchvorschlag wird eingereicht...";
+  selectionMessage.className =
+    "book-selection-message text-secondary mt-2 mb-0";
+
+  try {
+    await submitBookProposal(clubId, selectedBook);
+
+    selectionMessage.textContent = "Buch erfolgreich vorgeschlagen!";
+    selectionMessage.className =
+      "book-selection-message text-success mt-2 mb-0";
+  } catch (error) {
+    console.error("Fehler beim Einreichen:", error);
+
+    selectionMessage.textContent = error.message;
+    selectionMessage.className = "book-selection-message text-danger mt-2 mb-0";
+  } finally {
+    suggestButton.disabled = false;
+  }
 }
 
 bookSearchForm.addEventListener("submit", async function (event) {

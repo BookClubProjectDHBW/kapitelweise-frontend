@@ -105,7 +105,7 @@ export function renderBookSearchResults(books, onSelectBook) {
       "book-selection-message text-secondary mt-2 mb-0";
 
     suggestButton.addEventListener("click", function () {
-      onSelectBook(book, selectionMessage);
+      onSelectBook(book, selectionMessage, suggestButton);
     });
 
     bookInfo.append(title, author, year, suggestButton, selectionMessage);
