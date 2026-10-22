@@ -1,4 +1,3 @@
-
 import { graphqlRequest } from "./graphqlRequest.js";
 
 const HOMEPAGE_QUERY = `
@@ -6,23 +5,12 @@ const HOMEPAGE_QUERY = `
     member {
       id
       name
-      membership {
-        id
-        name
-        description
-      }
+      membership { id name description }
       invitationPending {
         id
         createdAt
-        bookclub {
-          id
-          name
-          description
-        }
-        invitedBy {
-          id
-          name
-        }
+        bookclub { id name description }
+        invitedBy { id name }
       }
     }
   }
@@ -30,39 +18,55 @@ const HOMEPAGE_QUERY = `
 
 const CREATE_CLUB_MUTATION = `
   mutation CreateClub($input: BookClubInput!) {
-    createNewBookClub(bookClubInput: $input) {
-      id
-      name
-      description
-    }
+    createNewBookClub(bookClubInput: $input) { id name description }
   }
 `;
 
 const RESPOND_INVITATION_MUTATION = `
   mutation Respond($input: InvitationInput!) {
-    responseInvitation(invitationInput: $input) {
+    responseInvitation(invitationInput: $input) { id name description }
+  }
+`;
+
+const CLUB_QUERY = `
+  query Club($id: ID!) {
+    bookclub(id: $id) { id bookClubName description role }
+  }
+`;
+
+const INVITE_MUTATION = `
+  mutation Invite($input: InviteUserInput!) {
+    inviteUser(inviteUserInput: $input) {
       id
-      name
-      description
+      invitationStatus
+      invitedUser
+      createdAt
     }
   }
 `;
 
-export async function getHomepageData() {
-  return await graphqlRequest(HOMEPAGE_QUERY);
+export function getHomepageData() {
+  return graphqlRequest(HOMEPAGE_QUERY);
 }
 
-export async function createClub(clubData) {
-  return await graphqlRequest(CREATE_CLUB_MUTATION, {
-    input: clubData,
+export function createClub(clubData) {
+  return graphqlRequest(CREATE_CLUB_MUTATION, { input: clubData });
+}
+
+export function answerInvitation(invitationId, status) {
+  return graphqlRequest(RESPOND_INVITATION_MUTATION, {
+    input: { invitationId: String(invitationId), status },
   });
 }
 
-export async function answerInvitation(invitationId, status) {
-  return await graphqlRequest(RESPOND_INVITATION_MUTATION, {
-    input: {
-      invitationId: String(invitationId),
-      status: status,
-    },
+export async function getBookClub(clubId) {
+  const data = await graphqlRequest(CLUB_QUERY, { id: String(clubId) });
+  return data.bookclub;
+}
+
+export async function inviteUserToClub(clubId, username) {
+  const data = await graphqlRequest(INVITE_MUTATION, {
+    input: { bookclubId: String(clubId), username },
   });
+  return data.inviteUser;
 }

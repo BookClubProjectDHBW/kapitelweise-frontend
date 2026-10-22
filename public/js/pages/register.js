@@ -1,4 +1,3 @@
-
 import { registerUser } from "../api/authApi.js";
 
 $("#registerForm").submit(async function (event) {
@@ -15,12 +14,10 @@ $("#registerForm").submit(async function (event) {
   } else {
     $("#confirmPassword").removeClass("is-invalid");
   }
-
   const registerData = {
     username: $("#username").val(),
     password: password,
   };
-
   try {
     const response = await registerUser(registerData);
 

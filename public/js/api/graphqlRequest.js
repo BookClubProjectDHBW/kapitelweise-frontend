@@ -23,7 +23,10 @@ export async function graphqlRequest(query, variables = {}) {
   const result = await response.json();
 
   if (result.errors?.length) {
-    throw new Error(result.errors[0].message);
+    const graphqlError = result.errors[0];
+    const error = new Error(graphqlError.message);
+    error.code = graphqlError.extensions?.code;
+    throw error;
   }
 
   return result.data;

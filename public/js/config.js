@@ -1,5 +1,5 @@
 const environment = "development";
-const useMockData = true;
+const enableMockData = true;
 
 const apiUrls = {
   development: {
@@ -8,7 +8,6 @@ const apiUrls = {
     bookSearch: "http://localhost:8383",
     backend: "http://localhost:8181",
   },
-
   production: {
     auth: "https://AUTH-HEROKU-URL",
     graphql: "https://GRAPHQL-HEROKU-URL/graphql",
@@ -18,7 +17,7 @@ const apiUrls = {
 };
 
 export const config = {
-  environment: environment,
-  useMockData: environment === "development" && useMockData,
+  environment,
+  useMockData: environment === "development" && enableMockData,
   api: apiUrls[environment],
 };

@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="de">
   <head>
@@ -13,55 +14,56 @@
     />
     <link rel="stylesheet" href="../css/common.css" />
     <link rel="stylesheet" href="../css/bookClub.css" />
-    <script src="../js/bookClubMockData.js" defer></script>
     <script type="module" src="../js/pages/bookClub.js"></script>
   </head>
-  <dialog
-    id="invitationDialog"
-    class="invitation-dialog"
-    aria-labelledby="invitationDialogTitle"
-  >
-    <form id="invitationForm" class="invitation-form" novalidate>
-      <div class="dialog-header">
-        <h2 id="invitationDialogTitle">Mitglied einladen</h2>
-        <button
-          id="closeInvitationDialog"
-          class="dialog-close-button"
-          type="button"
-          aria-label="Einladungsfenster schließen"
-        >
-          ×
-        </button>
-      </div>
 
-      <p>Gib den Benutzernamen der Person ein, die du einladen möchtest.</p>
-
-      <label for="invitedUsername">Benutzername</label>
-      <input
-        id="invitedUsername"
-        name="invitedUsername"
-        type="text"
-        autocomplete="off"
-        required
-      />
-
-      <p id="invitationStatus" class="invitation-status" role="status"></p>
-
-      <div class="dialog-actions">
-        <button
-          id="cancelInvitation"
-          class="dialog-cancel-button"
-          type="button"
-        >
-          Abbrechen
-        </button>
-        <button class="invitation-submit" type="submit">
-          Einladung senden
-        </button>
-      </div>
-    </form>
-  </dialog>
   <body>
+    <dialog
+      id="invitationDialog"
+      class="invitation-dialog"
+      aria-labelledby="invitationDialogTitle"
+    >
+      <form id="invitationForm" class="invitation-form" novalidate>
+        <div class="dialog-header">
+          <h2 id="invitationDialogTitle">Mitglied einladen</h2>
+          <button
+            id="closeInvitationDialog"
+            class="dialog-close-button"
+            type="button"
+            aria-label="Einladungsfenster schließen"
+          >
+            ×
+          </button>
+        </div>
+
+        <p>Gib den Benutzernamen der Person ein, die du einladen möchtest.</p>
+
+        <label for="invitedUsername">Benutzername</label>
+        <input
+          id="invitedUsername"
+          name="invitedUsername"
+          type="text"
+          autocomplete="off"
+          required
+        />
+
+        <p id="invitationStatus" class="invitation-status" role="status"></p>
+
+        <div class="dialog-actions">
+          <button
+            id="cancelInvitation"
+            class="dialog-cancel-button"
+            type="button"
+          >
+            Abbrechen
+          </button>
+          <button class="invitation-submit" type="submit">
+            Einladung senden
+          </button>
+        </div>
+      </form>
+    </dialog>
+
     <header>
       <nav class="navbar bg-white border-bottom shadow-sm">
         <div class="container py-2">
@@ -77,26 +79,31 @@
         </div>
       </nav>
     </header>
+
     <main class="container">
       <section class="bookclub-header">
         <div id="adminActions" class="bookclub-header-actions">
-          <a href="homePage.html" class="back-link"> ← Zurück </a>
-
-          <!-- Bleibt zunächst leer und wird nur für Admins befüllt. -->
-          <div></div>
+          <a href="homePage.html" class="back-link">
+            ← Zurück
+          </a>
         </div>
 
         <div class="bookclub-info">
-          <img id="bookCover" alt="Buchcover" class="book-cover" />
+          <img id="bookCover" alt="Buchcover" class="book-cover d-none" />
+
           <div class="book-details">
             <p class="club-name">
-              <span id="name">Buchclub</span>·<span id="memberCount"
-                >AnzahlMitglieder</span
-              >
-              Mitglieder
+              <span id="name">Buchclub</span>
+              <span id="memberCountLabel">
+                · <span id="memberCount">AnzahlMitglieder</span> Mitglieder
+              </span>
             </p>
+
             <h1 id="title">Buchtitel</h1>
-            <p class="book-data">
+
+            <p id="clubDescription" class="book-data d-none"></p>
+
+            <p id="currentBookData" class="book-data">
               <span id="edition">Ausgabe</span> · ISBN:
               <span id="isbn">ISBN</span> · Ziel:
               <span id="targetDate">Leseziel</span> Seiten
@@ -104,32 +111,43 @@
           </div>
         </div>
       </section>
+
       <nav
         id="bookclubNavigation"
         class="bookclub-navigation"
         aria-label="Buchclub Navigation"
       >
-        <button class="nav-tab active" type="button">Leseplan</button>
+        <button class="nav-tab active" type="button">
+          Leseplan
+        </button>
 
         <button id="votingTab" class="nav-tab" type="button">
           Buchvorschläge
         </button>
 
-        <button class="nav-tab" type="button">Treffen</button>
+        <button class="nav-tab" type="button">
+          Treffen
+        </button>
 
-        <button class="nav-tab" type="button">Mitglieder</button>
+        <button class="nav-tab" type="button">
+          Mitglieder
+        </button>
       </nav>
+
       <section id="tabContent" class="tab-content" aria-live="polite">
         <div id="bookSearchPanel" class="d-none">
           <h2 class="h4 mb-3">Buch suchen</h2>
+
           <p class="text-secondary">
-            Suche ein Buch und schlage es für deinen Buchclub vor. Der Admin
-            wählt anschließend das nächste Buch aus.
+            Suche ein Buch und schlage es für deinen Buchclub vor.
+            Der Admin wählt anschließend das nächste Buch aus.
           </p>
 
           <form id="bookSearchForm" class="row g-3 align-items-end">
             <div class="col-12 col-md-3">
-              <label for="bookSearchType" class="form-label">Suche nach</label>
+              <label for="bookSearchType" class="form-label">
+                Suche nach
+              </label>
               <select id="bookSearchType" class="form-select">
                 <option value="title">Titel</option>
                 <option value="author">Autor</option>
@@ -138,9 +156,9 @@
             </div>
 
             <div class="col-12 col-md-7">
-              <label for="bookSearchInput" class="form-label"
-                >Suchbegriff</label
-              >
+              <label for="bookSearchInput" class="form-label">
+                Suchbegriff
+              </label>
               <input
                 id="bookSearchInput"
                 type="search"
@@ -163,16 +181,19 @@
             <h2 id="clubSuggestionsHeading" class="h4 mb-3">
               Vorgeschlagene Bücher
             </h2>
+
             <p
               id="clubSuggestionsStatus"
               class="text-secondary"
               role="status"
             ></p>
+
             <div id="clubSuggestionsList" aria-live="polite"></div>
           </section>
         </div>
       </section>
     </main>
+
     <footer>
       <div class="container">
         <p class="mb-0">© 2026 Kapitelweise</p>

@@ -1,4 +1,3 @@
-
 import { loginUser } from "../api/authApi.js";
 
 function showError(message) {
@@ -8,7 +7,6 @@ function showError(message) {
     $("#loginError").addClass("d-none").text("");
   }, 4000);
 }
-
 if (sessionStorage.getItem("registered") === "true") {
   $("#registered").removeClass("d-none");
   sessionStorage.removeItem("registered");
@@ -28,12 +26,10 @@ $("#loginForm").on("submit", async function (event) {
 
     if (response.ok) {
       const data = await response.json();
-
       if (!data.token) {
         showError("Die Anmeldung hat kein Token zurückgegeben.");
         return;
       }
-
       sessionStorage.setItem("token", data.token);
       window.location.href = "homePage.html";
     } else if (response.status === 401) {
