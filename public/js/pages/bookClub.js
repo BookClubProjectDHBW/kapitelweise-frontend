@@ -4,6 +4,7 @@ import {
   searchBooks,
   submitBookProposal,
   getClubSuggestions,
+  setCurrentBook,
 } from "../api/bookApi.js";
 import {
   renderBookClub,
@@ -34,6 +35,25 @@ const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 const resultsContainer = document.getElementById("bookSearchResults");
 
+async function chooseCurrentBook(book, button) {
+  const status = document.getElementById("clubSuggestionsStatus");
+
+  button.disabled = true;
+  status.textContent = "Buch wird ausgewählt...";
+  status.className = "text-secondary";
+
+  try {
+    await setCurrentBook(clubId, book.id);
+
+    status.textContent = `"${book.title}" wurde als nächstes Buch ausgewählt.`;
+    status.className = "text-success";
+  } catch (error) {
+    status.textContent = error.message;
+    status.className = "text-danger";
+    button.disabled = false;
+  }
+}
+
 async function loadClubSuggestions() {
   const status = document.getElementById("clubSuggestionsStatus");
   const list = document.getElementById("clubSuggestionsList");
@@ -60,7 +80,11 @@ async function loadClubSuggestions() {
       throw new Error("Ungültiges Antwortformat der Vorschlags-API.");
     }
 
-    renderClubSuggestions(suggestions);
+    renderClubSuggestions(
+      suggestions,
+      currentBookClub?.role === "ADMIN",
+      chooseCurrentBook,
+    );
   } catch (error) {
     console.error("Fehler beim Laden der Buchvorschläge:", error);
 
