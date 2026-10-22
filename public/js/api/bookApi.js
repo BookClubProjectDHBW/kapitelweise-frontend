@@ -84,3 +84,27 @@ export async function getClubSuggestions(clubId) {
 
   return response.json();
 }
+
+export async function setCurrentBook(clubId, proposalId) {
+  const response = await fetch(
+    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/current-book/${encodeURIComponent(proposalId)}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+
+  if (response.status === 401) {
+    sessionStorage.removeItem("token");
+    window.location.href = "loginPage.html";
+    throw new Error("Deine Anmeldung ist abgelaufen.");
+  }
+
+  if (!response.ok) {
+    throw new Error(`Buchauswahl fehlgeschlagen (HTTP ${response.status}).`);
+  }
+
+  return response.json();
+}
