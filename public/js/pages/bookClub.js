@@ -14,6 +14,7 @@ import {
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 let currentBookClub = null;
+let hasSelectedCurrentBook = false;
 let devData = null;
 let selectedBook = null;
 let activeBookSearchController = null;
@@ -43,7 +44,15 @@ async function chooseCurrentBook(book, button) {
   status.className = "text-secondary";
 
   try {
-    await setCurrentBook(clubId, book.id);
+    const currentBook = await setCurrentBook(clubId, book.id);
+
+    hasSelectedCurrentBook = true;
+
+    document
+      .querySelectorAll("#clubSuggestionsList button")
+      .forEach(function (selectButton) {
+        selectButton.remove();
+      });
 
     status.textContent = `"${book.title}" wurde als nächstes Buch ausgewählt.`;
     status.className = "text-success";
@@ -79,12 +88,18 @@ async function loadClubSuggestions() {
     if (!Array.isArray(suggestions)) {
       throw new Error("Ungültiges Antwortformat der Vorschlags-API.");
     }
+    if (suggestions.length === 0) {
+      status.textContent = "Noch keine Buchvorschläge vorhanden.";
+      return;
+    }
 
     renderClubSuggestions(
       suggestions,
-      currentBookClub?.role === "ADMIN",
+      currentBookClub?.role === "ADMIN" && !hasSelectedCurrentBook,
       chooseCurrentBook,
     );
+
+    status.textContent = "";
   } catch (error) {
     console.error("Fehler beim Laden der Buchvorschläge:", error);
 
