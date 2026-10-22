@@ -246,6 +246,8 @@ async function loadBookClub() {
 
       showInvitationButton(currentMember?.role === "admin");
       return;
+
+      
     }
 
     if (!sessionStorage.getItem("token")) {
@@ -266,6 +268,18 @@ async function loadBookClub() {
     renderBookClub(currentBookClub);
 
     showInvitationButton(currentBookClub.role === "ADMIN");
+
+        try {
+      const currentBook = await getCurrentBook(clubId);
+
+      hasSelectedCurrentBook = currentBook !== null;
+
+      if (currentBook) {
+        renderCurrentBook(currentBook);
+      }
+    } catch (error) {
+      console.error("Aktuelles Buch konnte nicht geladen werden:", error);
+    }
   } catch (error) {
     console.error("Fehler beim Laden des Buchclubs:", error);
 
