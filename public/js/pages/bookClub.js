@@ -5,6 +5,7 @@ import {
   submitBookProposal,
   getClubSuggestions,
   setCurrentBook,
+  getCurrentBook,
 } from "../api/bookApi.js";
 import {
   renderBookClub,
@@ -83,6 +84,9 @@ async function loadClubSuggestions() {
   status.className = "text-secondary";
 
   try {
+    const currentBook = await getCurrentBook(clubId);
+    hasSelectedCurrentBook = currentBook !== null;
+
     const suggestions = await getClubSuggestions(clubId);
 
     if (!Array.isArray(suggestions)) {
