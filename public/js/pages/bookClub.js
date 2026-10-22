@@ -4,15 +4,19 @@ import {
   searchBooks,
   submitBookProposal,
   getClubSuggestions,
+  setCurrentBook,
+  getCurrentBook,
 } from "../api/bookApi.js";
 import {
   renderBookClub,
   renderBookSearchResults,
   renderClubSuggestions,
+  renderCurrentBook,
 } from "./bookClubView.js";
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 let currentBookClub = null;
+let hasSelectedCurrentBook = false;
 let devData = null;
 let selectedBook = null;
 let activeBookSearchController = null;
@@ -34,6 +38,35 @@ const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 const resultsContainer = document.getElementById("bookSearchResults");
 
+async function chooseCurrentBook(book, button) {
+  const status = document.getElementById("clubSuggestionsStatus");
+
+  button.disabled = true;
+  status.textContent = "Buch wird ausgewählt...";
+  status.className = "text-secondary";
+
+  try {
+    const currentBook = await setCurrentBook(clubId, book.id);
+
+    hasSelectedCurrentBook = true;
+
+    renderCurrentBook(currentBook);
+
+    document
+      .querySelectorAll("#clubSuggestionsList button")
+      .forEach(function (selectButton) {
+        selectButton.remove();
+      });
+
+    status.textContent = `"${book.title}" wurde als nächstes Buch ausgewählt.`;
+    status.className = "text-success";
+  } catch (error) {
+    status.textContent = error.message;
+    status.className = "text-danger";
+    button.disabled = false;
+  }
+}
+
 async function loadClubSuggestions() {
   const status = document.getElementById("clubSuggestionsStatus");
   const list = document.getElementById("clubSuggestionsList");
@@ -54,13 +87,30 @@ async function loadClubSuggestions() {
   status.className = "text-secondary";
 
   try {
+    const currentBook = await getCurrentBook(clubId);
+    hasSelectedCurrentBook = currentBook !== null;
+
+    if (currentBook) {
+      renderCurrentBook(currentBook);
+    }
+
     const suggestions = await getClubSuggestions(clubId);
 
     if (!Array.isArray(suggestions)) {
       throw new Error("Ungültiges Antwortformat der Vorschlags-API.");
     }
+    if (suggestions.length === 0) {
+      status.textContent = "Noch keine Buchvorschläge vorhanden.";
+      return;
+    }
 
-    renderClubSuggestions(suggestions);
+    renderClubSuggestions(
+      suggestions,
+      currentBookClub?.role === "ADMIN" && !hasSelectedCurrentBook,
+      chooseCurrentBook,
+    );
+
+    status.textContent = "";
   } catch (error) {
     console.error("Fehler beim Laden der Buchvorschläge:", error);
 
@@ -216,6 +266,18 @@ async function loadBookClub() {
     renderBookClub(currentBookClub);
 
     showInvitationButton(currentBookClub.role === "ADMIN");
+
+        try {
+          const currentBook = await getCurrentBook(clubId);
+
+      hasSelectedCurrentBook = currentBook !== null;
+
+      if (currentBook) {
+        renderCurrentBook(currentBook);
+      }
+    } catch (error) {
+      console.error("Aktuelles Buch konnte nicht geladen werden:", error);
+    }
   } catch (error) {
     console.error("Fehler beim Laden des Buchclubs:", error);
 

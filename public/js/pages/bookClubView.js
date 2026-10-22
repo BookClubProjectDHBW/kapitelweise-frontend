@@ -116,7 +116,7 @@ export function renderBookSearchResults(books, onSelectBook) {
   });
 }
 
-export function renderClubSuggestions(suggestions) {
+export function renderClubSuggestions(suggestions, isAdmin, onChooseBook) {
   const list = document.getElementById("clubSuggestionsList");
   const status = document.getElementById("clubSuggestionsStatus");
 
@@ -168,7 +168,33 @@ export function renderClubSuggestions(suggestions) {
     proposalStatus.textContent = `Status: ${statusLabels[book.suggestion_status] || book.suggestion_status || "Unbekannt"}`;
 
     cardBody.append(title, author, isbn, details, suggestedBy, proposalStatus);
+    if (isAdmin && book.suggestion_status === "READY") {
+      const selectButton = document.createElement("button");
+      selectButton.type = "button";
+      selectButton.className = "btn btn-confirm mt-3";
+      selectButton.textContent = "Als nächstes Buch auswählen";
+
+      selectButton.addEventListener("click", function () {
+        onChooseBook(book, selectButton);
+      });
+
+      cardBody.appendChild(selectButton);
+    }
     card.appendChild(cardBody);
     list.appendChild(card);
   });
+}
+export function renderCurrentBook(book) {
+  document.getElementById("title").textContent = book.title;
+
+  const bookData = document.getElementById("currentBookData");
+
+  bookData.textContent =
+    `Autor: ${book.author || "Unbekannt"} · ` +
+    `ISBN: ${book.isbn || "Unbekannt"} · ` +
+    `Seiten: ${book.pages ?? "Unbekannt"}`;
+
+  document.querySelector(".club-name").classList.remove("d-none");
+  document.getElementById("clubDescription").classList.add("d-none");
+  bookData.classList.remove("d-none");
 }
