@@ -1,4 +1,3 @@
-
 export function renderBookClub(club) {
   const book = club.currentBook;
   const name = club.bookClubName ?? club.name;
@@ -63,10 +62,10 @@ export function renderBookSearchResults(books, onSelectBook) {
     placeholder.style.height = "150px";
     placeholder.textContent = "Kein Cover";
 
-    if (book.cover_i) {
+    if (book.coverId) {
       const cover = document.createElement("img");
 
-      cover.src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+      cover.src = `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`;
       cover.alt = `Cover von ${book.title}`;
       cover.className = "rounded flex-shrink-0";
       cover.style.width = "100px";
@@ -88,13 +87,11 @@ export function renderBookSearchResults(books, onSelectBook) {
 
     const author = document.createElement("p");
     author.className = "mb-1";
-    author.textContent =
-      `Autor: ${book.author_name?.join(", ") || "Unbekannt"}`;
+    author.textContent = `Autor: ${book.author || "Unbekannt"}`;
 
     const year = document.createElement("p");
     year.className = "text-secondary mb-0";
-    year.textContent =
-      `Erstveröffentlichung: ${book.first_publish_year || "Unbekannt"}`;
+    year.textContent = `Erstveröffentlichung: ${book.firstPublishYear ?? "Unbekannt"}`;
 
     const bookInfo = document.createElement("div");
 
@@ -111,13 +108,7 @@ export function renderBookSearchResults(books, onSelectBook) {
       onSelectBook(book, selectionMessage);
     });
 
-    bookInfo.append(
-      title,
-      author,
-      year,
-      suggestButton,
-      selectionMessage,
-    );
+    bookInfo.append(title, author, year, suggestButton, selectionMessage);
 
     cardBody.appendChild(bookInfo);
     card.appendChild(cardBody);

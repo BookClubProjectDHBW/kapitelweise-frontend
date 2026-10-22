@@ -239,9 +239,9 @@ bookSearchForm.addEventListener("submit", async function (event) {
         if (searchType === "title") {
           value = book.title;
         } else if (searchType === "author") {
-          value = book.author_name.join(" ");
+          value = book.author;
         } else {
-          value = book.isbn.join(" ");
+          value = book.isbn;
         }
 
         return value.toLowerCase().includes(searchTerm.toLowerCase());
