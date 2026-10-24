@@ -132,7 +132,8 @@ async function loadClubSuggestions() {
   } catch (error) {
     console.error("Fehler beim Laden der Buchvorschläge:", error);
 
-    status.textContent = "Buchvorschläge konnten nicht geladen werden.";
+    status.textContent = error.message;
+  
     status.className = "text-danger";
   }
 }
@@ -252,56 +253,56 @@ function showInvitationButton(isAdmin) {
   adminActions.append(invitationButton);
 }
 
-async function loadBookClub() {
-  function showFinishBookButton() {
-    const adminActions = document.getElementById("adminActions");
+function showFinishBookButton() {
+  const adminActions = document.getElementById("adminActions");
 
-    document.getElementById("finishBookButton")?.remove();
+  document.getElementById("finishBookButton")?.remove();
 
-    if (currentBookClub?.role !== "ADMIN" || !hasSelectedCurrentBook) {
+  if (currentBookClub?.role !== "ADMIN" || !hasSelectedCurrentBook) {
+    return;
+  }
+
+  const button = document.createElement("button");
+  button.id = "finishBookButton";
+  button.type = "button";
+  button.className = "btn btn-confirm";
+  button.textContent = "Buch abschließen";
+
+  button.addEventListener("click", async function () {
+    const confirmed = window.confirm(
+      "Möchtest du das aktuelle Buch wirklich abschließen?",
+    );
+
+    if (!confirmed) {
       return;
     }
 
-    const button = document.createElement("button");
-    button.id = "finishBookButton";
-    button.type = "button";
-    button.className = "btn btn-confirm";
-    button.textContent = "Buch abschließen";
+    button.disabled = true;
+    button.textContent = "Wird abgeschlossen...";
 
-    button.addEventListener("click", async function () {
-      const confirmed = window.confirm(
-        "Möchtest du das aktuelle Buch wirklich abschließen?",
-      );
+    try {
+      await finishCurrentBook(clubId);
 
-      if (!confirmed) {
-        return;
+      hasSelectedCurrentBook = false;
+      currentBookClub.currentBook = null;
+
+      renderBookClub(currentBookClub);
+      showFinishBookButton();
+
+      if (document.getElementById("votingTab").classList.contains("active")) {
+        await loadClubSuggestions();
       }
+    } catch (error) {
+      window.alert(error.message);
+      button.disabled = false;
+      button.textContent = "Buch abschließen";
+    }
+  });
 
-      button.disabled = true;
-      button.textContent = "Wird abgeschlossen...";
+  adminActions.appendChild(button);
+}
 
-      try {
-        await finishCurrentBook(clubId);
-
-        hasSelectedCurrentBook = false;
-        currentBookClub.currentBook = null;
-
-        renderBookClub(currentBookClub);
-        showFinishBookButton();
-
-        if (document.getElementById("votingTab").classList.contains("active")) {
-          await loadClubSuggestions();
-        }
-      } catch (error) {
-        window.alert(error.message);
-        button.disabled = false;
-        button.textContent = "Buch abschließen";
-      }
-    });
-
-    adminActions.appendChild(button);
-  }
-
+async function loadBookClub() {
   try {
     if (config.useMockData) {
       devData = await import("../dev/mockData.js");
@@ -350,6 +351,7 @@ async function loadBookClub() {
     } catch (error) {
       console.error("Aktuelles Buch konnte nicht geladen werden:", error);
     }
+    await loadClubSuggestions();
   } catch (error) {
     console.error("Fehler beim Laden des Buchclubs:", error);
 
