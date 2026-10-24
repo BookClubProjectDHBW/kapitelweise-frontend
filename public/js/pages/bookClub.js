@@ -6,6 +6,7 @@ import {
   getClubSuggestions,
   setCurrentBook,
   getCurrentBook,
+  finishCurrentBook,
 } from "../api/bookApi.js";
 import {
   renderBookClub,
@@ -250,6 +251,37 @@ async function loadBookClub() {
     button.type = "button";
     button.className = "btn btn-confirm";
     button.textContent = "Buch abschließen";
+
+    button.addEventListener("click", async function () {
+      const confirmed = window.confirm(
+        "Möchtest du das aktuelle Buch wirklich abschließen?",
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Wird abgeschlossen...";
+
+      try {
+        await finishCurrentBook(clubId);
+
+        hasSelectedCurrentBook = false;
+        currentBookClub.currentBook = null;
+
+        renderBookClub(currentBookClub);
+        showFinishBookButton();
+
+        if (document.getElementById("votingTab").classList.contains("active")) {
+          await loadClubSuggestions();
+        }
+      } catch (error) {
+        window.alert(error.message);
+        button.disabled = false;
+        button.textContent = "Buch abschließen";
+      }
+    });
 
     adminActions.appendChild(button);
   }
