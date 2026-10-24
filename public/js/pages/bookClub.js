@@ -41,6 +41,14 @@ const resultsContainer = document.getElementById("bookSearchResults");
 async function chooseCurrentBook(book, button) {
   const status = document.getElementById("clubSuggestionsStatus");
 
+  const confirmed = window.confirm(
+    `Möchtest du "${book.title}" wirklich als nächstes Buch auswählen? Diese Auswahl kann nicht rückgängig gemacht werden.`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
   button.disabled = true;
   status.textContent = "Buch wird ausgewählt...";
   status.className = "text-secondary";
