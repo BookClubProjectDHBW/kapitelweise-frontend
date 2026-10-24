@@ -59,12 +59,7 @@ async function chooseCurrentBook(book, button) {
     hasSelectedCurrentBook = true;
 
     renderCurrentBook(currentBook);
-
-    document
-      .querySelectorAll("#clubSuggestionsList button")
-      .forEach(function (selectButton) {
-        selectButton.remove();
-      });
+    document.getElementById("clubSuggestionsList").replaceChildren();
 
     status.textContent = `"${book.title}" wurde als nächstes Buch ausgewählt.`;
     status.className = "text-success";
