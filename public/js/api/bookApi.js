@@ -56,7 +56,12 @@ export async function submitBookProposal(clubId, book) {
   }
 
   if (!response.ok) {
-    throw new Error(`Buchvorschlag fehlgeschlagen (HTTP ${response.status}).`);
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ||
+        `Buchvorschlag fehlgeschlagen (HTTP ${response.status}).`,
+    );
   }
 
   return response.json();
@@ -139,7 +144,7 @@ export async function getCurrentBook(clubId) {
 
 export async function finishCurrentBook(clubId) {
   const response = await fetch(
-    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/current-book/finish`,
+    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/closeBook`,
     {
       method: "POST",
       headers: {
