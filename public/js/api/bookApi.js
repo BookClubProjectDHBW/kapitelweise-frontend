@@ -136,3 +136,27 @@ export async function getCurrentBook(clubId) {
 
   return response.json();
 }
+
+export async function finishCurrentBook(clubId) {
+  const response = await fetch(
+    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/current-book/finish`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+
+  if (response.status === 401) {
+    sessionStorage.removeItem("token");
+    window.location.href = "loginPage.html";
+    throw new Error("Deine Anmeldung ist abgelaufen.");
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      `Buch konnte nicht abgeschlossen werden (HTTP ${response.status}).`,
+    );
+  }
+}

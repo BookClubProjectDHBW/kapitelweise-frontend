@@ -6,6 +6,7 @@ import {
   getClubSuggestions,
   setCurrentBook,
   getCurrentBook,
+  finishCurrentBook,
 } from "../api/bookApi.js";
 import {
   renderBookClub,
@@ -41,6 +42,14 @@ const resultsContainer = document.getElementById("bookSearchResults");
 async function chooseCurrentBook(book, button) {
   const status = document.getElementById("clubSuggestionsStatus");
 
+  const confirmed = window.confirm(
+    `Möchtest du "${book.title}" wirklich als nächstes Buch auswählen? Diese Auswahl kann nicht rückgängig gemacht werden.`,
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
   button.disabled = true;
   status.textContent = "Buch wird ausgewählt...";
   status.className = "text-secondary";
@@ -51,12 +60,8 @@ async function chooseCurrentBook(book, button) {
     hasSelectedCurrentBook = true;
 
     renderCurrentBook(currentBook);
-
-    document
-      .querySelectorAll("#clubSuggestionsList button")
-      .forEach(function (selectButton) {
-        selectButton.remove();
-      });
+    showFinishBookButton();
+    document.getElementById("clubSuggestionsList").replaceChildren();
 
     status.textContent = `"${book.title}" wurde als nächstes Buch ausgewählt.`;
     status.className = "text-success";
@@ -232,6 +237,55 @@ function showInvitationButton(isAdmin) {
 }
 
 async function loadBookClub() {
+  function showFinishBookButton() {
+    const adminActions = document.getElementById("adminActions");
+
+    document.getElementById("finishBookButton")?.remove();
+
+    if (currentBookClub?.role !== "ADMIN" || !hasSelectedCurrentBook) {
+      return;
+    }
+
+    const button = document.createElement("button");
+    button.id = "finishBookButton";
+    button.type = "button";
+    button.className = "btn btn-confirm";
+    button.textContent = "Buch abschließen";
+
+    button.addEventListener("click", async function () {
+      const confirmed = window.confirm(
+        "Möchtest du das aktuelle Buch wirklich abschließen?",
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Wird abgeschlossen...";
+
+      try {
+        await finishCurrentBook(clubId);
+
+        hasSelectedCurrentBook = false;
+        currentBookClub.currentBook = null;
+
+        renderBookClub(currentBookClub);
+        showFinishBookButton();
+
+        if (document.getElementById("votingTab").classList.contains("active")) {
+          await loadClubSuggestions();
+        }
+      } catch (error) {
+        window.alert(error.message);
+        button.disabled = false;
+        button.textContent = "Buch abschließen";
+      }
+    });
+
+    adminActions.appendChild(button);
+  }
+
   try {
     if (config.useMockData) {
       devData = await import("../dev/mockData.js");
@@ -267,14 +321,16 @@ async function loadBookClub() {
 
     showInvitationButton(currentBookClub.role === "ADMIN");
 
-        try {
-          const currentBook = await getCurrentBook(clubId);
+    try {
+      const currentBook = await getCurrentBook(clubId);
 
       hasSelectedCurrentBook = currentBook !== null;
 
       if (currentBook) {
         renderCurrentBook(currentBook);
       }
+
+      showFinishBookButton();
     } catch (error) {
       console.error("Aktuelles Buch konnte nicht geladen werden:", error);
     }
