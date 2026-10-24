@@ -1,9 +1,14 @@
-
 <!doctype html>
 <html lang="de">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script>
+      if (!sessionStorage.getItem("token")) {
+        window.location.replace("loginPage.html");
+      }
+    </script>
 
     <title>Name des Buchclubs</title>
     <link
@@ -83,9 +88,7 @@
     <main class="container">
       <section class="bookclub-header">
         <div id="adminActions" class="bookclub-header-actions">
-          <a href="homePage.html" class="back-link">
-            ← Zurück
-          </a>
+          <a href="homePage.html" class="back-link"> ← Zurück </a>
         </div>
 
         <div class="bookclub-info">
@@ -117,30 +120,22 @@
         class="bookclub-navigation"
         aria-label="Buchclub Navigation"
       >
-        <button class="nav-tab active" type="button">
-          Leseplan
-        </button>
-
-        <button id="votingTab" class="nav-tab" type="button">
+        <button id="votingTab" class="nav-tab active" type="button">
           Buchvorschläge
         </button>
 
-        <button class="nav-tab" type="button">
-          Treffen
-        </button>
+        <button class="nav-tab" type="button">Treffen</button>
 
-        <button class="nav-tab" type="button">
-          Mitglieder
-        </button>
+        <button class="nav-tab" type="button">Mitglieder</button>
       </nav>
 
       <section id="tabContent" class="tab-content" aria-live="polite">
-        <div id="bookSearchPanel" class="d-none">
+        <div id="bookSearchPanel">
           <h2 class="h4 mb-3">Buch suchen</h2>
 
           <p class="text-secondary">
-            Suche ein Buch und schlage es für deinen Buchclub vor.
-            Der Admin wählt anschließend das nächste Buch aus.
+            Suche ein Buch und schlage es für deinen Buchclub vor. Der Admin
+            wählt anschließend das nächste Buch aus.
           </p>
 
           <form id="bookSearchForm" class="row g-3 align-items-end">
