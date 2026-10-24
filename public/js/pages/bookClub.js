@@ -42,7 +42,7 @@ async function chooseCurrentBook(book, button) {
   const status = document.getElementById("clubSuggestionsStatus");
 
   const confirmed = window.confirm(
-    `Möchtest du "${book.title}" wirklich als nächstes Buch auswählen? Diese Auswahl kann nicht rückgängig gemacht werden.`
+    `Möchtest du "${book.title}" wirklich als nächstes Buch auswählen? Diese Auswahl kann nicht rückgängig gemacht werden.`,
   );
 
   if (!confirmed) {
@@ -59,6 +59,7 @@ async function chooseCurrentBook(book, button) {
     hasSelectedCurrentBook = true;
 
     renderCurrentBook(currentBook);
+    showFinishBookButton();
     document.getElementById("clubSuggestionsList").replaceChildren();
 
     status.textContent = `"${book.title}" wurde als nächstes Buch ausgewählt.`;
@@ -235,6 +236,24 @@ function showInvitationButton(isAdmin) {
 }
 
 async function loadBookClub() {
+  function showFinishBookButton() {
+    const adminActions = document.getElementById("adminActions");
+
+    document.getElementById("finishBookButton")?.remove();
+
+    if (currentBookClub?.role !== "ADMIN" || !hasSelectedCurrentBook) {
+      return;
+    }
+
+    const button = document.createElement("button");
+    button.id = "finishBookButton";
+    button.type = "button";
+    button.className = "btn btn-confirm";
+    button.textContent = "Buch abschließen";
+
+    adminActions.appendChild(button);
+  }
+
   try {
     if (config.useMockData) {
       devData = await import("../dev/mockData.js");
@@ -270,14 +289,16 @@ async function loadBookClub() {
 
     showInvitationButton(currentBookClub.role === "ADMIN");
 
-        try {
-          const currentBook = await getCurrentBook(clubId);
+    try {
+      const currentBook = await getCurrentBook(clubId);
 
       hasSelectedCurrentBook = currentBook !== null;
 
       if (currentBook) {
         renderCurrentBook(currentBook);
       }
+
+      showFinishBookButton();
     } catch (error) {
       console.error("Aktuelles Buch konnte nicht geladen werden:", error);
     }
