@@ -222,6 +222,26 @@ export function renderCurrentBook(book) {
     `ISBN: ${book.isbn || "Unbekannt"} · ` +
     `Seiten: ${book.pages ?? "Unbekannt"}`;
 
+  const cover = document.getElementById("bookCover");
+  const isbn = String(book.isbn || "").replace(/[^0-9X]/gi, "");
+
+  cover.classList.add("d-none");
+
+  if (isbn) {
+    cover.onload = function () {
+      cover.classList.remove("d-none");
+    };
+
+    cover.onerror = function () {
+      cover.classList.add("d-none");
+    };
+
+    cover.alt = `Cover von ${book.title}`;
+    cover.src = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`;
+  } else {
+    cover.removeAttribute("src");
+  }
+
   document.querySelector(".club-name").classList.remove("d-none");
   document.getElementById("clubDescription").classList.add("d-none");
   bookData.classList.remove("d-none");
