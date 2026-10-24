@@ -1,9 +1,14 @@
-
 <!doctype html>
 <html lang="de">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script>
+      if (!sessionStorage.getItem("token")) {
+        window.location.replace("loginPage.html");
+      }
+    </script>
 
     <title>Kapitelweise - Meine Clubs</title>
     <link
@@ -151,9 +156,7 @@
                 role="alert"
               ></div>
 
-              <button type="submit" class="btn btn-confirm">
-                Erstellen
-              </button>
+              <button type="submit" class="btn btn-confirm">Erstellen</button>
             </form>
           </div>
         </div>
