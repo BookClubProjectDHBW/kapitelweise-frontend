@@ -21,6 +21,7 @@ let hasSelectedCurrentBook = false;
 let devData = null;
 let selectedBook = null;
 let activeBookSearchController = null;
+let suggestionsRefreshTimer = null;
 
 const navigation = document.getElementById("bookclubNavigation");
 const invitationDialog = document.getElementById("invitationDialog");
@@ -73,6 +74,8 @@ async function chooseCurrentBook(book, button) {
 }
 
 async function loadClubSuggestions() {
+  clearTimeout(suggestionsRefreshTimer);
+  suggestionsRefreshTimer = null;
   const status = document.getElementById("clubSuggestionsStatus");
   const list = document.getElementById("clubSuggestionsList");
 
@@ -116,6 +119,16 @@ async function loadClubSuggestions() {
     );
 
     status.textContent = "";
+    const hasPendingSuggestions = suggestions.some(function (suggestion) {
+      return suggestion.suggestion_status === "PENDING";
+    });
+
+    if (
+      hasPendingSuggestions &&
+      document.getElementById("votingTab").classList.contains("active")
+    ) {
+      suggestionsRefreshTimer = setTimeout(loadClubSuggestions, 5000);
+    }
   } catch (error) {
     console.error("Fehler beim Laden der Buchvorschläge:", error);
 
@@ -143,6 +156,9 @@ navigation.addEventListener("click", function (event) {
 
   if (clickedTab.id === "votingTab") {
     loadClubSuggestions();
+  } else {
+    clearTimeout(suggestionsRefreshTimer);
+    suggestionsRefreshTimer = null;
   }
 });
 
