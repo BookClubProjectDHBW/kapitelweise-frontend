@@ -136,6 +136,34 @@ export function renderClubSuggestions(suggestions, isAdmin, onChooseBook) {
     const cardBody = document.createElement("div");
     cardBody.className = "card-body";
 
+    const placeholder = document.createElement("div");
+    placeholder.className =
+      "rounded float-start me-3 mb-2 bg-body-secondary d-flex align-items-center justify-content-center text-secondary text-center";
+    placeholder.style.width = "100px";
+    placeholder.style.height = "150px";
+    placeholder.textContent = "Kein Cover";
+
+    const coverIsbn = String(book.isbn || "").replace(/[^0-9X]/gi, "");
+
+    if (isbn) {
+      const cover = document.createElement("img");
+      cover.src = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`;
+      cover.alt = `Cover von ${book.title}`;
+      cover.className = "rounded float-start me-3 mb-2";
+      cover.style.width = "100px";
+      cover.style.height = "150px";
+      cover.style.objectFit = "cover";
+      cover.loading = "lazy";
+
+      cover.addEventListener("error", function () {
+        cover.replaceWith(placeholder);
+      });
+
+      cardBody.appendChild(cover);
+    } else {
+      cardBody.appendChild(placeholder);
+    }
+
     const title = document.createElement("h3");
     title.className = "h5";
     title.textContent = book.title || "Unbekannter Titel";
