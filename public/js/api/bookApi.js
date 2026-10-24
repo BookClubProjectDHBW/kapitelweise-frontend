@@ -108,7 +108,12 @@ export async function setCurrentBook(clubId, proposalId) {
   }
 
   if (!response.ok) {
-    throw new Error(`Buchauswahl fehlgeschlagen (HTTP ${response.status}).`);
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ||
+        `Buchauswahl fehlgeschlagen (HTTP ${response.status}).`,
+    );
   }
 
   return response.json();
