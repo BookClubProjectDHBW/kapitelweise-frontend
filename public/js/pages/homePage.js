@@ -1,7 +1,9 @@
+import { initHomeRouter } from "./homePageRouter.js";
 import { config } from "../config.js";
 import { getHomepageData, createClub, answerInvitation } from "../api/clubApi.js";
 import { renderClubs, renderInvitations } from "./homePageView.js";
 
+initHomeRouter();
 let currentClubs = [];
 
 async function loadHomepage() {
