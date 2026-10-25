@@ -84,7 +84,12 @@ export async function getClubSuggestions(clubId) {
   }
 
   if (!response.ok) {
-    throw new Error(`HTTP-Fehler: ${response.status}`);
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ||
+        `Buchvorschläge konnten nicht geladen werden (HTTP ${response.status}).`,
+    );
   }
 
   return response.json();
