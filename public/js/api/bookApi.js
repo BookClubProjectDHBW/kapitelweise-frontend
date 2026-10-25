@@ -84,7 +84,12 @@ export async function getClubSuggestions(clubId) {
   }
 
   if (!response.ok) {
-    throw new Error(`HTTP-Fehler: ${response.status}`);
+    const errorData = await response.json().catch(() => null);
+
+    throw new Error(
+      errorData?.message ||
+        `Buchvorschläge konnten nicht geladen werden (HTTP ${response.status}).`,
+    );
   }
 
   return response.json();
@@ -139,8 +144,11 @@ export async function getCurrentBook(clubId) {
   }
 
   if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
     throw new Error(
-      `Aktuelles Buch konnte nicht geladen werden (HTTP ${response.status}).`,
+      errorData?.message ||
+        `Aktuelles Buch konnte nicht geladen werden (HTTP ${response.status}).`,
     );
   }
 
@@ -165,8 +173,11 @@ export async function finishCurrentBook(clubId) {
   }
 
   if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
     throw new Error(
-      `Buch konnte nicht abgeschlossen werden (HTTP ${response.status}).`,
+      errorData?.message ||
+        `Buch konnte nicht abgeschlossen werden (HTTP ${response.status}).`,
     );
   }
 }

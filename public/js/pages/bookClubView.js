@@ -145,9 +145,9 @@ export function renderClubSuggestions(suggestions, isAdmin, onChooseBook) {
 
     const coverIsbn = String(book.isbn || "").replace(/[^0-9X]/gi, "");
 
-    if (isbn) {
+    if (coverIsbn) {
       const cover = document.createElement("img");
-      cover.src = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`;
+      cover.src = `https://covers.openlibrary.org/b/isbn/${coverIsbn}-M.jpg?default=false`;
       cover.alt = `Cover von ${book.title}`;
       cover.className = "rounded float-start me-3 mb-2";
       cover.style.width = "100px";
