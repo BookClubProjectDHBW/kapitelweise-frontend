@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+  <h2 class="h5 serif mb-0">Meine Buchclubs</h2>
+  <button class="btn link-accent serif fs-5" type="button" (click)="openForm()">+ Club erstellen</button>
+</div>
+
+<div id="clubList" class="row g-3">
+  @for (club of homepage.clubs(); track club.id) {
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100 shadow-sm">
+        <img class="card-img-top club-card-image" [src]="imageFor(club.id)" [alt]="'Bild für ' + club.name" />
+        <div class="card-body">
+          <h3 class="card-title h5">{{ club.name }}</h3>
+          <p class="card-text text-secondary">{{ club.description || 'Keine Beschreibung vorhanden.' }}</p>
+          <a class="btn btn-outline-botanical" [href]="'/public/html/bookClub.html?id=' + club.id">Club öffnen</a>
+        </div>
+      </div>
+    </div>
+  } @empty {
+    @if (!homepage.loading() && !homepage.error()) {
+      <p>Du bist noch in keinem Buchclub. Gründe deinen ersten Club!</p>
+    }
+  }
+</div>
+
+@if (formOpen()) {
+  <div class="kw-modal-backdrop">
+    <div class="kw-modal card" role="dialog" aria-modal="true" aria-labelledby="createClubModalLabel">
+      <div class="modal-header p-3 d-flex justify-content-between align-items-center">
+        <h2 class="modal-title fs-5" id="createClubModalLabel">Buchclub gründen</h2>
+        <button class="btn-close" type="button" aria-label="Schließen" [disabled]="busy()" (click)="closeForm()"></button>
+      </div>
+      <form class="modal-body p-3 d-flex flex-column gap-3" (ngSubmit)="create()">
+        <div>
+          <label class="form-label" for="clubNameInput">Clubname</label>
+          <input id="clubNameInput" name="name" class="form-control" required maxlength="25" [(ngModel)]="clubName" />
+        </div>
+        <div>
+          <label class="form-label" for="clubDescriptionInput">Beschreibung</label>
+          <textarea id="clubDescriptionInput" name="description" class="form-control" maxlength="250" [(ngModel)]="clubDescription"></textarea>
+        </div>
+        @if (error()) {
+          <div class="alert alert-danger" role="alert">{{ error() }}</div>
+        }
+        <div class="d-flex gap-2 justify-content-end">
+          <button class="btn btn-outline-secondary" type="button" [disabled]="busy()" (click)="closeForm()">Abbrechen</button>
+          <button class="btn btn-confirm" type="submit" [disabled]="busy()">{{ busy() ? 'Wird erstellt...' : 'Erstellen' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

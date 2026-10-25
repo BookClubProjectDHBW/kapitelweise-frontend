@@ -1,0 +1,28 @@
+<h2 class="h5 serif mb-4">Meine Einladungen</h2>
+
+@if (error()) {
+  <div class="alert alert-danger" role="alert">{{ error() }}</div>
+}
+
+<div id="inviteList" class="d-flex flex-column gap-3">
+  @for (invitation of homepage.invitations(); track invitation.id) {
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title h5">{{ invitation.bookclub.name }}</h3>
+        <p class="card-text text-secondary">{{ invitation.bookclub.description || 'Keine Beschreibung vorhanden.' }}</p>
+        <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-confirm" type="button" [disabled]="busyId() !== null" (click)="respond(invitation, 'ACCEPTED')">
+            Annehmen
+          </button>
+          <button class="btn btn-reject" type="button" [disabled]="busyId() !== null" (click)="respond(invitation, 'DECLINED')">
+            Ablehnen
+          </button>
+        </div>
+      </div>
+    </div>
+  } @empty {
+    @if (!homepage.loading() && !homepage.error()) {
+      <p>Du hast aktuell keine offenen Einladungen.</p>
+    }
+  }
+</div>
