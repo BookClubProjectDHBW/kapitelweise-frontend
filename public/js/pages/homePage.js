@@ -62,6 +62,7 @@ async function respondToInvitation(invitationId, status) {
       });
 
       renderClubs(currentClubs);
+      window.location.hash = "clubs";
     }
     return true;
   } catch (error) {
