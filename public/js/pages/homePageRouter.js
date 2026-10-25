@@ -28,3 +28,7 @@ export function initHomeRouter() {
 
   showRoute();
 }
+
+export function renderWelcome(username) {
+  document.getElementById("username").textContent = username;
+}

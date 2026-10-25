@@ -1,7 +1,12 @@
 import { initHomeRouter } from "./homePageRouter.js";
 import { config } from "../config.js";
-import { getHomepageData, createClub, answerInvitation } from "../api/clubApi.js";
+import {
+  getHomepageData,
+  createClub,
+  answerInvitation,
+} from "../api/clubApi.js";
 import { renderClubs, renderInvitations } from "./homePageView.js";
+import { renderWelcome } from "./welcomeComponent.js";
 
 initHomeRouter();
 let currentClubs = [];
@@ -11,7 +16,7 @@ async function loadHomepage() {
     const data = await getHomepageData();
     const member = data.member;
 
-    document.getElementById("username").textContent = member.name;
+    renderWelcome(member.name);
 
     const clubs = member.membership.map(function (club) {
       return {
@@ -78,14 +83,16 @@ logoutButton.addEventListener("click", function () {
   window.location.href = "loginPage.html";
 });
 if (config.useMockData) {
-  import("../dev/mockData.js").then(({ homepageClubs, homepageInvitations }) => {
-    document.getElementById("username").textContent = "Testnutzer";
-    currentClubs = homepageClubs.map((club) => ({ ...club }));
-    renderClubs(currentClubs);
-    renderInvitations(homepageInvitations, respondToInvitation);
-  }).catch((error) => {
-    console.error("Entwicklungsdaten konnten nicht geladen werden:", error);
-  });
+  import("../dev/mockData.js")
+    .then(({ homepageClubs, homepageInvitations }) => {
+      renderWelcome("Testnutzer");
+      currentClubs = homepageClubs.map((club) => ({ ...club }));
+      renderClubs(currentClubs);
+      renderInvitations(homepageInvitations, respondToInvitation);
+    })
+    .catch((error) => {
+      console.error("Entwicklungsdaten konnten nicht geladen werden:", error);
+    });
 } else if (!sessionStorage.getItem("token")) {
   window.location.href = "loginPage.html";
 } else {
