@@ -144,8 +144,11 @@ export async function getCurrentBook(clubId) {
   }
 
   if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
     throw new Error(
-      `Aktuelles Buch konnte nicht geladen werden (HTTP ${response.status}).`,
+      errorData?.message ||
+        `Aktuelles Buch konnte nicht geladen werden (HTTP ${response.status}).`,
     );
   }
 
