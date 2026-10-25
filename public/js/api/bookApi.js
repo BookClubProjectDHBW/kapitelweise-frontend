@@ -173,8 +173,11 @@ export async function finishCurrentBook(clubId) {
   }
 
   if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+
     throw new Error(
-      `Buch konnte nicht abgeschlossen werden (HTTP ${response.status}).`,
+      errorData?.message ||
+        `Buch konnte nicht abgeschlossen werden (HTTP ${response.status}).`,
     );
   }
 }
