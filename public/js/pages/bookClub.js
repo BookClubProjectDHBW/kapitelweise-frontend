@@ -14,6 +14,7 @@ import {
   renderClubSuggestions,
   renderCurrentBook,
 } from "./bookClubView.js";
+import { createMeeting } from "../api/meetingApi.js";
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 let currentBookClub = null;
@@ -133,7 +134,7 @@ async function loadClubSuggestions() {
     console.error("Fehler beim Laden der Buchvorschläge:", error);
 
     status.textContent = error.message;
-  
+
     status.className = "text-danger";
   }
 }
@@ -154,6 +155,9 @@ navigation.addEventListener("click", function (event) {
   document
     .getElementById("bookSearchPanel")
     .classList.toggle("d-none", clickedTab.id !== "votingTab");
+  document
+    .getElementById("meetingPanel")
+    .classList.toggle("d-none", clickedTab.id !== "meetingTab");
 
   if (clickedTab.id === "votingTab") {
     loadClubSuggestions();
@@ -301,7 +305,15 @@ function showFinishBookButton() {
 
   adminActions.appendChild(button);
 }
+function showMeetingButton(isAdmin) {
+  const button = document.getElementById("newMeetingButton");
 
+  button.classList.toggle("d-none", !isAdmin);
+
+  if (!isAdmin) {
+    document.getElementById("meetingForm").classList.add("d-none");
+  }
+}
 async function loadBookClub() {
   try {
     if (config.useMockData) {
@@ -316,6 +328,7 @@ async function loadBookClub() {
       );
 
       showInvitationButton(currentMember?.role === "admin");
+      showMeetingButton(currentMember?.role === "admin");
       return;
     }
 
@@ -337,6 +350,7 @@ async function loadBookClub() {
     renderBookClub(currentBookClub);
 
     showInvitationButton(currentBookClub.role === "ADMIN");
+    showMeetingButton(currentBookClub.role === "ADMIN");
 
     try {
       const currentBook = await getCurrentBook(clubId);
@@ -490,5 +504,74 @@ document.getElementById("logoutButton").addEventListener("click", function () {
   sessionStorage.removeItem("token");
   window.location.href = "loginPage.html";
 });
+const meetingForm = document.getElementById("meetingForm");
+const newMeetingButton = document.getElementById("newMeetingButton");
+const cancelMeetingButton = document.getElementById("cancelMeetingButton");
+const meetingStatus = document.getElementById("meetingStatus");
 
+newMeetingButton.addEventListener("click", function () {
+  meetingForm.classList.remove("d-none");
+  meetingStatus.textContent = "";
+  document.getElementById("meetingTitle").focus();
+});
+
+cancelMeetingButton.addEventListener("click", function () {
+  meetingForm.reset();
+  meetingForm.classList.add("d-none");
+  meetingStatus.textContent = "";
+});
+
+meetingForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const startsAt = document.getElementById("meetingStartsAt").value;
+  const endsAt = document.getElementById("meetingEndsAt").value;
+
+  if (new Date(startsAt).getTime() <= Date.now()) {
+    meetingStatus.textContent = "Das Treffen muss in der Zukunft liegen.";
+    meetingStatus.className = "mt-3 text-danger";
+    return;
+  }
+
+  if (endsAt && new Date(endsAt).getTime() <= new Date(startsAt).getTime()) {
+    meetingStatus.textContent = "Das Ende muss nach dem Beginn liegen.";
+    meetingStatus.className = "mt-3 text-danger";
+    return;
+  }
+
+  if (config.useMockData) {
+    meetingStatus.textContent =
+      "Im DEV-Modus können keine Treffen gespeichert werden.";
+    meetingStatus.className = "mt-3 text-secondary";
+    return;
+  }
+
+  const meeting = {
+    title: document.getElementById("meetingTitle").value.trim(),
+    description: document.getElementById("meetingDescription").value.trim(),
+    starts_at: `${startsAt}:00`,
+    ends_at: endsAt ? `${endsAt}:00` : null,
+    location: document.getElementById("meetingLocation").value.trim(),
+  };
+
+  const submitButton = meetingForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  meetingStatus.textContent = "Treffen wird erstellt...";
+  meetingStatus.className = "mt-3 text-secondary";
+
+  try {
+    await createMeeting(clubId, meeting);
+
+    meetingForm.reset();
+    meetingForm.classList.add("d-none");
+
+    meetingStatus.textContent = "Treffen wurde erfolgreich erstellt.";
+    meetingStatus.className = "mt-3 text-success";
+  } catch (error) {
+    meetingStatus.textContent = error.message;
+    meetingStatus.className = "mt-3 text-danger";
+  } finally {
+    submitButton.disabled = false;
+  }
+});
 loadBookClub();
