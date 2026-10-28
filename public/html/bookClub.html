@@ -124,7 +124,7 @@
           Buchvorschläge
         </button>
 
-        <button class="nav-tab" type="button">Treffen</button>
+        <button id="meetingTab" class="nav-tab" type="button">Treffen</button>
 
         <button class="nav-tab" type="button">Mitglieder</button>
       </nav>
@@ -186,6 +186,97 @@
             <div id="clubSuggestionsList" aria-live="polite"></div>
           </section>
         </div>
+        <section
+          id="meetingPanel"
+          class="d-none"
+          aria-labelledby="meetingHeading"
+        >
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 id="meetingHeading" class="h4 mb-0">Treffen</h2>
+            <button
+              id="newMeetingButton"
+              type="button"
+              class="btn btn-confirm d-none"
+            >
+              Treffen erstellen
+            </button>
+          </div>
+
+          <form id="meetingForm" class="card p-4 d-none">
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="meetingTitle" class="form-label">Titel</label>
+                <input
+                  id="meetingTitle"
+                  class="form-control"
+                  type="text"
+                  maxlength="100"
+                  required
+                />
+              </div>
+
+              <div class="col-12">
+                <label for="meetingDescription" class="form-label"
+                  >Beschreibung (optional)</label
+                >
+                <textarea
+                  id="meetingDescription"
+                  class="form-control"
+                  maxlength="500"
+                  rows="3"
+                ></textarea>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label for="meetingStartsAt" class="form-label">Beginn</label>
+                <input
+                  id="meetingStartsAt"
+                  class="form-control"
+                  type="datetime-local"
+                  required
+                />
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label for="meetingEndsAt" class="form-label"
+                  >Ende (optional)</label
+                >
+                <input
+                  id="meetingEndsAt"
+                  class="form-control"
+                  type="datetime-local"
+                />
+              </div>
+
+              <div class="col-12">
+                <label for="meetingLocation" class="form-label"
+                  >Ort (optional)</label
+                >
+                <input
+                  id="meetingLocation"
+                  class="form-control"
+                  type="text"
+                  maxlength="50"
+                />
+              </div>
+
+              <div class="col-12 d-flex gap-2">
+                <button class="btn btn-confirm" type="submit">
+                  Treffen speichern
+                </button>
+                <button
+                  id="cancelMeetingButton"
+                  class="btn btn-outline-secondary"
+                  type="button"
+                >
+                  Abbrechen
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <p id="meetingStatus" class="mt-3" role="status"></p>
+        </section>
       </section>
     </main>
 
