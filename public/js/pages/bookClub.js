@@ -13,8 +13,14 @@ import {
   renderBookSearchResults,
   renderClubSuggestions,
   renderCurrentBook,
+  renderMeetings,
 } from "./bookClubView.js";
-import { createMeeting } from "../api/meetingApi.js";
+import {
+  createMeeting,
+  getMeetings,
+  getAttendanceOverview,
+  setMeetingAttendance,
+} from "../api/meetingApi.js";
 const clubId = new URLSearchParams(window.location.search).get("id");
 
 let currentBookClub = null;
@@ -139,6 +145,37 @@ async function loadClubSuggestions() {
   }
 }
 
+async function loadMeetings() {
+  const status = document.getElementById("meetingStatus");
+  const list = document.getElementById("meetingList");
+  list.replaceChildren();
+
+  if (config.useMockData) {
+    status.textContent =
+      "Im DEV-Mockmodus werden keine Treffen geladen. Für den API-Test Mockdaten deaktivieren.";
+    return;
+  }
+  if (!clubId || !currentBookClub) {
+    status.textContent = "Der Buchclub ist noch nicht geladen.";
+    return;
+  }
+  status.textContent = "Treffen werden geladen...";
+  status.className = "mt-3 text-secondary";
+  try {
+    const meetings = await getMeetings(clubId);
+    renderMeetings(
+      meetings,
+      currentBookClub.role === "ADMIN",
+      (meetingId, answer) => setMeetingAttendance(clubId, meetingId, answer),
+      (meetingId) => getAttendanceOverview(clubId, meetingId),
+    );
+    status.textContent = "";
+  } catch (error) {
+    status.textContent = error.message;
+    status.className = "mt-3 text-danger";
+  }
+}
+
 navigation.addEventListener("click", function (event) {
   const clickedTab = event.target.closest(".nav-tab");
 
@@ -158,6 +195,10 @@ navigation.addEventListener("click", function (event) {
   document
     .getElementById("meetingPanel")
     .classList.toggle("d-none", clickedTab.id !== "meetingTab");
+
+  if (clickedTab.id === "meetingTab") {
+    loadMeetings();
+  }
 
   if (clickedTab.id === "votingTab") {
     loadClubSuggestions();
@@ -567,6 +608,7 @@ meetingForm.addEventListener("submit", async function (event) {
 
     meetingStatus.textContent = "Treffen wurde erfolgreich erstellt.";
     meetingStatus.className = "mt-3 text-success";
+    await loadMeetings();
   } catch (error) {
     meetingStatus.textContent = error.message;
     meetingStatus.className = "mt-3 text-danger";
