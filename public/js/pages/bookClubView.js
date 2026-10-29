@@ -246,3 +246,186 @@ export function renderCurrentBook(book) {
   document.getElementById("clubDescription").classList.add("d-none");
   bookData.classList.remove("d-none");
 }
+
+function meetingModel(raw) {
+  if (!raw || raw.id == null || !raw.title || !raw.starts_at) {
+    throw new Error("MeetingResponse: id, title oder starts_at fehlt.");
+  }
+  // MeetingResponse
+  const ownStatus = raw.my_attendance_status;
+  return {
+    id: raw.id,
+    title: raw.title,
+    description: raw.description,
+    startsAt: raw.starts_at,
+    endsAt: raw.ends_at,
+    location: raw.location,
+    ownStatus: ["OPEN", "ACCEPTED", "DECLINED"].includes(ownStatus)
+      ? ownStatus
+      : null,
+  };
+}
+
+function overviewEntries(raw) {
+  //AttendanceOverviewResponse
+  const entries = Array.isArray(raw) ? raw : raw?.attendees;
+  if (!Array.isArray(entries)) {
+    throw new Error("AttendanceOverviewResponse: attendees-Liste fehlt.");
+  }
+  return entries.map((entry) => {
+    if (
+      typeof entry.username !== "string" ||
+      !["OPEN", "ACCEPTED", "DECLINED"].includes(entry.status)
+    ) {
+      throw new Error(
+        "AttendanceOverviewResponse: Benutzer oder Status fehlt.",
+      );
+    }
+    return entry;
+  });
+}
+
+function formatMeetingDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "Ungültiger Termin"
+    : new Intl.DateTimeFormat("de-DE", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(date);
+}
+
+export function renderAttendanceOverview(container, raw) {
+  const entries = overviewEntries(raw);
+  container.replaceChildren();
+  for (const [status, label] of [
+    ["ACCEPTED", "Zugesagt"],
+    ["DECLINED", "Abgesagt"],
+    ["OPEN", "Noch offen"],
+  ]) {
+    const people = entries.filter((entry) => entry.status === status);
+    const heading = document.createElement("h4");
+    heading.className = "h6 mt-3";
+    heading.textContent = `${label} (${people.length})`;
+    const list = document.createElement("ul");
+    list.className = "mb-1";
+    if (people.length === 0) {
+      const empty = document.createElement("li");
+      empty.textContent = "Niemand";
+      list.append(empty);
+    }
+    for (const person of people) {
+      const item = document.createElement("li");
+      item.textContent = person.username;
+      list.append(item);
+    }
+    container.append(heading, list);
+  }
+}
+
+export function renderMeetings(rawMeetings, isAdmin, onAttend, onOverview) {
+  if (!Array.isArray(rawMeetings)) {
+    throw new Error("Die Meeting-API hat keine Liste zurückgegeben.");
+  }
+  const list = document.getElementById("meetingList");
+  list.replaceChildren();
+  // Serverseitig standardmäßig nur kommende Termine vorgesehen
+  // zusätzliche Filter schützt Anzeige, falls API alte Termine liefert
+  const meetings = rawMeetings
+    .map(meetingModel)
+    .filter((meeting) => new Date(meeting.startsAt).getTime() > Date.now())
+    .sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt));
+
+  if (meetings.length === 0) {
+    list.textContent = "Es sind keine zukünftigen Treffen geplant.";
+    return;
+  }
+
+  for (const meeting of meetings) {
+    const card = document.createElement("article");
+    card.className = "card p-3 mb-3";
+    const title = document.createElement("h3");
+    title.className = "h5";
+    title.textContent = meeting.title;
+    const when = document.createElement("p");
+    when.className = "mb-1";
+    when.textContent =
+      `Beginn: ${formatMeetingDate(meeting.startsAt)}` +
+      (meeting.endsAt ? ` · Ende: ${formatMeetingDate(meeting.endsAt)}` : "");
+    const location = document.createElement("p");
+    location.className = "mb-1";
+    location.textContent = `Ort: ${meeting.location || "Nicht angegeben"}`;
+    const description = document.createElement("p");
+    description.className = "mb-2";
+    description.textContent = meeting.description || "Keine Beschreibung.";
+    const status = document.createElement("p");
+    status.className = "mb-2";
+    status.textContent = `Deine Antwort: ${
+      {
+        OPEN: "Noch offen",
+        ACCEPTED: "Zugesagt",
+        DECLINED: "Abgesagt",
+      }[meeting.ownStatus] || "Nicht verfügbar"
+    }`;
+    const feedback = document.createElement("p");
+    feedback.className = "mb-0";
+    feedback.setAttribute("role", "status");
+    card.append(title, when, location, description, status);
+
+    if (meeting.ownStatus === "OPEN") {
+      const actions = document.createElement("div");
+      actions.className = "d-flex flex-wrap gap-2 mb-2";
+      const buttons = [
+        ["ACCEPTED", "Zusagen", "btn-confirm"],
+        ["DECLINED", "Absagen", "btn-reject"],
+      ].map(([answer, text, style]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `btn ${style}`;
+        button.textContent = text;
+        button.addEventListener("click", async () => {
+          for (const item of buttons) item.disabled = true;
+          feedback.textContent = "Antwort wird gespeichert...";
+          try {
+            await onAttend(meeting.id, answer);
+            meeting.ownStatus = answer;
+            status.textContent = `Deine Antwort: ${
+              answer === "ACCEPTED" ? "Zugesagt" : "Abgesagt"
+            }`;
+            actions.remove();
+            feedback.textContent = "Antwort gespeichert.";
+          } catch (error) {
+            feedback.textContent = error.message;
+            for (const item of buttons) item.disabled = false;
+          }
+        });
+        actions.append(button);
+        return button;
+      });
+      card.append(actions);
+    }
+
+    if (isAdmin) {
+      const overviewButton = document.createElement("button");
+      overviewButton.type = "button";
+      overviewButton.className = "btn btn-outline-secondary align-self-start";
+      overviewButton.textContent = "Antworten anzeigen";
+      const overview = document.createElement("div");
+      overviewButton.addEventListener("click", async () => {
+        overviewButton.disabled = true;
+        overview.textContent = "Antworten werden geladen...";
+        try {
+          const data = await onOverview(meeting.id);
+          renderAttendanceOverview(overview, data);
+        } catch (error) {
+          overview.textContent = error.message;
+        } finally {
+          overviewButton.disabled = false;
+        }
+      });
+      card.append(overviewButton, overview);
+    }
+    card.append(feedback);
+    list.append(card);
+  }
+}
