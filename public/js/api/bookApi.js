@@ -157,9 +157,9 @@ export async function getCurrentBook(clubId) {
 
 export async function finishCurrentBook(clubId) {
   const response = await fetch(
-    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/closeBook`,
+    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/close-book`,
     {
-      method: "POST",
+      method: "PATCH",
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
