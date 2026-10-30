@@ -170,9 +170,11 @@ async function loadMeetings() {
       (meetingId) => getAttendanceOverview(clubId, meetingId),
     );
     status.textContent = "";
+    return true;
   } catch (error) {
     status.textContent = error.message;
     status.className = "mt-3 text-danger";
+    return false;
   }
 }
 
@@ -606,9 +608,15 @@ meetingForm.addEventListener("submit", async function (event) {
     meetingForm.reset();
     meetingForm.classList.add("d-none");
 
-    meetingStatus.textContent = "Treffen wurde erfolgreich erstellt.";
-    meetingStatus.className = "mt-3 text-success";
-    await loadMeetings();
+    const updated = await loadMeetings();
+
+    meetingStatus.textContent = updated
+      ? "Treffen wurde erfolgreich erstellt."
+      : "Treffen wurde erstellt, aber die Terminliste konnte nicht geladen werden.";
+
+    meetingStatus.className = updated
+      ? "mt-3 text-success"
+      : "mt-3 text-warning";
   } catch (error) {
     meetingStatus.textContent = error.message;
     meetingStatus.className = "mt-3 text-danger";
