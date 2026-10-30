@@ -6,7 +6,6 @@ import {
   answerInvitation,
 } from "../api/clubApi.js";
 import { renderClubs, renderInvitations } from "./homePageView.js";
-import { renderWelcome } from "./welcomeComponent.js";
 
 initHomeRouter();
 let currentClubs = [];
@@ -16,7 +15,7 @@ async function loadHomepage() {
     const data = await getHomepageData();
     const member = data.member;
 
-    renderWelcome(member.name);
+    document.getElementById("username").textContent = member.name;
 
     const clubs = member.membership.map(function (club) {
       return {
@@ -85,7 +84,7 @@ logoutButton.addEventListener("click", function () {
 if (config.useMockData) {
   import("../dev/mockData.js")
     .then(({ homepageClubs, homepageInvitations }) => {
-      renderWelcome("Testnutzer");
+      document.getElementById("username").textContent = "Testnutzer";
       currentClubs = homepageClubs.map((club) => ({ ...club }));
       renderClubs(currentClubs);
       renderInvitations(homepageInvitations, respondToInvitation);
