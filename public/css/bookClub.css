@@ -1,44 +1,31 @@
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-background);
-  color: var(--color-text);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-
-main {
-  flex: 1;
-}
-
-footer {
-  padding: 1.5rem;
-  background: var(--color-secondary-light);
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-muted);
-  text-align: center;
+main.container {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
 }
 
 .bookclub-header {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--color-border);
+  padding: 0 0 2rem;
+}
+
+.bookclub-header-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .back-link {
-  display: inline-block;
-  margin-bottom: 1.5rem;
-  color: var(--color-secondary-hover);
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-muted);
   font-size: 0.95rem;
   text-decoration: none;
-}
-
-.back-link:hover,
-.nav-tab:hover {
-  color: var(--color-primary);
+  transition: color 0.2s ease;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  color: var(--color-primary-hover);
 }
 
 .bookclub-info {
@@ -48,140 +35,277 @@ footer {
 }
 
 .book-cover {
-  width: 125px;
-  height: 145px;
+  width: 108px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+  box-shadow: var(--shadow-sm);
 }
 
-.club-name,
-.book-data {
-  margin: 0;
-  color: var(--color-secondary-hover);
-  font-size: 0.95rem;
+.book-details {
+  min-width: 0;
 }
 
 .club-name {
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.45rem;
+  color: var(--color-secondary-hover);
+  font-size: 0.94rem;
   font-weight: 600;
 }
 
 .club-name span,
-.book-meta span {
-  margin: 0 0.35rem;
+.book-data span {
+  margin-right: 0.2rem;
 }
 
 .book-details h1 {
-  margin: 0 0 1rem;
+  margin: 0 0 0.65rem;
   color: var(--color-text);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 2.85rem);
   font-weight: 600;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.book-data {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.admin-invitation-button {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: #52694a;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-invitation-button:hover {
+  background: var(--color-secondary);
+  color: #fff;
 }
 
 .bookclub-navigation {
   display: flex;
-  border-bottom: 1px solid var(--color-border);
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: 0.7rem 1.5rem 0;
+  border: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-primary-light);
+  border-radius: 1rem 1rem 0 0;
+  background: var(--gradient-header);
+  box-shadow: 0 0.5rem 1.5rem rgba(105, 72, 77, 0.06);
 }
 
 .nav-tab {
   position: relative;
-  flex: 1;
-  padding: 1rem 0.4rem;
+  padding: 0.75rem 0 0.9rem;
   border: 0;
+  border-bottom: 3px solid transparent;
   background: transparent;
-  color: var(--color-text);
-  font: inherit;
-  font-weight: 600;
+  color: var(--color-text-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-tab:hover {
-  background: rgba(183, 123, 130, 0.10);
+  color: var(--color-primary-hover);
 }
 
 .nav-tab.active {
-  color: var(--color-primary);
-  font-weight: 700;
+  border-bottom-color: var(--color-primary);
+  color: var(--color-text);
+  font-weight: 600;
 }
 
-.nav-tab.active::after {
+#tabContent {
+  min-height: 21rem;
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  border-top: 0;
+  border-radius: 0 0 1rem 1rem;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: var(--shadow-card);
+}
+
+#tabContent h2,
+#tabContent h3 {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+#tabContent h2 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+#bookSearchForm {
+  margin-top: 0.25rem;
+}
+
+#tabContent .form-label {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+#tabContent .form-control,
+#tabContent .form-select {
+  border-color: var(--color-border);
+  border-radius: 0.65rem;
+  background-color: #fff;
+  color: var(--color-text);
+}
+
+#tabContent .form-control:focus,
+#tabContent .form-select:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 0.2rem var(--color-secondary-light);
+}
+
+#tabContent .btn {
+  border-radius: 0.65rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+#tabContent .btn-outline-secondary {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+#tabContent .btn-outline-secondary:hover {
+  color: var(--color-text);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+#tabContent .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#bookSearchResults .card,
+#clubSuggestionsList .card,
+#meetingList .card,
+#meetingForm {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 0.9rem;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+#bookSearchResults .card,
+#clubSuggestionsList .card {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#bookSearchResults .card:hover,
+#clubSuggestionsList .card:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0.6rem 1.5rem rgba(63, 58, 56, 0.1);
+}
+
+#bookSearchResults .card-body,
+#clubSuggestionsList .card-body {
+  padding: 1.25rem;
+}
+
+#bookSearchResults .card h3,
+#clubSuggestionsList .card h3,
+#meetingList .card h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 600;
+}
+
+#bookSearchResults .card img,
+#clubSuggestionsList .card img {
+  border: 1px solid var(--color-border);
+  border-radius: 0.45rem !important;
+}
+
+#clubSuggestionsList .card {
+  border-left: 4px solid var(--color-secondary);
+  background: linear-gradient(100deg, rgba(220, 228, 215, 0.23), #fff 35%);
+}
+
+#clubSuggestionsList .card-body::after {
   content: "";
-  position: absolute;
-  right: 0.4rem;
-  bottom: -1px;
-  left: 0.4rem;
-  height: 3px;
-  border-radius: 3px 3px 0 0;
-  background: var(--color-primary);
+  display: block;
+  clear: both;
 }
 
-@media (max-width: 576px) {
-  .bookclub-info {
-    align-items: flex-start;
-  }
-
-  .book-cover {
-    width: 90px;
-    height: 115px;
-  }
-
-  .bookclub-navigation {
-    overflow-x: auto;
-  }
-
-  .nav-tab {
-    min-width: 110px;
-  }
-}
-
-.bookclub-header-actions {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+#meetingPanel > .d-flex:first-child {
   gap: 1rem;
 }
 
-.bookclub-header-actions .back-link {
+#meetingForm {
   margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #fff8f9, #fff 45%);
 }
 
-.admin-invitation-button,
-.invitation-submit,
-.dialog-cancel-button {
-  padding: 0.6rem 0.9rem;
-  border-radius: 6px;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
+#meetingList .card {
+  padding: 1.5rem !important;
+  border-left: 4px solid var(--color-secondary);
+  background: linear-gradient(110deg, rgba(220, 228, 215, 0.24), #fff 34%);
 }
 
-.admin-invitation-button {
-  border: 1px solid var(--color-secondary-hover);
-  background: transparent;
+#meetingList .card > p {
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+#meetingList .card > p:nth-of-type(4) {
   color: var(--color-secondary-hover);
+  font-weight: 600;
 }
 
-.admin-invitation-button:hover {
-  border-color: var(--color-primary);
-  background: rgba(183, 123, 130, 0.10);
-  color: var(--color-primary);
+#meetingList .card > div:not(.d-flex) {
+  margin-top: 0.75rem;
+}
+
+#meetingList .card > div:not(.d-flex) h4 {
+  color: var(--color-secondary-hover);
+  font-weight: 600;
+}
+
+#meetingList .card > div:not(.d-flex) ul {
+  padding-left: 1.4rem;
+  color: var(--color-text);
+}
+
+#meetingStatus,
+#clubSuggestionsStatus,
+.book-selection-message {
+  overflow-wrap: anywhere;
 }
 
 .invitation-dialog {
   width: min(30rem, calc(100% - 2rem));
+  max-width: none;
   padding: 0;
-  border: 0;
-  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
   color: var(--color-text);
-  box-shadow: 0 1rem 3rem rgba(63, 58, 56, 0.22);
+  background: #fff;
+  box-shadow: var(--shadow-dialog);
 }
 
 .invitation-dialog::backdrop {
-  background: rgba(63, 58, 56, 0.45);
+  background: rgba(63, 58, 56, 0.42);
+  backdrop-filter: blur(3px);
 }
 
 .invitation-form {
@@ -193,37 +317,18 @@ footer {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  margin: -1.5rem -1.5rem 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--gradient-modal);
 }
 
 .dialog-header h2 {
   margin: 0;
-  font-size: 1.6rem;
-}
-
-.invitation-form > p {
-  margin: 0.75rem 0 1.5rem;
-  color: var(--color-secondary-hover);
-}
-
-.invitation-form label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
-
-.invitation-form input {
-  width: 100%;
-  padding: 0.7rem 0.8rem;
-  border: 1px solid var(--color-secondary-hover);
-  border-radius: 6px;
   color: var(--color-text);
-  font: inherit;
-}
-
-.invitation-form input:focus {
-  outline: 3px solid rgba(135, 155, 124, 0.25);
-  outline-offset: 2px;
-  border-color: var(--color-primary);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .dialog-close-button {
@@ -236,31 +341,75 @@ footer {
   cursor: pointer;
 }
 
+.invitation-form > p {
+  margin: 0 0 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.invitation-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.invitation-form input {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+  color: var(--color-text);
+  background: #fff;
+  font: inherit;
+}
+
+.invitation-form input:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 0.2rem var(--color-secondary-light);
+}
+
 .invitation-status {
   min-height: 1.5rem;
-  margin: 0.75rem 0 0;
+  margin: 0.75rem 0 0 !important;
   font-weight: 600;
 }
 
 .invitation-status.error {
-  color: #9b2c2c;
+  color: var(--color-danger);
 }
 
 .invitation-status.success {
-  color: #28633b;
+  color: var(--color-success);
 }
 
 .dialog-actions {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1.5rem;
 }
 
+.dialog-cancel-button,
+.invitation-submit {
+  padding: 0.6rem 1rem;
+  border-radius: 0.65rem;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
 .dialog-cancel-button {
-  border: 1px solid var(--color-secondary-hover);
+  border: 1px solid var(--color-border);
   background: #fff;
-  color: var(--color-secondary-hover);
+  color: var(--color-text-muted);
+}
+
+.dialog-cancel-button:hover {
+  border-color: var(--color-primary-light);
+  background: var(--color-primary-light);
+  color: var(--color-primary-hover);
 }
 
 .invitation-submit {
@@ -270,118 +419,109 @@ footer {
 }
 
 .invitation-submit:hover {
-  background: var(--color-secondary-hover);
   border-color: var(--color-secondary-hover);
+  background: var(--color-secondary-hover);
 }
 
-@media (max-width: 576px) {
+@media (max-width: 767.98px) {
+  main.container {
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .bookclub-header {
+    padding-bottom: 1.5rem;
+  }
+
   .bookclub-header-actions {
-    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .bookclub-navigation {
+    gap: 1.25rem;
+    padding: 0.5rem 1.25rem 0;
+    overflow-x: auto;
+  }
+
+  .nav-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  #tabContent {
+    padding: 1.4rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .bookclub-info {
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .book-cover {
+    width: 78px;
+    height: 110px;
+  }
+
+  .book-details h1 {
+    font-size: clamp(1.65rem, 7vw, 2.2rem);
+  }
+
+  .club-name,
+  .book-data {
+    font-size: 0.84rem;
+  }
+
+  .bookclub-header-actions {
+    align-items: flex-start;
     flex-direction: column;
   }
 
-  .bookclub-header-actions .back-link {
-    margin-bottom: 0;
+  .bookclub-navigation {
+    gap: 1rem;
+    padding: 0.4rem 1rem 0;
   }
 
-  .admin-invitation-button {
-    align-self: flex-start;
-    margin-bottom: 1.5rem;
+  .nav-tab {
+    font-size: 1rem;
+  }
+
+  #tabContent {
+    padding: 1.1rem;
+  }
+
+  #bookSearchResults .card-body {
+    gap: 0.75rem !important;
+    padding: 1rem;
+  }
+
+  #bookSearchResults .card img,
+  #bookSearchResults .card .bg-body-secondary,
+  #clubSuggestionsList .card img,
+  #clubSuggestionsList .card .bg-body-secondary {
+    width: 74px !important;
+    height: 111px !important;
+  }
+
+  #meetingList .card {
+    padding: 1rem !important;
+  }
+
+  #meetingPanel > .d-flex:first-child {
+    flex-wrap: wrap;
   }
 }
 
-
-.navbar {
-  border-color: var(--color-border) !important;
-}
-
-.navbar-brand {
-  color: var(--color-text);
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 600;
-}
-
-.navbar-brand:hover {
-  color: var(--color-primary);
-}
-
-#logoutButton {
-  color: var(--color-text-muted);
-  border-color: var(--color-border);
-}
-
-#logoutButton:hover {
-  color: var(--color-text);
-  background: var(--color-primary-light);
-  border-color: var(--color-primary-light);
-}
-
-.bookclub-header {
-  border-bottom-color: var(--color-border);
-}
-
-.book-details h1,
-.dialog-header h2 {
-  font-family: Georgia, "Times New Roman", serif;
-}
-
-.bookclub-navigation {
-  border-bottom-color: var(--color-border);
-}
-
-.nav-tab.active {
-  color: var(--color-secondary-hover);
-}
-
-.nav-tab.active::after {
-  background: var(--color-secondary);
-}
-
-.admin-invitation-button {
-  border-color: var(--color-secondary);
-  color: var(--color-secondary-hover);
-}
-
-.admin-invitation-button:hover {
-  border-color: var(--color-secondary-hover);
-  background: var(--color-secondary-light);
-  color: var(--color-secondary-hover);
-}
-
-.invitation-dialog {
-  border: 1px solid var(--color-border);
-}
-
-.invitation-form input {
-  border-color: var(--color-border);
-}
-
-.invitation-form input:focus {
-  border-color: var(--color-secondary);
-}
-
-.invitation-form > p {
-  color: var(--color-text-muted);
-}
-
-.dialog-cancel-button {
-  border-color: var(--color-border);
-  color: var(--color-text-muted);
-}
-
-.dialog-cancel-button:hover {
-  background: var(--color-primary-light);
-  border-color: var(--color-primary);
-  color: var(--color-primary-hover);
-}
-
-.invitation-submit {
-  border-color: var(--color-secondary);
-  background: var(--color-secondary);
-  color: #fff;
-}
-
-.invitation-submit:hover {
-  border-color: var(--color-secondary-hover);
-  background: var(--color-secondary-hover);
+@media (prefers-reduced-motion: reduce) {
+  .back-link,
+  .admin-invitation-button,
+  .nav-tab,
+  #tabContent .btn,
+  #bookSearchResults .card,
+  #clubSuggestionsList .card,
+  .dialog-cancel-button,
+  .invitation-submit {
+    transition: none;
+  }
 }

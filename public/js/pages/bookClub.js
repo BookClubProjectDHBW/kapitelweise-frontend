@@ -151,10 +151,49 @@ async function loadMeetings() {
   list.replaceChildren();
 
   if (config.useMockData) {
-    status.textContent =
-      "Im DEV-Mockmodus werden keine Treffen geladen. Für den API-Test Mockdaten deaktivieren.";
-    return;
+    const currentMember = currentBookClub.members.find(
+      (member) => member.userId === devData.currentUserId,
+    );
+
+    renderMeetings(
+      devData.mockMeetings,
+      currentMember?.role === "admin",
+
+      async (meetingId, answer) => {
+        const meeting = devData.mockMeetings.find(
+          (item) => item.id === meetingId,
+        );
+
+        if (!meeting) {
+          throw new Error("Treffen nicht gefunden.");
+        }
+
+        meeting.my_attendance_status = answer;
+
+        const currentUser = devData.users.find(
+          (user) => user.userId === devData.currentUserId,
+        );
+
+        const attendance = devData.mockMeetingAttendance[meetingId]?.find(
+          (entry) => entry.username === currentUser.username,
+        );
+
+        if (attendance) {
+          attendance.status = answer;
+        }
+      },
+
+      async (meetingId) => {
+        return {
+          attendees: devData.mockMeetingAttendance[meetingId] ?? [],
+        };
+      },
+    );
+
+    status.textContent = "";
+    return true;
   }
+
   if (!clubId || !currentBookClub) {
     status.textContent = "Der Buchclub ist noch nicht geladen.";
     return;

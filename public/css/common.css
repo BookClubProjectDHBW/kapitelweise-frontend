@@ -15,12 +15,29 @@
   --color-focus: rgba(135, 155, 124, 0.25);
   --border-radius: 0.5rem;
   --shadow-sm: 0 0.125rem 0.5rem rgba(63, 58, 56, 0.08);
+  --shadow-card: 0 0.75rem 2.1rem rgba(105, 72, 77, 0.09);
+  --shadow-dialog: 0 1rem 2.5rem rgba(80, 60, 65, 0.16);
+  --gradient-navbar: linear-gradient(90deg, #ffffff 65%, #fff6f7);
+  --gradient-header: linear-gradient(100deg, #fff5f7, #ffffff 65%);
+  --gradient-modal: linear-gradient(100deg, var(--color-primary-light), var(--color-secondary-light));
+  --gradient-footer: linear-gradient(90deg, var(--color-primary-light), var(--color-secondary-light));
 }
 
 body {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: var(--color-background);
+  background-image:
+    radial-gradient(ellipse 38rem 27rem at 4% 23%, rgba(183, 123, 130, 0.18), transparent 73%),
+    radial-gradient(ellipse 35rem 30rem at 94% 47%, rgba(135, 155, 124, 0.17), transparent 72%),
+    radial-gradient(ellipse 42rem 22rem at 50% 92%, rgba(234, 212, 214, 0.36), transparent 76%);
+  background-attachment: fixed;
   color: var(--color-text);
+}
+
+main {
+  flex: 1;
 }
 
 .serif {
@@ -113,4 +130,74 @@ a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--color-secondary-hover);
   outline-offset: 2px;
+}
+
+.navbar {
+  border-color: var(--color-primary-light) !important;
+  background: var(--gradient-navbar) !important;
+}
+
+.navbar-brand {
+  color: var(--color-text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  letter-spacing: 0.012em;
+}
+
+.navbar-brand:hover {
+  color: var(--color-primary);
+}
+
+#logoutButton {
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+#logoutButton:hover {
+  color: var(--color-text);
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+.modal-content {
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-dialog);
+}
+
+.modal-header {
+  background: var(--gradient-modal);
+  border-bottom-color: var(--color-border);
+}
+
+.modal-title {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.modal-footer,
+.modal-body {
+  background: var(--color-surface);
+}
+
+footer {
+  background: var(--gradient-footer);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 1.4rem;
+}
+
+footer p {
+  margin: 0;
+}
+
+@media (max-width: 575.98px) {
+  body {
+    background-attachment: scroll;
+    background-image:
+      radial-gradient(ellipse 19rem 18rem at 0% 18%, rgba(183, 123, 130, 0.15), transparent 72%),
+      radial-gradient(ellipse 20rem 19rem at 100% 75%, rgba(135, 155, 124, 0.15), transparent 75%);
+  }
 }
