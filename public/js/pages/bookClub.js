@@ -103,11 +103,16 @@ async function loadClubSuggestions() {
   status.className = "text-secondary";
 
   try {
-    const currentBook = await getCurrentBook(clubId);
-    hasSelectedCurrentBook = currentBook !== null;
+    // Ein Fehler beim aktuellen Buch darf das Laden der Vorschläge nicht blockieren
+    try {
+      const currentBook = await getCurrentBook(clubId);
+      hasSelectedCurrentBook = currentBook !== null;
 
-    if (currentBook) {
-      renderCurrentBook(currentBook);
+      if (currentBook) {
+        renderCurrentBook(currentBook);
+      }
+    } catch (error) {
+      console.error("Aktuelles Buch konnte nicht geladen werden:", error);
     }
 
     const suggestions = await getClubSuggestions(clubId);
