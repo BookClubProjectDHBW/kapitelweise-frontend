@@ -183,8 +183,10 @@ async function loadMeetings() {
         }
       },
 
-      async () => {
-        throw new Error("Übersicht im DEV-Modus noch nicht verfügbar.");
+      async (meetingId) => {
+        return {
+          attendees: devData.mockMeetingAttendance[meetingId] ?? [],
+        };
       },
     );
 
