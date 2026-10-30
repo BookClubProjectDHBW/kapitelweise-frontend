@@ -33,7 +33,7 @@ $("#loginForm").on("submit", async function (event) {
       }
       await clearOfflineCache();
       sessionStorage.setItem("token", data.token);
-      window.location.href = "homePage.html";
+      window.location.href = "../spa/";
     } else if (response.status === 401) {
       showError("Benutzername oder Passwort ist falsch.");
       $("#password").val("");
