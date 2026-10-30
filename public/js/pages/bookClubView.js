@@ -399,6 +399,12 @@ export function renderMeetings(rawMeetings, isAdmin, onAttend, onOverview) {
             }
 
             feedback.textContent = "Antwort gespeichert.";
+
+            setTimeout(() => {
+              if (feedback.textContent === "Antwort gespeichert.") {
+                feedback.textContent = "";
+              }
+            }, 3000);
           } catch (error) {
             feedback.textContent = error.message;
 
