@@ -154,3 +154,67 @@ export const searchResults = [
     isbn: "9780261103344",
   },
 ];
+
+function mockMeetingDate(daysFromNow, hour) {
+  const date = new Date();
+  date.setDate(date.getDate() + daysFromNow);
+  date.setHours(hour, 0, 0, 0);
+  return date.toISOString();
+}
+
+export const mockMeetings = [
+  {
+    id: 1,
+    title: "Gemeinsamer Leseabend",
+    description: "Wir besprechen die ersten Kapitel unseres Buches.",
+    starts_at: mockMeetingDate(3, 19),
+    ends_at: mockMeetingDate(3, 21),
+    location: "Stadtbibliothek",
+    my_attendance_status: "OPEN",
+  },
+  {
+    id: 2,
+    title: "Buchclub-Treffen",
+    description: "Austausch über die Handlung und unsere Theorien.",
+    starts_at: mockMeetingDate(7, 18),
+    ends_at: mockMeetingDate(7, 20),
+    location: "Café am Markt",
+    my_attendance_status: "ACCEPTED",
+  },
+  {
+    id: 3,
+    title: "Abschlussbesprechung",
+    description: "Wir besprechen das Ende des Buches.",
+    starts_at: mockMeetingDate(14, 19),
+    ends_at: mockMeetingDate(14, 21),
+    location: "Online",
+    my_attendance_status: "DECLINED",
+  },
+];
+
+export const mockMeetingAttendance = {
+  1: [
+    { username: "anna.liest", status: "OPEN" },
+    { username: "lea.schmidt", status: "ACCEPTED" },
+    { username: "jonas.klein", status: "DECLINED" },
+    { username: "lena.buecher", status: "ACCEPTED" },
+    { username: "tim.liest", status: "OPEN" },
+    { username: "mia.schreibt", status: "OPEN" },
+  ],
+  2: [
+    { username: "anna.liest", status: "ACCEPTED" },
+    { username: "lea.schmidt", status: "ACCEPTED" },
+    { username: "jonas.klein", status: "OPEN" },
+    { username: "lena.buecher", status: "DECLINED" },
+    { username: "tim.liest", status: "OPEN" },
+    { username: "mia.schreibt", status: "ACCEPTED" },
+  ],
+  3: [
+    { username: "anna.liest", status: "DECLINED" },
+    { username: "lea.schmidt", status: "OPEN" },
+    { username: "jonas.klein", status: "ACCEPTED" },
+    { username: "lena.buecher", status: "OPEN" },
+    { username: "tim.liest", status: "DECLINED" },
+    { username: "mia.schreibt", status: "OPEN" },
+  ],
+};
