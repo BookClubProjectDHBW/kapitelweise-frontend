@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <script>
-      if (!sessionStorage.getItem("token")) {
+      const isLocal = ["localhost", "127.0.0.1"].includes(
+        window.location.hostname,
+      );
+
+      if (!isLocal && !sessionStorage.getItem("token")) {
         window.location.replace("loginPage.html");
       }
     </script>
