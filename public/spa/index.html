@@ -1,18 +1,20 @@
 <!doctype html>
 <html lang="de" data-beasties-container>
-<head>
-  <meta charset="utf-8">
-  <title>Kapitelweise – Meine Buchclubs</title>
-  <base href="/public/spa/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script>
-    if (!sessionStorage.getItem('token')) {
-      window.location.replace('/public/html/loginPage.html');
-    }
-  </script>
-<style>:root{--color-primary:#b77b82;--color-primary-hover:#9f686f;--color-primary-light:#ead4d6;--color-secondary:#879b7c;--color-secondary-hover:#718568;--color-secondary-light:#dce4d7;--color-background:#f8f5f2;--color-surface:#ffffff;--color-text:#3f3a38;--color-text-muted:#77716e;--color-border:#ddd6d2;--color-danger:#b85c5c;--color-success:#718568;--color-focus:rgba(135, 155, 124, .25);--border-radius:.5rem;--shadow-sm:0 .125rem .5rem rgba(63, 58, 56, .08)}body{min-height:100vh;background-color:var(--color-background);color:var(--color-text)}body{min-height:100vh;display:flex;flex-direction:column;background-color:var(--color-background);background-image:radial-gradient(ellipse 38rem 27rem at 4% 23%,rgba(183,123,130,.18),transparent 73%),radial-gradient(ellipse 35rem 30rem at 94% 47%,rgba(135,155,124,.17),transparent 72%),radial-gradient(ellipse 42rem 22rem at 50% 92%,rgba(234,212,214,.36),transparent 76%);background-attachment:fixed;color:var(--color-text)}@media(max-width:575.98px){body{background-attachment:scroll;background-image:radial-gradient(ellipse 19rem 18rem at 0% 18%,rgba(183,123,130,.15),transparent 72%),radial-gradient(ellipse 20rem 19rem at 100% 75%,rgba(135,155,124,.15),transparent 75%)}}app-root{display:flex;flex-direction:column;min-height:100vh}</style><link rel="stylesheet" href="styles-ZX3M76DH.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-ZX3M76DH.css"></noscript></head>
-<body>
-  <app-root></app-root>
-<script src="main-R6NUQUR5.js" type="module"></script></body>
+  <head>
+    <meta charset="utf-8">
+    <title>Kapitelweise – Meine Buchclubs</title>
+    <base href="/public/spa/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+      if (!sessionStorage.getItem('token') && navigator.onLine) {
+        window.location.replace('/public/html/loginPage.html');
+      }
+    </script>
+    <link rel="manifest" href="manifest.webmanifest">
+  <style>:root{--color-primary:#b77b82;--color-primary-hover:#9f686f;--color-primary-light:#ead4d6;--color-secondary:#879b7c;--color-secondary-hover:#718568;--color-secondary-light:#dce4d7;--color-background:#f8f5f2;--color-surface:#ffffff;--color-text:#3f3a38;--color-text-muted:#77716e;--color-border:#ddd6d2;--color-danger:#b85c5c;--color-success:#718568;--color-focus:rgba(135, 155, 124, .25);--border-radius:.5rem;--shadow-sm:0 .125rem .5rem rgba(63, 58, 56, .08)}body{min-height:100vh;background-color:var(--color-background);color:var(--color-text)}body{min-height:100vh;display:flex;flex-direction:column;background-color:var(--color-background);background-image:radial-gradient(ellipse 38rem 27rem at 4% 23%,rgba(183,123,130,.18),transparent 73%),radial-gradient(ellipse 35rem 30rem at 94% 47%,rgba(135,155,124,.17),transparent 72%),radial-gradient(ellipse 42rem 22rem at 50% 92%,rgba(234,212,214,.36),transparent 76%);background-attachment:fixed;color:var(--color-text)}@media(max-width:575.98px){body{background-attachment:scroll;background-image:radial-gradient(ellipse 19rem 18rem at 0% 18%,rgba(183,123,130,.15),transparent 72%),radial-gradient(ellipse 20rem 19rem at 100% 75%,rgba(135,155,124,.15),transparent 75%)}}app-root{display:flex;flex-direction:column;min-height:100vh}</style><link rel="stylesheet" href="styles-ZX3M76DH.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-ZX3M76DH.css"></noscript></head>
+  <body>
+    <app-root></app-root>
+    <noscript>Please enable JavaScript to continue using this application.</noscript>
+  <script src="main-A4XIVF76.js" type="module"></script></body>
 </html>

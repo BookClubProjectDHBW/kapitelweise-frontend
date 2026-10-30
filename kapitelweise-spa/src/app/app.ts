@@ -12,13 +12,14 @@ export class App {
   readonly homepage = inject(HomepageService);
 
   constructor() {
-    if (sessionStorage.getItem('token')) {
+    if (sessionStorage.getItem('token') || !navigator.onLine) {
       void this.homepage.load();
     }
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
     sessionStorage.removeItem('token');
+    await this.homepage.clearCache();
     window.location.replace('/public/html/loginPage.html');
   }
 }

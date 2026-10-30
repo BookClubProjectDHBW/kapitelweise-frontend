@@ -1,5 +1,6 @@
 import { initHomeRouter } from "./homePageRouter.js";
 import { config } from "../config.js";
+import { clearOfflineCache } from "../offlineCache.js";
 import {
   getHomepageData,
   createClub,
@@ -77,8 +78,9 @@ async function respondToInvitation(invitationId, status) {
       : error.message;
   }
 }
-logoutButton.addEventListener("click", function () {
+logoutButton.addEventListener("click", async function () {
   sessionStorage.removeItem("token");
+  await clearOfflineCache();
   window.location.href = "loginPage.html";
 });
 if (config.useMockData) {

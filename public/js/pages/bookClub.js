@@ -1,4 +1,5 @@
 import { config } from "../config.js";
+import { clearOfflineCache } from "../offlineCache.js";
 import { getBookClub, inviteUserToClub } from "../api/clubApi.js";
 import {
   searchBooks,
@@ -582,8 +583,9 @@ bookSearchForm.addEventListener("submit", async function (event) {
   }
 });
 
-document.getElementById("logoutButton").addEventListener("click", function () {
+document.getElementById("logoutButton").addEventListener("click", async function () {
   sessionStorage.removeItem("token");
+  await clearOfflineCache();
   window.location.href = "loginPage.html";
 });
 const meetingForm = document.getElementById("meetingForm");

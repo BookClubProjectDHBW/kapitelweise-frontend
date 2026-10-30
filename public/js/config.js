@@ -1,5 +1,5 @@
-const environment = "development";
-const enableMockData = true;
+const environment = "production";
+const enableMockData = false;
 
 const apiUrls = {
   development: {
