@@ -158,9 +158,31 @@ async function loadMeetings() {
     renderMeetings(
       devData.mockMeetings,
       currentMember?.role === "admin",
-      async () => {
-        throw new Error("Teilnahme im DEV-Modus noch nicht verfügbar.");
+
+      async (meetingId, answer) => {
+        const meeting = devData.mockMeetings.find(
+          (item) => item.id === meetingId,
+        );
+
+        if (!meeting) {
+          throw new Error("Treffen nicht gefunden.");
+        }
+
+        meeting.my_attendance_status = answer;
+
+        const currentUser = devData.users.find(
+          (user) => user.userId === devData.currentUserId,
+        );
+
+        const attendance = devData.mockMeetingAttendance[meetingId]?.find(
+          (entry) => entry.username === currentUser.username,
+        );
+
+        if (attendance) {
+          attendance.status = answer;
+        }
       },
+
       async () => {
         throw new Error("Übersicht im DEV-Modus noch nicht verfügbar.");
       },
