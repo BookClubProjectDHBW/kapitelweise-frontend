@@ -151,10 +151,25 @@ async function loadMeetings() {
   list.replaceChildren();
 
   if (config.useMockData) {
-    status.textContent =
-      "Im DEV-Mockmodus werden keine Treffen geladen. Für den API-Test Mockdaten deaktivieren.";
-    return;
+    const currentMember = currentBookClub.members.find(
+      (member) => member.userId === devData.currentUserId,
+    );
+
+    renderMeetings(
+      devData.mockMeetings,
+      currentMember?.role === "admin",
+      async () => {
+        throw new Error("Teilnahme im DEV-Modus noch nicht verfügbar.");
+      },
+      async () => {
+        throw new Error("Übersicht im DEV-Modus noch nicht verfügbar.");
+      },
+    );
+
+    status.textContent = "";
+    return true;
   }
+
   if (!clubId || !currentBookClub) {
     status.textContent = "Der Buchclub ist noch nicht geladen.";
     return;
