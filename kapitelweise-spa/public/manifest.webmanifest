@@ -1,6 +1,6 @@
 {
-  "name": "kapitelweise-spa",
-  "short_name": "kapitelweise-spa",
+  "name": "Kapitelweise – Meine Buchclubs",
+  "short_name": "Kapitelweise",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

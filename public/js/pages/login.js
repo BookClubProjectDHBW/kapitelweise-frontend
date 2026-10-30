@@ -1,4 +1,5 @@
 import { loginUser } from "../api/authApi.js";
+import { clearOfflineCache } from "../offlineCache.js";
 
 function showError(message) {
   $("#loginError").removeClass("d-none").text(message);
@@ -30,6 +31,7 @@ $("#loginForm").on("submit", async function (event) {
         showError("Die Anmeldung hat kein Token zurückgegeben.");
         return;
       }
+      await clearOfflineCache();
       sessionStorage.setItem("token", data.token);
       window.location.href = "homePage.html";
     } else if (response.status === 401) {

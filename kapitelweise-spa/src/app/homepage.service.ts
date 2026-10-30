@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { IndexedDBService } from './indexDBService';
 
 export interface Club {
   id: string;
@@ -48,12 +49,17 @@ const RESPOND_INVITATION_MUTATION = `
   }
 `;
 
+const CACHE_KEY_MEMBER = 'cached_member_homepage';
+
 @Injectable({ providedIn: 'root' })
 export class HomepageService {
   private readonly http = inject(HttpClient);
-  private readonly graphqlUrl = window.location.hostname === 'localhost'
-    ? 'http://localhost:8383/graphql'
-    : 'https://kapitelweise-graphql-f85172125d1d.herokuapp.com/graphql';
+  private readonly idbService = inject(IndexedDBService);
+
+  private readonly graphqlUrl =
+    window.location.hostname === 'localhost'
+      ? 'http://localhost:8383/graphql'
+      : 'https://kapitelweise-graphql-f85172125d1d.herokuapp.com/graphql';
 
   readonly username = signal('');
   readonly clubs = signal<Club[]>([]);
@@ -61,11 +67,16 @@ export class HomepageService {
   readonly loading = signal(false);
   readonly error = signal('');
   private loaded = false;
+  private member: Member | null = null;
 
   private async request<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
     const token = sessionStorage.getItem('token');
 
     if (!token) {
+      // Offline kann die Login-Seite nicht geladen werden, daher stattdessen auf den Cache zurückfallen.
+      if (!navigator.onLine) {
+        throw new Error('Du bist offline.');
+      }
       window.location.replace('/public/html/loginPage.html');
       throw new Error('Bitte melde dich an.');
     }
@@ -73,11 +84,13 @@ export class HomepageService {
     let response: GraphqlResponse<T>;
 
     try {
-      response = await firstValueFrom(this.http.post<GraphqlResponse<T>>(
-        this.graphqlUrl,
-        { query, variables },
-        { headers: { Authorization: `Bearer ${token}` } },
-      ));
+      response = await firstValueFrom(
+        this.http.post<GraphqlResponse<T>>(
+          this.graphqlUrl,
+          { query, variables },
+          { headers: { Authorization: `Bearer ${token}` } },
+        ),
+      );
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
         if (error.status === 401) {
@@ -85,9 +98,10 @@ export class HomepageService {
           window.location.replace('/public/html/loginPage.html');
           throw new Error('Deine Anmeldung ist abgelaufen.');
         }
-        const message = typeof error.error?.message === 'string'
-          ? error.error.message
-          : `HTTP-Fehler: ${error.status}`;
+        const message =
+          typeof error.error?.message === 'string'
+            ? error.error.message
+            : `HTTP-Fehler: ${error.status}`;
         throw new Error(message);
       }
       throw error;
@@ -115,22 +129,75 @@ export class HomepageService {
       if (!data.member) {
         throw new Error('Mitgliedsdaten konnten nicht geladen werden.');
       }
-      this.username.set(data.member.name);
-      this.clubs.set(data.member.membership ?? []);
-      this.invitations.set(data.member.invitationPending ?? []);
+      this.applyMemberData(data.member);
       this.loaded = true;
+      await this.persistCache();
     } catch (error) {
-      this.error.set(this.errorMessage(error));
+      const cached = await this.readCache();
+      if (cached) {
+        this.applyMemberData(cached);
+        this.loaded = true;
+        this.error.set('Offline-Modus: Daten aus lokalem Zwischenspeicher geladen.');
+        window.addEventListener('online', () => this.reload(), { once: true });
+      } else {
+        this.error.set(this.errorMessage(error));
+      }
     } finally {
       this.loading.set(false);
     }
   }
 
+  private reload(): void {
+    this.loaded = false;
+    void this.load();
+  }
+
+  async clearCache(): Promise<void> {
+    try {
+      await this.idbService.deleteData(CACHE_KEY_MEMBER);
+    } catch (error) {
+      console.error('Offline-Cache konnte nicht gelöscht werden:', error);
+    }
+  }
+
+  private async readCache(): Promise<Member | null> {
+    try {
+      return await this.idbService.getCache<Member>(CACHE_KEY_MEMBER);
+    } catch (error) {
+      console.error('Offline-Cache konnte nicht gelesen werden:', error);
+      return null;
+    }
+  }
+
+  private async persistCache(): Promise<void> {
+    if (!this.member) {
+      return;
+    }
+    const member: Member = {
+      ...this.member,
+      membership: this.clubs(),
+      invitationPending: this.invitations(),
+    };
+    try {
+      await this.idbService.setCache(CACHE_KEY_MEMBER, member);
+    } catch (error) {
+      console.error('Offline-Cache konnte nicht gespeichert werden:', error);
+    }
+  }
+
+  private applyMemberData(member: Member): void {
+    this.member = member;
+    this.username.set(member.name);
+    this.clubs.set(member.membership ?? []);
+    this.invitations.set(member.invitationPending ?? []);
+  }
+
   async createClub(name: string, description: string): Promise<void> {
-    const data = await this.request<{ createNewBookClub: Club }>(
-      CREATE_CLUB_MUTATION, { input: { name, description } },
-    );
-    this.clubs.update(clubs => [...clubs, data.createNewBookClub]);
+    const data = await this.request<{ createNewBookClub: Club }>(CREATE_CLUB_MUTATION, {
+      input: { name, description },
+    });
+    this.clubs.update((clubs) => [...clubs, data.createNewBookClub]);
+    await this.persistCache();
   }
 
   async respondToInvitation(invitationId: string, status: 'ACCEPTED' | 'DECLINED'): Promise<void> {
@@ -139,12 +206,16 @@ export class HomepageService {
       { input: { invitationId: String(invitationId), status } },
     );
 
-    this.invitations.update(invitations => invitations.filter(invitation => invitation.id !== invitationId));
+    this.invitations.update((invitations) =>
+      invitations.filter((invitation) => invitation.id !== invitationId),
+    );
     if (status === 'ACCEPTED' && data.responseInvitation) {
       const club = data.responseInvitation;
-      this.clubs.update(clubs => clubs.some(existing => existing.id === club.id)
-        ? clubs : [...clubs, club]);
+      this.clubs.update((clubs) =>
+        clubs.some((existing) => existing.id === club.id) ? clubs : [...clubs, club],
+      );
     }
+    await this.persistCache();
   }
 
   errorMessage(error: unknown): string {
