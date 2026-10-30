@@ -603,7 +603,7 @@ cancelMeetingButton.addEventListener("click", function () {
   meetingStatus.textContent = "";
 });
 
-meetingForm.addEventListener("submit", async function (event) {
+addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const startsAt = document.getElementById("meetingStartsAt").value;
