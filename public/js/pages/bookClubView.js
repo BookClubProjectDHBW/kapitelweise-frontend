@@ -372,7 +372,7 @@ export function renderMeetings(rawMeetings, isAdmin, onAttend, onOverview) {
     feedback.setAttribute("role", "status");
     card.append(title, when, location, description, status);
 
-    if (meeting.ownStatus === "OPEN") {
+    if (["OPEN", "ACCEPTED", "DECLINED"].includes(meeting.ownStatus)) {
       const actions = document.createElement("div");
       actions.className = "d-flex flex-wrap gap-2 mb-2";
       const buttons = [
@@ -383,6 +383,8 @@ export function renderMeetings(rawMeetings, isAdmin, onAttend, onOverview) {
         button.type = "button";
         button.className = `btn ${style}`;
         button.textContent = text;
+        button.dataset.answer = answer;
+        button.disabled = answer === meeting.ownStatus;
         button.addEventListener("click", async () => {
           for (const item of buttons) item.disabled = true;
           feedback.textContent = "Antwort wird gespeichert...";
@@ -392,11 +394,17 @@ export function renderMeetings(rawMeetings, isAdmin, onAttend, onOverview) {
             status.textContent = `Deine Antwort: ${
               answer === "ACCEPTED" ? "Zugesagt" : "Abgesagt"
             }`;
-            actions.remove();
+            for (const item of buttons) {
+              item.disabled = item.dataset.answer === meeting.ownStatus;
+            }
+
             feedback.textContent = "Antwort gespeichert.";
           } catch (error) {
             feedback.textContent = error.message;
-            for (const item of buttons) item.disabled = false;
+
+            for (const item of buttons) {
+              item.disabled = item.dataset.answer === meeting.ownStatus;
+            }
           }
         });
         actions.append(button);
