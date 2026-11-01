@@ -73,6 +73,40 @@
       </form>
     </dialog>
 
+    <dialog
+      id="confirmationDialog"
+      class="invitation-dialog"
+      aria-labelledby="confirmationDialogTitle"
+      aria-describedby="confirmationMessage"
+    >
+      <form method="dialog" class="invitation-form">
+        <div class="dialog-header">
+          <h2 id="confirmationDialogTitle">Buch auswählen</h2>
+        </div>
+
+        <p id="confirmationMessage"></p>
+
+        <div class="dialog-actions">
+          <button
+            class="dialog-cancel-button"
+            type="submit"
+            value="cancel"
+            autofocus
+          >
+            Abbrechen
+          </button>
+          <button
+            id="confirmationSubmit"
+            class="invitation-submit"
+            type="submit"
+            value="confirm"
+          >
+            Bestätigen
+          </button>
+        </div>
+      </form>
+    </dialog>
+
     <header>
       <nav class="navbar bg-white border-bottom shadow-sm">
         <div class="container py-2">

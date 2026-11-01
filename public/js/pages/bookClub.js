@@ -48,11 +48,38 @@ const bookSearchType = document.getElementById("bookSearchType");
 const bookSearchInput = document.getElementById("bookSearchInput");
 const resultsContainer = document.getElementById("bookSearchResults");
 
+const confirmationDialog = document.getElementById("confirmationDialog");
+const confirmationDialogTitle = document.getElementById("confirmationDialogTitle");
+const confirmationMessage = document.getElementById("confirmationMessage");
+const confirmationSubmit = document.getElementById("confirmationSubmit");
+
+function confirmBookAction(title, message, buttonLabel) {
+  if (confirmationDialog.open) {
+    return Promise.resolve(false);
+  }
+
+  confirmationDialogTitle.textContent = title;
+  confirmationMessage.textContent = message;
+  confirmationSubmit.textContent = buttonLabel;
+  confirmationDialog.returnValue = "cancel";
+
+  return new Promise((resolve) => {
+    confirmationDialog.addEventListener(
+      "close",
+      () => resolve(confirmationDialog.returnValue === "confirm"),
+      { once: true },
+    );
+    confirmationDialog.showModal();
+  });
+}
+
 async function chooseCurrentBook(book, button) {
   const status = document.getElementById("clubSuggestionsStatus");
 
-  const confirmed = window.confirm(
-    `Möchtest du "${book.title}" wirklich als nächstes Buch auswählen? Diese Auswahl kann nicht rückgängig gemacht werden.`,
+  const confirmed = await confirmBookAction(
+    "Nächstes Buch auswählen",
+    `Möchtest du „${book.title}“ als nächstes Buch auswählen? Diese Auswahl kann nicht rückgängig gemacht werden.`,
+    "Buch auswählen",
   );
 
   if (!confirmed) {
@@ -361,8 +388,10 @@ function showFinishBookButton() {
   button.textContent = "Buch abschließen";
 
   button.addEventListener("click", async function () {
-    const confirmed = window.confirm(
+    const confirmed = await confirmBookAction(
+      "Buch abschließen",
       "Möchtest du das aktuelle Buch wirklich abschließen?",
+      "Buch abschließen",
     );
 
     if (!confirmed) {
