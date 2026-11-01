@@ -73,10 +73,44 @@
       </form>
     </dialog>
 
+    <dialog
+      id="confirmationDialog"
+      class="invitation-dialog"
+      aria-labelledby="confirmationDialogTitle"
+      aria-describedby="confirmationMessage"
+    >
+      <form method="dialog" class="invitation-form">
+        <div class="dialog-header">
+          <h2 id="confirmationDialogTitle">Buch auswählen</h2>
+        </div>
+
+        <p id="confirmationMessage"></p>
+
+        <div class="dialog-actions">
+          <button
+            class="dialog-cancel-button"
+            type="submit"
+            value="cancel"
+            autofocus
+          >
+            Abbrechen
+          </button>
+          <button
+            id="confirmationSubmit"
+            class="invitation-submit"
+            type="submit"
+            value="confirm"
+          >
+            Bestätigen
+          </button>
+        </div>
+      </form>
+    </dialog>
+
     <header>
       <nav class="navbar bg-white border-bottom shadow-sm">
         <div class="container py-2">
-          <a class="navbar-brand fs-4" href="homePage.html">Buchclub</a>
+          <a class="navbar-brand fs-4" href="../spa/">Buchclub</a>
 
           <button
             type="button"
@@ -92,7 +126,7 @@
     <main class="container">
       <section class="bookclub-header">
         <div id="adminActions" class="bookclub-header-actions">
-          <a href="homePage.html" class="back-link"> ← Zurück </a>
+          <a href="../spa/" class="back-link"> ← Zurück </a>
         </div>
 
         <div class="bookclub-info">
