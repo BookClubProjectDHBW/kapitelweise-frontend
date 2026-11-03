@@ -517,6 +517,7 @@ async function loadBookClub() {
 
     showInvitationButton(currentBookClub.role === "ADMIN");
     showMeetingButton(currentBookClub.role === "ADMIN");
+    showLeaveClubButton(currentBookClub.role === "MEMBER");
 
     try {
       const currentBook = await getCurrentBook(clubId);
