@@ -31,8 +31,14 @@ $(".auth-link-secondary").on("click", function (event) {
 });
 
 window.addEventListener("offline", showOfflineState);
+let leavingPage = false;
+window.addEventListener("beforeunload", function () {
+  leavingPage = true;
+});
 window.addEventListener("online", function () {
-  window.location.reload();
+  if (!leavingPage) {
+    window.location.reload();
+  }
 });
 
 if (!navigator.onLine) {

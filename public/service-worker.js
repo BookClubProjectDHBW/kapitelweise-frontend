@@ -1,5 +1,5 @@
 // Mit Hilfe der KI entwickelt
-const cacheName = "kapitelweise-detail-v4";
+const cacheName = "kapitelweise-detail-v5";
 const filesToCache = [
   "./html/bookClub.html",
   "./html/loginPage.html",
@@ -41,7 +41,9 @@ self.addEventListener("activate", (e) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== cacheName)
+            .filter(
+              (key) => key.startsWith("kapitelweise-") && key !== cacheName,
+            )
             .map((key) => caches.delete(key)),
         ),
       )

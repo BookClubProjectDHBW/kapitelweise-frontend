@@ -570,8 +570,14 @@ function showOfflineState() {
 }
 
 window.addEventListener("offline", showOfflineState);
+let leavingPage = false;
+window.addEventListener("beforeunload", function () {
+  leavingPage = true;
+});
 window.addEventListener("online", function () {
-  window.location.reload();
+  if (!leavingPage) {
+    window.location.reload();
+  }
 });
 
 bookSearchType.addEventListener("change", function () {
