@@ -222,6 +222,10 @@ export function renderCurrentBook(book) {
     `ISBN: ${book.isbn || "Unbekannt"} · ` +
     `Seiten: ${book.pages ?? "Unbekannt"}`;
 
+  bookData.classList.remove("d-none");
+  document.querySelector(".club-name").classList.remove("d-none");
+  document.getElementById("clubDescription").classList.add("d-none");
+
   const cover = document.getElementById("bookCover");
   const isbn = String(book.isbn || "").replace(/[^0-9X]/gi, "");
 
