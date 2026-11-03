@@ -68,8 +68,19 @@ export class HomepageService {
   readonly invitations = signal<Invitation[]>([]);
   readonly loading = signal(false);
   readonly error = signal('');
+  readonly online = signal(navigator.onLine);
   private loaded = false;
   private member: Member | null = null;
+
+  constructor() {
+    window.addEventListener('online', () => {
+      this.online.set(true);
+      if (this.error()) {
+        this.reload();
+      }
+    });
+    window.addEventListener('offline', () => this.online.set(false));
+  }
 
   private async request<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
     const token = sessionStorage.getItem('token');
@@ -148,9 +159,6 @@ export class HomepageService {
             ? 'Offline-Modus: Daten aus lokalem Zwischenspeicher geladen.'
             : 'Server nicht erreichbar: Daten aus lokalem Zwischenspeicher geladen.',
         );
-        if (offline) {
-          window.addEventListener('online', () => this.reload(), { once: true });
-        }
       } else {
         this.error.set(this.errorMessage(error));
       }

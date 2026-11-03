@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1793710770460,
+  "timestamp": 1793713972828,
   "index": "/public/spa/index.html",
   "assetGroups": [
     {
@@ -13,9 +13,9 @@
       "urls": [
         "/public/spa/favicon.ico",
         "/public/spa/index.html",
-        "/public/spa/main-ZZJ5FTZQ.js",
+        "/public/spa/main-LOXG7UAL.js",
         "/public/spa/manifest.webmanifest",
-        "/public/spa/styles-ZX3M76DH.css"
+        "/public/spa/styles-3IACN4RJ.css"
       ],
       "patterns": [
         "https:\\/\\/cdn\\.jsdelivr\\.net\\/npm\\/bootstrap@5\\.2\\.3\\/dist\\/css\\/bootstrap\\.min\\.css"
@@ -23,7 +23,7 @@
     },
     {
       "name": "assets",
-      "installMode": "lazy",
+      "installMode": "prefetch",
       "updateMode": "prefetch",
       "cacheQueryOptions": {
         "ignoreVary": true
@@ -62,20 +62,20 @@
     "/public/spa/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
     "/public/spa/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
     "/public/spa/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
-    "/public/spa/images/club1.webp": "3cfa624f439157083a7deae61faafa02ff47b9bb",
-    "/public/spa/images/club10.webp": "de497da0b35a5473939380df1895909067f99cfc",
-    "/public/spa/images/club2.webp": "aa1f245ca440eadf484dd0424da72322168ac5db",
-    "/public/spa/images/club3.webp": "9b58d07ef6b8bae2fe6a01fad47d76920e6be491",
-    "/public/spa/images/club4.webp": "75a3810529fb3918a9666228699b858b6a187255",
-    "/public/spa/images/club5.webp": "e990637c5527a028c524a4896e398dfdd3d36bba",
-    "/public/spa/images/club6.webp": "34d8d6e9f924e46a178cf60e9697412f45bf1107",
-    "/public/spa/images/club7.webp": "4fec486f8bf07026482a9447f57ef0f1c8f44fdb",
-    "/public/spa/images/club8.webp": "764e5873cb49d9014674140bd9491beed786b745",
-    "/public/spa/images/club9.webp": "f055049d7d1cbb31919e702f61ca311207d2142b",
-    "/public/spa/index.html": "a244596f3ff2af8cfac0528c1f453c76ad533848",
-    "/public/spa/main-ZZJ5FTZQ.js": "9bca800483f51e21d036926b9e1cd9003a881466",
+    "/public/spa/images/club1.webp": "4eaaaf0a0b224a6dcf802b2f69044c921a8e2172",
+    "/public/spa/images/club10.webp": "1eafe22a5e0ebb67f42ec3cdc36a7c919ac679c8",
+    "/public/spa/images/club2.webp": "c6f1b2e25fc81cc8903b71748e6b42561d8befa1",
+    "/public/spa/images/club3.webp": "a2d8cb3937c1a59343fffb19e5623de03ff4726f",
+    "/public/spa/images/club4.webp": "1bdb9d6ce3d99f0232d00eab9125a6966b972289",
+    "/public/spa/images/club5.webp": "3d6e65cae52e74b0cabeb211e2586de1ac8a8cf5",
+    "/public/spa/images/club6.webp": "f5e4ea8d55fa6547f20c303f58ff7d64af77cdc9",
+    "/public/spa/images/club7.webp": "373b64bc23af29fc9b2cf856ea5140c8a4fe9764",
+    "/public/spa/images/club8.webp": "34e4f0cb33a34e19c3862fe3526e40de9ec76565",
+    "/public/spa/images/club9.webp": "41833fbc0161bde9081c51fba1c8e0b0d3a57e2e",
+    "/public/spa/index.html": "bdb2820e25facf63f69dd4f2abea3b3a3d0b1d8c",
+    "/public/spa/main-LOXG7UAL.js": "211e23ff0d1a175bf48e79dbbf607518dcfded22",
     "/public/spa/manifest.webmanifest": "9bba8c51380023c509687f0ccb166451e4341b0a",
-    "/public/spa/styles-ZX3M76DH.css": "ac07c9880a9bbf154032d50621169f3b3648ba53"
+    "/public/spa/styles-3IACN4RJ.css": "41ef212c62bc0d2b56fc750235d04aa799a4152b"
   },
   "navigationUrls": [
     {

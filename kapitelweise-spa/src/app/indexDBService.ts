@@ -72,42 +72,6 @@ export class IndexedDBService {
     });
   }
 
-  async addData<T>(data: T): Promise<number> {
-    const db = await this.getDB();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(this.storeName, 'readwrite');
-      const store = transaction.objectStore(this.storeName);
-      const request = store.add(data);
-
-      request.onsuccess = () => resolve(request.result as number);
-      request.onerror = () => reject(request.error);
-    });
-  }
-
-  async getAllData<T>(): Promise<T[]> {
-    const db = await this.getDB();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(this.storeName, 'readonly');
-      const store = transaction.objectStore(this.storeName);
-      const request = store.getAll();
-
-      request.onsuccess = () => resolve(request.result as T[]);
-      request.onerror = () => reject(request.error);
-    });
-  }
-
-  async updateData<T>(data: T): Promise<void> {
-    const db = await this.getDB();
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction(this.storeName, 'readwrite');
-      const store = transaction.objectStore(this.storeName);
-      const request = store.put(data);
-
-      request.onsuccess = () => resolve();
-      request.onerror = () => reject(request.error);
-    });
-  }
-
   async deleteData(id: number | string): Promise<void> {
     const db = await this.getDB();
     return new Promise((resolve, reject) => {

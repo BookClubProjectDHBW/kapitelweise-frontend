@@ -11,10 +11,22 @@
         <h3 class="card-title h5">{{ invitation.bookclub.name }}</h3>
         <p class="card-text text-secondary">{{ invitation.bookclub.description || 'Keine Beschreibung vorhanden.' }}</p>
         <div class="d-flex flex-wrap gap-2">
-          <button class="btn btn-confirm" type="button" [disabled]="busyId() !== null" (click)="respond(invitation, 'ACCEPTED')">
+          <button
+            class="btn btn-confirm"
+            type="button"
+            [disabled]="busyId() !== null || !homepage.online()"
+            [attr.title]="homepage.online() ? null : 'Offline nicht verfügbar'"
+            (click)="respond(invitation, 'ACCEPTED')"
+          >
             Annehmen
           </button>
-          <button class="btn btn-reject" type="button" [disabled]="busyId() !== null" (click)="respond(invitation, 'DECLINED')">
+          <button
+            class="btn btn-reject"
+            type="button"
+            [disabled]="busyId() !== null || !homepage.online()"
+            [attr.title]="homepage.online() ? null : 'Offline nicht verfügbar'"
+            (click)="respond(invitation, 'DECLINED')"
+          >
             Ablehnen
           </button>
         </div>
