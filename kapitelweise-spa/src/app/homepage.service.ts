@@ -51,6 +51,8 @@ const RESPOND_INVITATION_MUTATION = `
 
 const CACHE_KEY_MEMBER = 'cached_member_homepage';
 
+class ConnectionError extends Error {}
+
 @Injectable({ providedIn: 'root' })
 export class HomepageService {
   private readonly http = inject(HttpClient);
@@ -75,7 +77,7 @@ export class HomepageService {
     if (!token) {
       // Offline kann die Login-Seite nicht geladen werden, daher stattdessen auf den Cache zurückfallen.
       if (!navigator.onLine) {
-        throw new Error('Du bist offline.');
+        throw new ConnectionError('Du bist offline.');
       }
       window.location.replace('/public/html/loginPage.html');
       throw new Error('Bitte melde dich an.');
@@ -93,6 +95,9 @@ export class HomepageService {
       );
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
+        if (error.status === 0) {
+          throw new ConnectionError('Keine Verbindung zum Server.');
+        }
         if (error.status === 401) {
           sessionStorage.removeItem('token');
           window.location.replace('/public/html/loginPage.html');
@@ -133,12 +138,19 @@ export class HomepageService {
       this.loaded = true;
       await this.persistCache();
     } catch (error) {
-      const cached = await this.readCache();
+      const offline = !navigator.onLine;
+      const cached = error instanceof ConnectionError ? await this.readCache() : null;
       if (cached) {
         this.applyMemberData(cached);
         this.loaded = true;
-        this.error.set('Offline-Modus: Daten aus lokalem Zwischenspeicher geladen.');
-        window.addEventListener('online', () => this.reload(), { once: true });
+        this.error.set(
+          offline
+            ? 'Offline-Modus: Daten aus lokalem Zwischenspeicher geladen.'
+            : 'Server nicht erreichbar: Daten aus lokalem Zwischenspeicher geladen.',
+        );
+        if (offline) {
+          window.addEventListener('online', () => this.reload(), { once: true });
+        }
       } else {
         this.error.set(this.errorMessage(error));
       }
