@@ -551,6 +551,7 @@ async function loadBookClub() {
   }
 }
 
+// Mit Hilfe der KI entwickelt
 function showOfflineState() {
   document.getElementById("offlineNotice").classList.remove("d-none");
 

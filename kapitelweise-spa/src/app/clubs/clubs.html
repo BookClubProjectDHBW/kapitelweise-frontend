@@ -1,5 +1,6 @@
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
   <h2 class="h5 serif mb-0">Meine Buchclubs</h2>
+  <!-- Mit Hilfe der KI entwickelt -->
   <button
     class="btn link-accent serif fs-5"
     type="button"
@@ -19,6 +20,7 @@
         <div class="card-body">
           <h3 class="card-title h5">{{ club.name }}</h3>
           <p class="card-text text-secondary">{{ club.description || 'Keine Beschreibung vorhanden.' }}</p>
+          <!-- Mit Hilfe der KI entwickelt -->
           @if (homepage.online()) {
             <a class="btn btn-outline-botanical" [href]="'/public/html/bookClub.html?id=' + club.id">Club öffnen</a>
           } @else {
@@ -55,6 +57,7 @@
         }
         <div class="d-flex gap-2 justify-content-end">
           <button class="btn btn-outline-secondary" type="button" [disabled]="busy()" (click)="closeForm()">Abbrechen</button>
+          <!-- Mit Hilfe der KI entwickelt -->
           <button
             class="btn btn-confirm"
             type="submit"

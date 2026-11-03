@@ -82,6 +82,7 @@
   border-color: var(--color-secondary);
 }
 
+/* Mit Hilfe der KI entwickelt */
 .btn:disabled[title] {
   pointer-events: auto;
   cursor: not-allowed;

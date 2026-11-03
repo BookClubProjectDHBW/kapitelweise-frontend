@@ -54,6 +54,7 @@ export class IndexedDBService {
     });
   }
 
+  // Mit Hilfe der KI entwickelt (Rückgabe von updatedAt)
   async getCache<T>(key: string): Promise<{ payload: T; updatedAt: number } | null> {
     const db = await this.getDB();
     return new Promise((resolve, reject) => {

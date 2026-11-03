@@ -51,6 +51,7 @@ const RESPOND_INVITATION_MUTATION = `
 
 const CACHE_KEY_MEMBER = 'cached_member_homepage';
 
+// Mit Hilfe der KI entwickelt
 class ConnectionError extends Error {}
 
 @Injectable({ providedIn: 'root' })
@@ -68,10 +69,12 @@ export class HomepageService {
   readonly invitations = signal<Invitation[]>([]);
   readonly loading = signal(false);
   readonly error = signal('');
+  // Mit Hilfe der KI entwickelt
   readonly online = signal(navigator.onLine);
   private loaded = false;
   private member: Member | null = null;
 
+  // Mit Hilfe der KI entwickelt
   constructor() {
     window.addEventListener('online', () => {
       this.online.set(true);
@@ -106,6 +109,7 @@ export class HomepageService {
       );
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
+        // Mit Hilfe der KI entwickelt
         if (error.status === 0 || error.status === 504 || !navigator.onLine) {
           throw new ConnectionError('Keine Verbindung zum Server.');
         }
@@ -149,6 +153,7 @@ export class HomepageService {
       this.loaded = true;
       await this.persistCache();
     } catch (error) {
+      // Mit Hilfe der KI entwickelt
       const offline = !navigator.onLine;
       const cached = error instanceof ConnectionError || offline ? await this.readCache() : null;
       if (cached) {

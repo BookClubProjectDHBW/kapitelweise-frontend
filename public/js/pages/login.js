@@ -13,6 +13,7 @@ if (sessionStorage.getItem("registered") === "true") {
   sessionStorage.removeItem("registered");
 }
 
+// Mit Hilfe der KI entwickelt
 function showOfflineState() {
   $("#offlineHint").removeClass("d-none");
   $("#loginForm button[type=submit]")

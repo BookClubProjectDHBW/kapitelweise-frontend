@@ -1,3 +1,4 @@
+// Mit Hilfe der KI entwickelt
 const cacheName = "kapitelweise-detail-v4";
 const filesToCache = [
   "./html/bookClub.html",

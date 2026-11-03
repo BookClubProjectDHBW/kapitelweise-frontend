@@ -431,4 +431,5 @@ app-root { display: flex; flex-direction: column; min-height: 100vh; }
 .kw-modal-backdrop { position: fixed; inset: 0; z-index: 1050; background: rgba(0, 0, 0, 0.45); display: flex; justify-content: center; align-items: center; padding: 1rem; }
 .kw-modal { width: min(100%, 31rem); max-height: 90vh; overflow-y: auto; background: #fff; }
 .nav-link.active { color: var(--color-primary) !important; }
+/* Mit Hilfe der KI entwickelt */
 .btn:disabled[title] { pointer-events: auto; cursor: not-allowed; filter: grayscale(1); }

@@ -3,6 +3,7 @@ main.container {
   padding-bottom: 4rem;
 }
 
+/* Mit Hilfe der KI entwickelt */
 button:disabled[title] {
   pointer-events: auto;
   cursor: not-allowed;
