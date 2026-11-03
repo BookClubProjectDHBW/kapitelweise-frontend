@@ -49,7 +49,9 @@ const bookSearchInput = document.getElementById("bookSearchInput");
 const resultsContainer = document.getElementById("bookSearchResults");
 
 const confirmationDialog = document.getElementById("confirmationDialog");
-const confirmationDialogTitle = document.getElementById("confirmationDialogTitle");
+const confirmationDialogTitle = document.getElementById(
+  "confirmationDialogTitle",
+);
 const confirmationMessage = document.getElementById("confirmationMessage");
 const confirmationSubmit = document.getElementById("confirmationSubmit");
 
@@ -238,7 +240,10 @@ async function loadMeetings() {
     renderMeetings(
       meetings,
       currentBookClub.role === "ADMIN",
-      (meetingId, answer) => setMeetingAttendance(clubId, meetingId, answer),
+      async (meetingId, answer) => {
+        await setMeetingAttendance(clubId, meetingId, answer);
+        await loadMeetings();
+      },
       (meetingId) => getAttendanceOverview(clubId, meetingId),
     );
     status.textContent = "";
@@ -617,11 +622,13 @@ bookSearchForm.addEventListener("submit", async function (event) {
   }
 });
 
-document.getElementById("logoutButton").addEventListener("click", async function () {
-  sessionStorage.removeItem("token");
-  await clearOfflineCache();
-  window.location.href = "loginPage.html";
-});
+document
+  .getElementById("logoutButton")
+  .addEventListener("click", async function () {
+    sessionStorage.removeItem("token");
+    await clearOfflineCache();
+    window.location.href = "loginPage.html";
+  });
 const meetingForm = document.getElementById("meetingForm");
 const newMeetingButton = document.getElementById("newMeetingButton");
 const cancelMeetingButton = document.getElementById("cancelMeetingButton");
