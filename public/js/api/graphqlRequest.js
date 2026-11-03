@@ -25,7 +25,7 @@ export async function graphqlRequest(query, variables = {}) {
   if (result.errors?.length) {
     const graphqlError = result.errors[0];
     const error = new Error(graphqlError.message);
-    error.code = graphqlError.extensions?.code;
+    error.code = graphqlError.extensions?.classification;
     throw error;
   }
 
