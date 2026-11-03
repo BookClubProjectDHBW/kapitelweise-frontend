@@ -45,6 +45,12 @@ const INVITE_MUTATION = `
   }
 `;
 
+const LEAVE_CLUB_MUTATION = `
+  mutation LeaveClub($clubId: ID!) {
+    leaveBookClub(clubId: $clubId)
+  }
+`;
+
 export function getHomepageData() {
   return graphqlRequest(HOMEPAGE_QUERY);
 }
@@ -69,4 +75,12 @@ export async function inviteUserToClub(clubId, username) {
     input: { bookclubId: String(clubId), username },
   });
   return data.inviteUser;
+}
+
+export async function leaveBookClub(clubId) {
+  const data = await graphqlRequest(LEAVE_CLUB_MUTATION, {
+    clubId: String(clubId),
+  });
+
+  return data.leaveBookClub;
 }
