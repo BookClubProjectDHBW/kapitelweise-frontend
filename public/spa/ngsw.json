@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1793710120010,
+  "timestamp": 1793710770460,
   "index": "/public/spa/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/public/spa/favicon.ico",
         "/public/spa/index.html",
-        "/public/spa/main-7EXMRPV3.js",
+        "/public/spa/main-ZZJ5FTZQ.js",
         "/public/spa/manifest.webmanifest",
         "/public/spa/styles-ZX3M76DH.css"
       ],
@@ -72,8 +72,8 @@
     "/public/spa/images/club7.webp": "4fec486f8bf07026482a9447f57ef0f1c8f44fdb",
     "/public/spa/images/club8.webp": "764e5873cb49d9014674140bd9491beed786b745",
     "/public/spa/images/club9.webp": "f055049d7d1cbb31919e702f61ca311207d2142b",
-    "/public/spa/index.html": "fa5a99587fd746919762757c25cb3bd28dc8e509",
-    "/public/spa/main-7EXMRPV3.js": "69edcde7c3c853e265663518f5e3c5676f7b9845",
+    "/public/spa/index.html": "a244596f3ff2af8cfac0528c1f453c76ad533848",
+    "/public/spa/main-ZZJ5FTZQ.js": "9bca800483f51e21d036926b9e1cd9003a881466",
     "/public/spa/manifest.webmanifest": "9bba8c51380023c509687f0ccb166451e4341b0a",
     "/public/spa/styles-ZX3M76DH.css": "ac07c9880a9bbf154032d50621169f3b3648ba53"
   },

@@ -95,7 +95,7 @@ export class HomepageService {
       );
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
-        if (error.status === 0) {
+        if (error.status === 0 || error.status === 504 || !navigator.onLine) {
           throw new ConnectionError('Keine Verbindung zum Server.');
         }
         if (error.status === 401) {
@@ -139,7 +139,7 @@ export class HomepageService {
       await this.persistCache();
     } catch (error) {
       const offline = !navigator.onLine;
-      const cached = error instanceof ConnectionError ? await this.readCache() : null;
+      const cached = error instanceof ConnectionError || offline ? await this.readCache() : null;
       if (cached) {
         this.applyMemberData(cached);
         this.loaded = true;
