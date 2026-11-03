@@ -1,6 +1,10 @@
 import { config } from "../config.js";
 import { clearOfflineCache } from "../offlineCache.js";
-import { getBookClub, inviteUserToClub } from "../api/clubApi.js";
+import {
+  getBookClub,
+  inviteUserToClub,
+  leaveBookClub,
+} from "../api/clubApi.js";
 import {
   searchBooks,
   submitBookProposal,
@@ -36,7 +40,11 @@ const invitationDialog = document.getElementById("invitationDialog");
 const invitationForm = document.getElementById("invitationForm");
 const invitedUsernameInput = document.getElementById("invitedUsername");
 const invitationStatus = document.getElementById("invitationStatus");
-
+const leaveClubButton = document.getElementById("leaveClubButton");
+const leaveClubDialog = document.getElementById("leaveClubDialog");
+const leaveClubStatus = document.getElementById("leaveClubStatus");
+const cancelLeaveClub = document.getElementById("cancelLeaveClub");
+const confirmLeaveClub = document.getElementById("confirmLeaveClub");
 const closeInvitationDialogButton = document.getElementById(
   "closeInvitationDialog",
 );
@@ -436,6 +444,42 @@ function showMeetingButton(isAdmin) {
     document.getElementById("meetingForm").classList.add("d-none");
   }
 }
+
+function showLeaveClubButton(isMember) {
+  leaveClubButton.classList.toggle("d-none", !isMember);
+}
+
+leaveClubButton.addEventListener("click", function () {
+  leaveClubStatus.textContent = "";
+  leaveClubStatus.className = "mt-3";
+  leaveClubDialog.showModal();
+});
+
+cancelLeaveClub.addEventListener("click", function () {
+  leaveClubDialog.close();
+});
+
+confirmLeaveClub.addEventListener("click", async function () {
+  confirmLeaveClub.disabled = true;
+  leaveClubStatus.textContent = "Buchclub wird verlassen...";
+  leaveClubStatus.className = "mt-3 text-secondary";
+
+  try {
+    const success = await leaveBookClub(clubId);
+
+    if (!success) {
+      throw new Error("Der Buchclub konnte nicht verlassen werden.");
+    }
+
+    await clearOfflineCache();
+    window.location.href = "../spa/";
+  } catch (error) {
+    leaveClubStatus.textContent = error.message;
+    leaveClubStatus.className = "mt-3 text-danger";
+  } finally {
+    confirmLeaveClub.disabled = false;
+  }
+});
 async function loadBookClub() {
   try {
     if (config.useMockData) {
@@ -448,9 +492,9 @@ async function loadBookClub() {
       const currentMember = currentBookClub.members.find(
         (member) => member.userId === devData.currentUserId,
       );
-
-      showInvitationButton(currentMember?.role === "admin");
-      showMeetingButton(currentMember?.role === "admin");
+      showInvitationButton(currentBookClub.role === "ADMIN");
+      showMeetingButton(currentBookClub.role === "ADMIN");
+      showLeaveClubButton(currentBookClub.role === "MEMBER");
       return;
     }
 
