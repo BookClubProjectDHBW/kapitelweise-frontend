@@ -1,4 +1,3 @@
-// Muss zu dbName in kapitelweise-spa/src/app/indexDBService.ts passen.
 const OFFLINE_DB_NAME = "kapitelweiseHome";
 
 export function clearOfflineCache() {

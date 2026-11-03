@@ -72,7 +72,39 @@
         </div>
       </form>
     </dialog>
+    <dialog
+      id="leaveClubDialog"
+      class="invitation-dialog"
+      aria-labelledby="leaveClubDialogTitle"
+    >
+      <div class="invitation-form">
+        <div class="dialog-header">
+          <h2 id="leaveClubDialogTitle">Buchclub verlassen</h2>
+        </div>
 
+        <p>Möchtest du diesen Buchclub wirklich verlassen?</p>
+
+        <p id="leaveClubStatus" class="mt-3" role="status"></p>
+
+        <div class="dialog-actions">
+          <button
+            id="cancelLeaveClub"
+            class="dialog-cancel-button"
+            type="button"
+          >
+            Abbrechen
+          </button>
+
+          <button
+            id="confirmLeaveClub"
+            class="btn btn-outline-danger"
+            type="button"
+          >
+            Buchclub verlassen
+          </button>
+        </div>
+      </div>
+    </dialog>
     <dialog
       id="confirmationDialog"
       class="invitation-dialog"
@@ -127,6 +159,14 @@
       <section class="bookclub-header">
         <div id="adminActions" class="bookclub-header-actions">
           <a href="../spa/" class="back-link"> ← Zurück </a>
+
+          <button
+            id="leaveClubButton"
+            class="btn btn-outline-danger d-none"
+            type="button"
+          >
+            Buchclub verlassen
+          </button>
         </div>
 
         <div class="bookclub-info">
@@ -164,7 +204,6 @@
 
         <button id="meetingTab" class="nav-tab" type="button">Treffen</button>
 
-        <button class="nav-tab" type="button">Mitglieder</button>
       </nav>
 
       <section id="tabContent" class="tab-content" aria-live="polite">
