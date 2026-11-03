@@ -1,5 +1,5 @@
 import { config } from "../config.js";
-import { clearOfflineCache, OFFLINE_CLUB_KEY } from "../offlineCache.js";
+import { clearOfflineCache } from "../offlineCache.js";
 import {
   getBookClub,
   inviteUserToClub,
@@ -184,7 +184,7 @@ async function loadClubSuggestions() {
 
     status.textContent = navigator.onLine
       ? error.message
-      : "Offline nicht verfügbar: Keine gespeicherten Buchvorschläge.";
+      : "Offline nicht verfügbar";
 
     status.className = "text-danger";
   }
@@ -261,7 +261,7 @@ async function loadMeetings() {
   } catch (error) {
     status.textContent = navigator.onLine
       ? error.message
-      : "Offline nicht verfügbar: Keine gespeicherten Treffen.";
+      : "Offline nicht verfügbar";
     status.className = "mt-3 text-danger";
     return false;
   }
@@ -511,7 +511,7 @@ async function loadBookClub() {
       throw new Error("Keine Buchclub-ID vorhanden.");
     }
 
-    currentBookClub = await loadClubDetails();
+    currentBookClub = await getBookClub(clubId);
 
     if (!currentBookClub) {
       throw new Error("Der Buchclub konnte nicht gefunden werden.");
@@ -544,60 +544,34 @@ async function loadBookClub() {
       error.code === "FORBIDDEN"
         ? "Du bist kein Mitglied dieses Buchclubs."
         : !navigator.onLine
-          ? "Diesen Buchclub hast du noch nicht online geöffnet."
+          ? "Offline nicht verfügbar"
           : "Der Buchclub konnte nicht geladen werden.";
 
     showInvitationButton(false);
   }
 }
 
-async function loadClubDetails() {
-  try {
-    const club = await getBookClub(clubId);
-    localStorage.setItem(OFFLINE_CLUB_KEY + clubId, JSON.stringify(club));
-    return club;
-  } catch (error) {
-    const cachedClub = localStorage.getItem(OFFLINE_CLUB_KEY + clubId);
-
-    if (!navigator.onLine && cachedClub) {
-      return JSON.parse(cachedClub);
-    }
-
-    throw error;
-  }
-}
-
-const offlineNotice = document.getElementById("offlineNotice");
-const alwaysEnabledButtons =
-  ".nav-tab, .dialog-cancel-button, .dialog-close-button, #cancelMeetingButton";
-
-function applyOfflineState() {
-  offlineNotice.classList.toggle("d-none", navigator.onLine);
+function showOfflineState() {
+  document.getElementById("offlineNotice").classList.remove("d-none");
 
   document.querySelectorAll("button").forEach(function (button) {
-    if (button.matches(alwaysEnabledButtons)) {
+    if (
+      button.matches(
+        ".nav-tab, #logoutButton, .dialog-cancel-button, #cancelMeetingButton",
+      )
+    ) {
       return;
     }
 
-    if (!navigator.onLine && !button.disabled) {
-      button.disabled = true;
-      button.title = "Offline nicht verfügbar";
-      button.dataset.offline = "true";
-    } else if (navigator.onLine && button.dataset.offline) {
-      button.disabled = false;
-      button.removeAttribute("title");
-      delete button.dataset.offline;
-    }
+    button.disabled = true;
+    button.title = "Offline nicht verfügbar";
   });
 }
 
-window.addEventListener("online", applyOfflineState);
-window.addEventListener("offline", applyOfflineState);
-new MutationObserver(function () {
-  if (!navigator.onLine) {
-    applyOfflineState();
-  }
-}).observe(document.body, { childList: true, subtree: true });
+window.addEventListener("offline", showOfflineState);
+window.addEventListener("online", function () {
+  window.location.reload();
+});
 
 bookSearchType.addEventListener("change", function () {
   const placeholders = {
@@ -806,4 +780,7 @@ meetingForm.addEventListener("submit", async function (event) {
   }
 });
 loadBookClub();
-applyOfflineState();
+
+if (!navigator.onLine) {
+  showOfflineState();
+}

@@ -13,6 +13,31 @@ if (sessionStorage.getItem("registered") === "true") {
   sessionStorage.removeItem("registered");
 }
 
+function showOfflineState() {
+  $("#offlineHint").removeClass("d-none");
+  $("#loginForm button[type=submit]")
+    .prop("disabled", true)
+    .attr("title", "Offline nicht verfügbar");
+  $(".auth-link-secondary")
+    .addClass("link-offline")
+    .attr("title", "Offline nicht verfügbar");
+}
+
+$(".auth-link-secondary").on("click", function (event) {
+  if (!navigator.onLine) {
+    event.preventDefault();
+  }
+});
+
+window.addEventListener("offline", showOfflineState);
+window.addEventListener("online", function () {
+  window.location.reload();
+});
+
+if (!navigator.onLine) {
+  showOfflineState();
+}
+
 $("#loginForm").on("submit", async function (event) {
   event.preventDefault();
   $("#loginError").addClass("d-none").text("");

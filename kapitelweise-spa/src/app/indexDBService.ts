@@ -54,7 +54,7 @@ export class IndexedDBService {
     });
   }
 
-  async getCache<T>(key: string): Promise<T | null> {
+  async getCache<T>(key: string): Promise<{ payload: T; updatedAt: number } | null> {
     const db = await this.getDB();
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(this.storeName, 'readonly');
@@ -63,7 +63,7 @@ export class IndexedDBService {
 
       request.onsuccess = () => {
         if (request.result && request.result.payload) {
-          resolve(request.result.payload as T);
+          resolve({ payload: request.result.payload as T, updatedAt: request.result.updatedAt });
         } else {
           resolve(null);
         }

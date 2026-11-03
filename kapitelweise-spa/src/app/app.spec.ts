@@ -24,12 +24,11 @@ describe('App', () => {
     expect(compiled.querySelector('.navbar-brand')?.textContent).toContain('Kapitelweise');
   });
 
-  it('should disable logout while offline', async () => {
+  it('should keep logout enabled while offline', async () => {
     const fixture = TestBed.createComponent(App);
     TestBed.inject(HomepageService).online.set(false);
     await fixture.whenStable();
     const logout = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('#logoutButton');
-    expect(logout?.disabled).toBe(true);
-    expect(logout?.title).toBe('Offline nicht verfügbar');
+    expect(logout?.disabled).toBe(false);
   });
 });

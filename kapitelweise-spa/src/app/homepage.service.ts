@@ -152,12 +152,18 @@ export class HomepageService {
       const offline = !navigator.onLine;
       const cached = error instanceof ConnectionError || offline ? await this.readCache() : null;
       if (cached) {
-        this.applyMemberData(cached);
+        this.applyMemberData(cached.payload);
         this.loaded = true;
+        const savedAt = new Date(cached.updatedAt).toLocaleString('de-DE', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
         this.error.set(
-          offline
-            ? 'Offline-Modus: Daten aus lokalem Zwischenspeicher geladen.'
-            : 'Server nicht erreichbar: Daten aus lokalem Zwischenspeicher geladen.',
+          (offline ? 'Offline-Modus' : 'Server nicht erreichbar') +
+            `: Daten aus lokalem Zwischenspeicher, Stand ${savedAt} Uhr.`,
         );
       } else {
         this.error.set(this.errorMessage(error));
@@ -180,7 +186,7 @@ export class HomepageService {
     }
   }
 
-  private async readCache(): Promise<Member | null> {
+  private async readCache(): Promise<{ payload: Member; updatedAt: number } | null> {
     try {
       return await this.idbService.getCache<Member>(CACHE_KEY_MEMBER);
     } catch (error) {

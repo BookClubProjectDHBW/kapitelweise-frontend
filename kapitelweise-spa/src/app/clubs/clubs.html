@@ -19,7 +19,11 @@
         <div class="card-body">
           <h3 class="card-title h5">{{ club.name }}</h3>
           <p class="card-text text-secondary">{{ club.description || 'Keine Beschreibung vorhanden.' }}</p>
-          <a class="btn btn-outline-botanical" [href]="'/public/html/bookClub.html?id=' + club.id">Club öffnen</a>
+          @if (homepage.online()) {
+            <a class="btn btn-outline-botanical" [href]="'/public/html/bookClub.html?id=' + club.id">Club öffnen</a>
+          } @else {
+            <button class="btn btn-outline-botanical" type="button" disabled title="Offline nicht verfügbar">Club öffnen</button>
+          }
         </div>
       </div>
     </div>

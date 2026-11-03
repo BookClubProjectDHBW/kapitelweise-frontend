@@ -81,3 +81,13 @@
   color: var(--color-success);
   border-color: var(--color-secondary);
 }
+
+.btn:disabled[title] {
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.link-offline {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

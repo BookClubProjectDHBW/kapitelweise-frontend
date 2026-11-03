@@ -2,16 +2,7 @@
   <nav class="navbar bg-white border-bottom shadow-sm">
     <div class="container py-2">
       <a class="navbar-brand serif fs-4" routerLink="/clubs">Kapitelweise</a>
-      <button
-        class="btn btn-outline-secondary"
-        id="logoutButton"
-        type="button"
-        [disabled]="!homepage.online()"
-        [attr.title]="homepage.online() ? null : 'Offline nicht verfügbar'"
-        (click)="logout()"
-      >
-        Logout
-      </button>
+      <button class="btn btn-outline-secondary" id="logoutButton" type="button" (click)="logout()">Logout</button>
     </div>
   </nav>
 </header>
