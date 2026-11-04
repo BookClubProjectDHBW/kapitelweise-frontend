@@ -62,10 +62,12 @@ export function renderBookSearchResults(books, onSelectBook) {
     placeholder.style.height = "150px";
     placeholder.textContent = "Kein Cover";
 
-    if (book.coverId) {
+    const coverIsbn = String(book.isbn || "").replace(/[^0-9X]/gi, "");
+
+    if (coverIsbn) {
       const cover = document.createElement("img");
 
-      cover.src = `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`;
+      cover.src = `https://covers.openlibrary.org/b/isbn/${coverIsbn}-M.jpg?default=false`;
       cover.alt = `Cover von ${book.title}`;
       cover.className = "rounded flex-shrink-0";
       cover.style.width = "100px";

@@ -101,7 +101,8 @@ async function chooseCurrentBook(book, button) {
   status.className = "text-secondary";
 
   try {
-    const currentBook = await setCurrentBook(clubId, book.id);
+    const selectedBook = await setCurrentBook(clubId, book.id);
+    const currentBook = (await getCurrentBook(clubId)) ?? selectedBook;
 
     hasSelectedCurrentBook = true;
 
@@ -177,7 +178,7 @@ async function loadClubSuggestions() {
       hasPendingSuggestions &&
       document.getElementById("votingTab").classList.contains("active")
     ) {
-      suggestionsRefreshTimer = setTimeout(loadClubSuggestions, 5000);
+      suggestionsRefreshTimer = setTimeout(loadClubSuggestions, 30000);
     }
   } catch (error) {
     console.error("Fehler beim Laden der Buchvorschläge:", error);
