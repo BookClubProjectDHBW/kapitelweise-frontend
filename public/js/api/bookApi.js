@@ -38,7 +38,7 @@ export async function submitBookProposal(clubId, book) {
   };
 
   const response = await fetch(
-    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/proposals`,
+    `${config.api.backend}/clubs/${encodeURIComponent(clubId)}/suggestions`,
     {
       method: "POST",
       headers: {

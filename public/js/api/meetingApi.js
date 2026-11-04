@@ -64,7 +64,7 @@ async function meetingRequest(path, options = {}) {
 }
 
 export function getMeetings(clubId) {
-  return meetingRequest(`/clubs/${encodeURIComponent(clubId)}/meeting`);
+  return meetingRequest(`/clubs/${encodeURIComponent(clubId)}/meetings`);
 }
 
 export function getAttendanceOverview(clubId, meetingId) {
