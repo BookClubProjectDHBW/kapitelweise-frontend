@@ -665,6 +665,7 @@ bookSearchForm.addEventListener("submit", async function (event) {
   const searchTerm = bookSearchInput.value.trim();
 
   if (searchTerm === "") {
+    resultsContainer.textContent = "Bitte gib einen Suchbegriff ein.";
     return;
   }
 

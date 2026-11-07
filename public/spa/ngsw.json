@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1793741004470,
+  "timestamp": 1794087508801,
   "index": "/public/spa/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/public/spa/favicon.ico",
         "/public/spa/index.html",
-        "/public/spa/main-SDAIUPUR.js",
+        "/public/spa/main-2FME7EYZ.js",
         "/public/spa/manifest.webmanifest",
         "/public/spa/styles-3IACN4RJ.css"
       ],
@@ -72,8 +72,8 @@
     "/public/spa/images/club7.webp": "373b64bc23af29fc9b2cf856ea5140c8a4fe9764",
     "/public/spa/images/club8.webp": "34e4f0cb33a34e19c3862fe3526e40de9ec76565",
     "/public/spa/images/club9.webp": "41833fbc0161bde9081c51fba1c8e0b0d3a57e2e",
-    "/public/spa/index.html": "1859a5c1ec14286d1ed415abe0ba8ca836bc46fb",
-    "/public/spa/main-SDAIUPUR.js": "031b0628f966601a6940ddb2b1756505b98423ca",
+    "/public/spa/index.html": "f9220b96625e7ff504c2938a07a5298c50a9f66b",
+    "/public/spa/main-2FME7EYZ.js": "95081c88dd7e43949925298f75f3cc72e3d16485",
     "/public/spa/manifest.webmanifest": "9bba8c51380023c509687f0ccb166451e4341b0a",
     "/public/spa/styles-3IACN4RJ.css": "41ef212c62bc0d2b56fc750235d04aa799a4152b"
   },
