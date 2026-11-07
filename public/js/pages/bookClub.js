@@ -618,11 +618,20 @@ async function selectBook(book, selectionMessage, suggestButton) {
 
   try {
     await submitBookProposal(clubId, selectedBook);
-    loadClubSuggestions();
+    selectedBook = null;
 
-    selectionMessage.textContent = "Buch erfolgreich vorgeschlagen!";
-    selectionMessage.className =
-      "book-selection-message text-success mt-2 mb-0";
+    if (resultsContainer.contains(suggestButton)) {
+      resultsContainer.replaceChildren();
+      bookSearchInput.value = "";
+    }
+
+    await loadClubSuggestions();
+
+    const status = document.getElementById("clubSuggestionsStatus");
+    if (status.className !== "text-danger") {
+      status.textContent = `„${book.title || "Unbekannter Titel"}“ wurde vorgeschlagen und wird gerade geprüft.`;
+      status.className = "text-success";
+    }
   } catch (error) {
     console.error("Fehler beim Einreichen:", error);
 
