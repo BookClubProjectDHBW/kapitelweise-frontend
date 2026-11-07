@@ -86,10 +86,14 @@ export async function getClubSuggestions(clubId) {
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
 
-    throw new Error(
+    const error = new Error(
       errorData?.message ||
         `Buchvorschläge konnten nicht geladen werden (HTTP ${response.status}).`,
     );
+    if (response.status === 403) {
+      error.code = "FORBIDDEN";
+    }
+    throw error;
   }
 
   return response.json();

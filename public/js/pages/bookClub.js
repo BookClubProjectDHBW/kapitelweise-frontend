@@ -119,7 +119,8 @@ async function chooseCurrentBook(book, button) {
   }
 }
 
-async function loadClubSuggestions() {
+// Mit Hilfe der KI angepasst: Neuladen ohne komische Statusanzeige
+async function loadClubSuggestions(silent = false, attempt = 0) {
   clearTimeout(suggestionsRefreshTimer);
   suggestionsRefreshTimer = null;
   const status = document.getElementById("clubSuggestionsStatus");
@@ -136,9 +137,11 @@ async function loadClubSuggestions() {
     return;
   }
 
-  list.replaceChildren();
-  status.textContent = "Buchvorschläge werden geladen...";
-  status.className = "text-secondary";
+  if (!silent) {
+    list.replaceChildren();
+    status.textContent = "Buchvorschläge werden geladen...";
+    status.className = "text-secondary";
+  }
 
   try {
     // Ein Fehler beim aktuellen Buch darf das Laden der Vorschläge nicht blockieren
@@ -178,9 +181,22 @@ async function loadClubSuggestions() {
       hasPendingSuggestions &&
       document.getElementById("votingTab").classList.contains("active")
     ) {
-      suggestionsRefreshTimer = setTimeout(loadClubSuggestions, 30000);
+      suggestionsRefreshTimer = setTimeout(
+        () => loadClubSuggestions(true),
+        30000,
+      );
     }
   } catch (error) {
+    if (error.code === "FORBIDDEN" && attempt < 5) {
+      status.textContent = "";
+      status.className = "";
+      suggestionsRefreshTimer = setTimeout(
+        () => loadClubSuggestions(true, attempt + 1),
+        2000,
+      );
+      return;
+    }
+
     console.error("Fehler beim Laden der Buchvorschläge:", error);
 
     status.textContent = navigator.onLine
