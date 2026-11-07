@@ -38,7 +38,15 @@ export class ClubsComponent {
   async create(): Promise<void> {
     const name = this.clubName.trim();
     const description = this.clubDescription.trim();
-    if (!name || name.length > 25 || description.length > 250 || this.busy()) {
+    if (this.busy()) {
+      return;
+    }
+    if (!name) {
+      this.error.set('Ohne Namen gibts keinen Club!');
+      return;
+    }
+    if (name.length > 25 || description.length > 250) {
+      this.error.set('Eingabe zu lang!');
       return;
     }
 
