@@ -1,4 +1,4 @@
-// Mit Hilfe der KI entwickelt
+// KI-Log Nr. 72
 const cacheName = "kapitelweise-detail-v5";
 const filesToCache = [
   "./html/bookClub.html",

@@ -1,9 +1,10 @@
+/* KI-Log Nr. 15, 17 */
 main.container {
   padding-top: 2rem;
   padding-bottom: 4rem;
 }
 
-/* Mit Hilfe der KI entwickelt */
+/* KI-Log Nr. 72 */
 button:disabled[title] {
   pointer-events: auto;
   cursor: not-allowed;
@@ -430,6 +431,7 @@ button:disabled[title] {
   background: var(--color-secondary-hover);
 }
 
+/* KI-Log Nr. 15 */
 @media (max-width: 767.98px) {
   main.container {
     padding-top: 1.5rem;
@@ -460,6 +462,7 @@ button:disabled[title] {
   }
 }
 
+/* KI-Log Nr. 15 */
 @media (max-width: 575.98px) {
   .bookclub-info {
     align-items: flex-start;
@@ -520,6 +523,7 @@ button:disabled[title] {
   }
 }
 
+/* KI-Log Nr. 15 */
 @media (prefers-reduced-motion: reduce) {
   .back-link,
   .admin-invitation-button,

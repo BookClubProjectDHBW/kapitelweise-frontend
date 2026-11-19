@@ -119,7 +119,7 @@ async function chooseCurrentBook(book, button) {
   }
 }
 
-// Mit Hilfe der KI angepasst: Neuladen ohne komische Statusanzeige
+// KI-Log Nr. 79
 async function loadClubSuggestions(silent = false, attempt = 0) {
   clearTimeout(suggestionsRefreshTimer);
   suggestionsRefreshTimer = null;
@@ -207,6 +207,7 @@ async function loadClubSuggestions(silent = false, attempt = 0) {
   }
 }
 
+// KI-Log Nr. 52
 async function loadMeetings() {
   const status = document.getElementById("meetingStatus");
   const list = document.getElementById("meetingList");
@@ -538,6 +539,7 @@ async function loadBookClub() {
 
     showInvitationButton(currentBookClub.role === "ADMIN");
     showMeetingButton(currentBookClub.role === "ADMIN");
+    // KI-Log Nr. 66
     showLeaveClubButton(currentBookClub.role === "MEMBER");
 
     try {
@@ -568,7 +570,7 @@ async function loadBookClub() {
   }
 }
 
-// Mit Hilfe der KI entwickelt
+// KI-Log Nr. 72
 function showOfflineState() {
   document.getElementById("offlineNotice").classList.remove("d-none");
 
