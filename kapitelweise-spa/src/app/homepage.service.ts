@@ -26,7 +26,7 @@ interface GraphqlResponse<T> {
   errors?: { message: string }[];
 }
 
-// KI-Log Nr. 47
+// KI-Log Nr. 50
 const HOMEPAGE_QUERY = `
   query {
     member {
@@ -52,7 +52,7 @@ const RESPOND_INVITATION_MUTATION = `
 
 const CACHE_KEY_MEMBER = 'cached_member_homepage';
 
-// KI-Log Nr. 70
+// KI-Log Nr. 74
 class ConnectionError extends Error {}
 
 @Injectable({ providedIn: 'root' })
@@ -70,12 +70,12 @@ export class HomepageService {
   readonly invitations = signal<Invitation[]>([]);
   readonly loading = signal(false);
   readonly error = signal('');
-  // KI-Log Nr. 72
+  // KI-Log Nr. 76
   readonly online = signal(navigator.onLine);
   private loaded = false;
   private member: Member | null = null;
 
-  // KI-Log Nr. 72
+  // KI-Log Nr. 76
   constructor() {
     window.addEventListener('online', () => {
       this.online.set(true);
@@ -86,7 +86,7 @@ export class HomepageService {
     window.addEventListener('offline', () => this.online.set(false));
   }
 
-  // KI-Log Nr. 47
+  // KI-Log Nr. 50
   private async request<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
     const token = sessionStorage.getItem('token');
 
@@ -111,7 +111,7 @@ export class HomepageService {
       );
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
-        // KI-Log Nr. 70
+        // KI-Log Nr. 74
         if (error.status === 0 || error.status === 504 || !navigator.onLine) {
           throw new ConnectionError('Keine Verbindung zum Server.');
         }
@@ -138,7 +138,7 @@ export class HomepageService {
     return response.data;
   }
 
-  // KI-Log Nr. 47
+  // KI-Log Nr. 50
   async load(): Promise<void> {
     if (this.loaded || this.loading()) {
       return;
@@ -156,7 +156,7 @@ export class HomepageService {
       this.loaded = true;
       await this.persistCache();
     } catch (error) {
-      // KI-Log Nr. 70, 77
+      // KI-Log Nr. 74, 81
       const offline = !navigator.onLine;
       const cached = error instanceof ConnectionError || offline ? await this.readCache() : null;
       if (cached) {
@@ -203,7 +203,7 @@ export class HomepageService {
     }
   }
 
-  // KI-Log Nr. 47
+  // KI-Log Nr. 50
   private async persistCache(): Promise<void> {
     if (!this.member) {
       return;
@@ -235,7 +235,7 @@ export class HomepageService {
     await this.persistCache();
   }
 
-  // KI-Log Nr. 47
+  // KI-Log Nr. 50
   async respondToInvitation(invitationId: string, status: 'ACCEPTED' | 'DECLINED'): Promise<void> {
     const data = await this.request<{ responseInvitation: Club | null }>(
       RESPOND_INVITATION_MUTATION,

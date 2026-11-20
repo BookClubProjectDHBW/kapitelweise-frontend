@@ -13,7 +13,7 @@ if (sessionStorage.getItem("registered") === "true") {
   sessionStorage.removeItem("registered");
 }
 
-// KI-Log Nr. 77
+// KI-Log Nr. 81
 function showOfflineState() {
   $("#offlineHint").removeClass("d-none");
   $("#loginForm button[type=submit]")

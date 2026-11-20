@@ -1,4 +1,4 @@
-// KI-Log Nr. 73
+// KI-Log Nr. 77
 const cacheName = "kapitelweise-detail-v5";
 const filesToCache = [
   "./html/bookClub.html",

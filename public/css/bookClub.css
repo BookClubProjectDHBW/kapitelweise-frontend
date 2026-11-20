@@ -1,10 +1,10 @@
-/* KI-Log Nr. 16, 18 */
+/* KI-Log Nr. 16, 20 */
 main.container {
   padding-top: 2rem;
   padding-bottom: 4rem;
 }
 
-/* KI-Log Nr. 73 */
+/* KI-Log Nr. 77 */
 button:disabled[title] {
   pointer-events: auto;
   cursor: not-allowed;

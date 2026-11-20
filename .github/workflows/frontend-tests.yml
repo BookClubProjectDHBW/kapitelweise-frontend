@@ -1,4 +1,4 @@
-# KI-Log Nr. 74
+# KI-Log Nr. 78
 name: Frontend Tests
 
 on: [push, pull_request]

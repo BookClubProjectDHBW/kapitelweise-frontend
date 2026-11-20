@@ -24,7 +24,7 @@ describe('App', () => {
     expect(compiled.querySelector('.navbar-brand')?.textContent).toContain('Kapitelweise');
   });
 
-  // KI-Log Nr. 74
+  // KI-Log Nr. 78
   it('should keep logout enabled while offline', async () => {
     const fixture = TestBed.createComponent(App);
     TestBed.inject(HomepageService).online.set(false);

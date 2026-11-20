@@ -119,7 +119,7 @@ async function chooseCurrentBook(book, button) {
   }
 }
 
-// KI-Log Nr. 80
+// KI-Log Nr. 84
 async function loadClubSuggestions(silent = false, attempt = 0) {
   clearTimeout(suggestionsRefreshTimer);
   suggestionsRefreshTimer = null;
@@ -207,7 +207,7 @@ async function loadClubSuggestions(silent = false, attempt = 0) {
   }
 }
 
-// KI-Log Nr. 53
+// KI-Log Nr. 56
 async function loadMeetings() {
   const status = document.getElementById("meetingStatus");
   const list = document.getElementById("meetingList");
@@ -539,7 +539,7 @@ async function loadBookClub() {
 
     showInvitationButton(currentBookClub.role === "ADMIN");
     showMeetingButton(currentBookClub.role === "ADMIN");
-    // KI-Log Nr. 67
+    // KI-Log Nr. 71
     showLeaveClubButton(currentBookClub.role === "MEMBER");
 
     try {
@@ -570,7 +570,7 @@ async function loadBookClub() {
   }
 }
 
-// KI-Log Nr. 73
+// KI-Log Nr. 77
 function showOfflineState() {
   document.getElementById("offlineNotice").classList.remove("d-none");
 
