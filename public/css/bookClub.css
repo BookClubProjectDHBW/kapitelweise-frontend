@@ -1,10 +1,10 @@
-/* KI-Log Nr. 15, 17 */
+/* KI-Log Nr. 16, 18 */
 main.container {
   padding-top: 2rem;
   padding-bottom: 4rem;
 }
 
-/* KI-Log Nr. 72 */
+/* KI-Log Nr. 73 */
 button:disabled[title] {
   pointer-events: auto;
   cursor: not-allowed;
@@ -431,7 +431,7 @@ button:disabled[title] {
   background: var(--color-secondary-hover);
 }
 
-/* KI-Log Nr. 15 */
+/* KI-Log Nr. 16 */
 @media (max-width: 767.98px) {
   main.container {
     padding-top: 1.5rem;
@@ -462,7 +462,7 @@ button:disabled[title] {
   }
 }
 
-/* KI-Log Nr. 15 */
+/* KI-Log Nr. 16 */
 @media (max-width: 575.98px) {
   .bookclub-info {
     align-items: flex-start;
@@ -523,7 +523,7 @@ button:disabled[title] {
   }
 }
 
-/* KI-Log Nr. 15 */
+/* KI-Log Nr. 16 */
 @media (prefers-reduced-motion: reduce) {
   .back-link,
   .admin-invitation-button,

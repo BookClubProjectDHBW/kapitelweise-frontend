@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-// KI-Log Nr. 65
+// KI-Log Nr. 66
 @Injectable({
   providedIn: 'root',
 })
@@ -55,7 +55,7 @@ export class IndexedDBService {
     });
   }
 
-  // KI-Log Nr. 76
+  // KI-Log Nr. 77
   async getCache<T>(key: string): Promise<{ payload: T; updatedAt: number } | null> {
     const db = await this.getDB();
     return new Promise((resolve, reject) => {

@@ -15,7 +15,7 @@ export class ClubsComponent {
   clubName = '';
   clubDescription = '';
 
-  // KI-Log Nr. 46
+  // KI-Log Nr. 47
   imageFor(id: string): string {
     const numericId = Number(id);
     const index = Number.isInteger(numericId)
@@ -36,7 +36,7 @@ export class ClubsComponent {
     this.error.set('');
   }
 
-  // KI-Log Nr. 46
+  // KI-Log Nr. 47
   async create(): Promise<void> {
     const name = this.clubName.trim();
     const description = this.clubDescription.trim();

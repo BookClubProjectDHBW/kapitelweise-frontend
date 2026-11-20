@@ -82,7 +82,7 @@
   border-color: var(--color-secondary);
 }
 
-/* KI-Log Nr. 76 */
+/* KI-Log Nr. 77 */
 .btn:disabled[title] {
   pointer-events: auto;
   cursor: not-allowed;
