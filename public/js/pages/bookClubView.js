@@ -253,7 +253,7 @@ export function renderCurrentBook(book) {
   bookData.classList.remove("d-none");
 }
 
-// KI-Log Nr. 54
+// KI-Log Nr. 55
 function meetingModel(raw) {
   if (!raw || raw.id == null || !raw.title || !raw.starts_at) {
     throw new Error("MeetingResponse: id, title oder starts_at fehlt.");
@@ -330,7 +330,7 @@ export function renderAttendanceOverview(container, raw) {
   }
 }
 
-// KI-Log Nr. 54
+// KI-Log Nr. 55
 export function renderMeetings(rawMeetings, isAdmin, onAttend, onOverview) {
   if (!Array.isArray(rawMeetings)) {
     throw new Error("Die Meeting-API hat keine Liste zurückgegeben.");

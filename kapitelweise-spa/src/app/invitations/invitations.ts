@@ -12,7 +12,7 @@ export class InvitationsComponent {
   readonly busyId = signal<string | null>(null);
   readonly error = signal('');
 
-  // KI-Log Nr. 50
+  // KI-Log Nr. 51
   async respond(invitation: Invitation, status: 'ACCEPTED' | 'DECLINED'): Promise<void> {
     if (this.busyId()) {
       return;

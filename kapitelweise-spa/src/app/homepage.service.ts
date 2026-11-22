@@ -26,7 +26,7 @@ interface GraphqlResponse<T> {
   errors?: { message: string }[];
 }
 
-// KI-Log Nr. 50
+// KI-Log Nr. 51
 const HOMEPAGE_QUERY = `
   query {
     member {
@@ -86,7 +86,7 @@ export class HomepageService {
     window.addEventListener('offline', () => this.online.set(false));
   }
 
-  // KI-Log Nr. 50
+  // KI-Log Nr. 51
   private async request<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
     const token = sessionStorage.getItem('token');
 
@@ -138,7 +138,7 @@ export class HomepageService {
     return response.data;
   }
 
-  // KI-Log Nr. 50
+  // KI-Log Nr. 51
   async load(): Promise<void> {
     if (this.loaded || this.loading()) {
       return;
@@ -203,7 +203,7 @@ export class HomepageService {
     }
   }
 
-  // KI-Log Nr. 50
+  // KI-Log Nr. 51
   private async persistCache(): Promise<void> {
     if (!this.member) {
       return;
@@ -235,7 +235,7 @@ export class HomepageService {
     await this.persistCache();
   }
 
-  // KI-Log Nr. 50
+  // KI-Log Nr. 51
   async respondToInvitation(invitationId: string, status: 'ACCEPTED' | 'DECLINED'): Promise<void> {
     const data = await this.request<{ responseInvitation: Club | null }>(
       RESPOND_INVITATION_MUTATION,

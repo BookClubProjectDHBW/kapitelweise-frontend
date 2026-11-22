@@ -119,7 +119,7 @@ async function chooseCurrentBook(book, button) {
   }
 }
 
-// KI-Log Nr. 84
+// KI-Log Nr. 85
 async function loadClubSuggestions(silent = false, attempt = 0) {
   clearTimeout(suggestionsRefreshTimer);
   suggestionsRefreshTimer = null;
@@ -207,7 +207,7 @@ async function loadClubSuggestions(silent = false, attempt = 0) {
   }
 }
 
-// KI-Log Nr. 56
+// KI-Log Nr. 57
 async function loadMeetings() {
   const status = document.getElementById("meetingStatus");
   const list = document.getElementById("meetingList");

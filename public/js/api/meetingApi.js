@@ -31,7 +31,7 @@ export async function createMeeting(clubId, meeting) {
   return response.json();
 }
 
-// KI-Log Nr. 55
+// KI-Log Nr. 56
 async function meetingRequest(path, options = {}) {
   const response = await fetch(`${config.api.backend}${path}`, {
     ...options,
